@@ -1,1 +1,69 @@
-!function(e,t){"use strict";var i,a=function(e,t){this.extend(this.params,e),this._init(t)};a.prototype={params:{element:!1,index:1,repeatClick:!1},_init:function(e){var t=this;if(t.params.element&&1==t.params.element.nodeType&&(i=t.params.element.children)){t.setActive();for(var a=0;a<i.length;a++)i[a].setAttribute("tapmode",""),i[a].setAttribute("data-item-order",a),i[a].onclick=function(i){!t.params.repeatClick&&this.className.indexOf("aui-active")>-1||(e&&e({index:parseInt(this.getAttribute("data-item-order"))+1,dom:this}),this.parentNode.querySelector(".aui-active").classList.remove("aui-active"),this.classList.add("aui-active"))}}},setRepeat:function(e){this.params.repeatClick=e||!1},setActive:function(e){var t=this;e=e||t.params.index;var a=i[e-1];a.parentNode.querySelector(".aui-active")&&a.parentNode.querySelector(".aui-active").classList.remove("aui-active"),a.classList.add("aui-active")},extend:function(e,t){for(var i in t)t.hasOwnProperty(i)&&(e[i]=t[i]);return e}},e.auiTab=a}(window);
+/**
+ * aui-tab.js
+ * @author 流浪男
+ * @todo more things to abstract, e.g. Loading css etc.
+ * Licensed under the MIT license.
+ * http://www.opensource.org/licenses/mit-license.php
+ */
+(function( window, undefined ) {
+    "use strict";
+    var auiTab = function(params,callback) {
+    	this.extend(this.params, params);
+        this._init(callback);
+    };
+    var tabItems;
+    auiTab.prototype = {
+        params: {
+            element: false,
+            index: 1, //默认选中
+            repeatClick: false //是否允许重复点击
+        },
+        _init: function(callback) {
+        	var self = this;
+        	if(!self.params.element || self.params.element.nodeType!=1){
+        		return;
+        	}
+        	tabItems = self.params.element.children;
+        	if(tabItems){
+        		self.setActive();
+        		for(var i=0; i<tabItems.length; i++){
+        			tabItems[i].setAttribute("tapmode","");
+        			tabItems[i].setAttribute("data-item-order",i);
+        			tabItems[i].onclick = function(e){
+                        if(!self.params.repeatClick){
+                            if(this.className.indexOf("aui-active") > -1)return;
+                        }
+        				if(callback){
+                            callback({
+                                index: parseInt(this.getAttribute("data-item-order"))+1,
+                                dom:this
+                            })
+                        };
+        				this.parentNode.querySelector(".aui-active").classList.remove("aui-active");
+            			this.classList.add("aui-active");
+        			}
+        		}
+        	}
+        },
+        setRepeat:function(value){
+            var self = this;
+            self.params.repeatClick = value ? value : false;
+        },
+        setActive: function(index){
+        	var self = this;
+        	index = index ? index : self.params.index;
+        	var _tab = tabItems[index-1];
+        	if(_tab.parentNode.querySelector(".aui-active"))_tab.parentNode.querySelector(".aui-active").classList.remove("aui-active");
+        	_tab.classList.add("aui-active");
+        },
+        extend: function(a, b) {
+			for (var key in b) {
+			  	if (b.hasOwnProperty(key)) {
+			  		a[key] = b[key];
+			  	}
+		  	}
+		  	return a;
+		}
+    };
+	window.auiTab = auiTab;
+})(window);

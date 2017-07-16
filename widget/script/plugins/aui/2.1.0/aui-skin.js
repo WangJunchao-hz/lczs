@@ -1,1 +1,89 @@
-!function(e,t){"use strict";var n,a=function(e){this.extend(this.params,e),this._init()};a.prototype={params:{name:"",skinPath:"",default:!1,beginTime:"",endTime:""},_init:function(){var e=this;if(e.params.name&&e.params.skinPath)if((n=document.createElement("link")).setAttribute("rel","stylesheet"),n.setAttribute("type","text/css"),n.setAttribute("aui-skin-name",e.params.name),n.setAttribute("href",e.params.skinPath),e.params.default)document.getElementsByTagName("head")[0].appendChild(n);else{if(!e.params.beginTime||!e.params.endTime)return;if(!e.check(e.params.beginTime,e.params.endTime))return;var t=new Date;if(t.getMinutes()<10)a="0"+t.getMinutes();else var a=t.getMinutes();var i=t.getHours()+":"+a,r=parseInt(e.params.beginTime.replace(":","")),s=parseInt(e.params.endTime.replace(":","")),m=parseInt(i.replace(":",""));r>s?(m>=r||m<=s)&&e.setSkin():r<s?m>=r&&m<=s&&e.setSkin():e.removeSkin()}},setSkin:function(){document.getElementsByTagName("head")[0].appendChild(n)},removeSkin:function(){var e=this;document.querySelector("link[aui-skin-name='"+e.params.name+"']")&&document.querySelector("link[aui-skin-name='"+e.params.name+"']").parentNode.removeChild(document.querySelector("link[aui-skin-name='"+e.params.name+"']"))},check:function(e,t){var n=e.split(":");if(2!=n.length)return!1;var a=t.split(":");if(2!=a.length)return!1;var i=new Date,r=new Date;return i.setHours(n[0]),i.setMinutes(n[1]),r.setHours(a[0]),r.setMinutes(a[1]),!(n[0]>24||n[0]<0||a[0]>24||a[0]<0)&&!(n[1]>59||n[1]<0||a[1]>59||a[1]<0)},extend:function(e,t){for(var n in t)t.hasOwnProperty(n)&&(e[n]=t[n]);return e}},e.auiSkin=a}(window);
+/**
+ * aui-skin.js
+ * @author 流浪男
+ * @todo more things to abstract, e.g. Loading css etc.
+ * Licensed under the MIT license.
+ * http://www.opensource.org/licenses/mit-license.php
+ */
+(function( window, undefined ) {
+    "use strict";
+    var auiSkin = function(params) {
+    	this.extend(this.params, params);
+        this._init();
+    };
+    var fileRef;
+    auiSkin.prototype = {
+        params: {
+            name: "", //主题名字
+            skinPath:  "",//主题路径
+            default:   false, //默认是否立即使用
+            beginTime: "",//开始时间
+            endTime:   ""//结束时间
+        },
+        _init: function() {
+        	var self = this;
+            if(!self.params.name)return;
+        	if(!self.params.skinPath)return;
+            fileRef = document.createElement('link');
+            fileRef.setAttribute("rel","stylesheet");
+            fileRef.setAttribute("type","text/css");
+            fileRef.setAttribute("aui-skin-name",self.params.name);
+            fileRef.setAttribute("href",self.params.skinPath);
+            if(self.params.default){
+                document.getElementsByTagName("head")[0].appendChild(fileRef);
+            }else{
+                if(!self.params.beginTime || !self.params.endTime)return;
+                if(!self.check(self.params.beginTime,self.params.endTime))return;
+                var _date = new Date();
+                if(_date.getMinutes() < 10){
+                    var nowM = "0"+_date.getMinutes();
+                }else{
+                    var nowM = _date.getMinutes();
+                }
+                var nowTime = _date.getHours()+":"+nowM;
+                var b = parseInt(self.params.beginTime.replace(":", ''));
+                var e = parseInt(self.params.endTime.replace(":", ''));
+                var n = parseInt(nowTime.replace(":", ''));
+                if(b > e){
+                    if(n >= b || n <= e)self.setSkin();
+                }else if(b < e){
+                    if(n >= b && n <= e)self.setSkin();
+                }else{
+                    self.removeSkin();
+                }
+            }
+        },
+        setSkin:function(){
+            document.getElementsByTagName("head")[0].appendChild(fileRef);
+        },
+        removeSkin:function(){
+            var self = this;
+            if(document.querySelector("link[aui-skin-name='"+self.params.name+"']"))
+            document.querySelector("link[aui-skin-name='"+self.params.name+"']").parentNode.removeChild(document.querySelector("link[aui-skin-name='"+self.params.name+"']"));
+        },
+        check:function(beginTime,endTime){
+            var strb = beginTime.split (":");
+            if (strb.length != 2)return false;
+            var stre = endTime.split (":");
+            if (stre.length != 2)return false;
+            var b = new Date ();
+            var e = new Date ();
+            b.setHours (strb[0]);
+            b.setMinutes (strb[1]);
+            e.setHours (stre[0]);
+            e.setMinutes (stre[1]);
+            if(strb[0] > 24 || strb[0] < 0 || stre[0] > 24 || stre[0] < 0)return false;
+            if(strb[1] > 59 || strb[1] < 0 || stre[1] > 59 || stre[1] < 0)return false;
+            return true;
+        },
+        extend: function(a, b) {
+			for (var key in b) {
+			  	if (b.hasOwnProperty(key)) {
+			  		a[key] = b[key];
+			  	}
+		  	}
+		  	return a;
+		}
+    };
+	window.auiSkin = auiSkin;
+})(window);

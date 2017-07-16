@@ -1,1 +1,333 @@
-!function(i){"use strict";function t(i,t){for(var e in t)t.hasOwnProperty(e)&&(i[e]=t[e]);return i}function e(i){this._init(i)}var s,n,h,o,d,a,l,r;e.prototype.options={container:"",width:"auto",height:"auto",speed:300,autoPlay:0,pageShow:!0,pageStyle:"dot",dotPosition:"center",friction:1,loop:!0,currentPage:!1,PageCount:!1},e.prototype._init=function(i){if(t(this.options,i),this.options.container){this.index=0,this.continuous=!0,this.container=this.options.container,this.loop=this.options.loop,this.speed=this.options.speed,this.container.style.position="relative",this.container.style.width=this.options.width+"px",this.container.style.height=this.options.height+"px";var e=this.container.children[0];if(this.slideWrap=e,this.slideNodeList=this.slideWrap.querySelectorAll(".aui-slide-node"),e&&this.slideNodeList){this.slideWrapWidth=this.slideWrap.offsetWidth,this.slideNodeListLength=this.slideNodeList.length,2==this.slideNodeListLength&&(e.appendChild(this.slideWrap.children[0].cloneNode(!0)),e.appendChild(this.slideWrap.children[1].cloneNode(!0)),this.slideWrap=e,this.slideNodeList=this.slideWrap.querySelectorAll(".aui-slide-node"),this.slideNodeListLength=this.slideNodeList.length,this.continuous=!1);for(var s=0;s<this.slideNodeListLength;s++)this.slideNodeList[s]&&(this.slideNodeList[s].style.webkitTransform=this.slideNodeList[s].style.transform="translate3d("+this.slideWrapWidth*s+"px,0,0)");this.slideNodeListLength>1&&(this.options.pageShow&&(this.createPagination(0),this.setPageDotPosition()),this.options.autoPlay>500&&this.loop&&this.autoPlay(0),this.slideWrap.addEventListener("touchstart",this.touchStart.bind(this),!1),this.slideWrap.addEventListener("touchmove",this.touchMove.bind(this),!1),this.slideWrap.addEventListener("touchend",this.touchEnd.bind(this),!1))}}},e.prototype.setPageDotPosition=function(){var i=this.options.dotPosition;this.container.querySelector(".aui-slide-page-wrap").style.textAlign=i},e.prototype.autoPlay=function(i){var t=this;setInterval(function(){t.slideTo(t.getCircle(t.index-1),-t.slideWrapWidth,0),t.slideTo(t.getCircle(t.index+2),t.slideWrapWidth,0),t.slideTo(t.index,-t.slideWrapWidth,t.options.speed),t.slideTo(t.getCircle(t.index+1),0,t.options.speed),t.index=t.getCircle(t.index+1),t.setPaginationActive(t.index)},t.options.autoPlay)},e.prototype.setPaginationActive=function(i){var t=this;if(t.options.currentPage&&t.options.currentPage(i),this.container.querySelector(".aui-slide-page-wrap")){var e=this.container.querySelectorAll(".aui-slide-page");this.container.querySelector(".aui-slide-page.aui-slide-page-active")&&this.container.querySelector(".aui-slide-page.aui-slide-page-active").classList.remove("aui-slide-page-active"),this.continuous?e[this.index].classList.add("aui-slide-page-active"):3==this.index?e[1].classList.add("aui-slide-page-active"):2==this.index?e[0].classList.add("aui-slide-page-active"):e[this.index].classList.add("aui-slide-page-active")}},e.prototype.createPagination=function(i){var t=this,e=this.container.querySelector(".aui-slide-page-wrap");if(e){e.innerHTML="";var s="";switch(t.options.pageStyle){case"dot":if(this.continuous)for(n=0;n<this.slideNodeListLength;n++)s+='<span class="aui-slide-page aui-slide-page-dot"></span>';else for(n=0;n<2;n++)s+='<span class="aui-slide-page aui-slide-page-dot"></span>';e.innerHTML=s,t.setPaginationActive(0);break;case"line":if(this.continuous)for(n=0;n<this.slideNodeListLength;n++)s+='<span class="aui-slide-page aui-slide-page-line" style="width:'+100/this.slideNodeListLength+'%"></span>';else for(var n=0;n<2;n++)s+='<span class="aui-slide-page aui-slide-page-line" style="width:50%"></span>';e.innerHTML=s,t.setPaginationActive(0)}}},e.prototype.pageCount=function(){return this.slideNodeList.length},e.prototype.touchStart=function(i){d=1*new Date,s=parseInt(i.changedTouches[0].pageX),n=parseInt(i.changedTouches[0].pageY),r=void 0},e.prototype.touchMove=function(i){var t=i.changedTouches[0],e=parseInt(t.pageX);o=(h=e-s)/this.options.friction,a=parseInt(t.pageX)-s,l=parseInt(t.pageY)-n;var d=this.getDirection(a,l);if(void 0===r&&(r=!!(r||Math.abs(a)<Math.abs(l))),!r){if(i.preventDefault(),!this.loop){if(!this.continuous&&1==this.index&&"left"==d)return;if(!this.continuous&&0==this.index&&"right"==d)return;if(this.index==this.slideNodeList.length-1){if(o<=0)return;this.setTranslate(this.getCircle(this.index-1),o-this.slideWrapWidth,0)}else if(0==this.index){if(o>=0)return;this.setTranslate(this.getCircle(this.index+1),this.slideWrapWidth,0)}}this.setTranslate(this.getCircle(this.index-1),o-this.slideWrapWidth,0),this.setTranslate(this.index,o,0),this.setTranslate(this.getCircle(this.index+1),o+this.slideWrapWidth,0)}},e.prototype.touchEnd=function(i){var t=i.changedTouches[0],e=parseInt(t.pageX)-s,h=parseInt(t.pageY)-n,o=(t.pageX,t.pageY,this.getDirection(e,h)),l=this.slideWrapWidth/4,p=1*new Date-d,c=Number(p)<250&&Math.abs(a)>20||Math.abs(a)>l;if(!r){if(c){if(a<0){if(!this.loop&&this.index==this.slideNodeList.length-1)return;if(!this.loop&&!this.continuous&&1==this.index)return;a<-l&&"left"==o?(this.slideTo(this.getCircle(this.index-1),-this.slideWrapWidth,0),this.slideTo(this.getCircle(this.index+2),this.slideWrapWidth,0),this.slideTo(this.index,-this.slideWrapWidth,this.speed),this.slideTo(this.getCircle(this.index+1),0,this.speed),this.index=this.getCircle(this.index+1)):(this.slideTo(this.index,0,this.speed),this.slideTo(this.getCircle(this.index+1),this.slideWrapWidth,this.speed))}else if(a>0){if(!this.loop&&0==this.index)return;if(!this.loop&&!this.continuous&&0==this.index)return;a>l&&"right"==o?(this.slideTo(this.getCircle(this.index+1),this.slideWrapWidth,0),this.slideTo(this.getCircle(this.index-2),-this.slideWrapWidth,0),this.slideTo(this.index,this.slideWrapWidth,this.speed),this.slideTo(this.getCircle(this.index-1),0,this.speed),this.index=this.getCircle(this.index-1)):(this.slideTo(this.index,0,this.speed),this.slideTo(this.getCircle(this.index+1),this.slideWrapWidth,this.speed))}}else a&&(this.slideTo(this.getCircle(this.index-1),-this.slideWrapWidth,this.speed),this.slideTo(this.index,0,this.speed),this.slideTo(this.getCircle(this.index+1),this.slideWrapWidth,this.speed));this.setPaginationActive(this.index)}},e.prototype.setTranslate=function(i,t,e){this.slideNodeList[i]&&(this.slideNodeList[i].style.webkitTransitionDuration=this.slideNodeList[i].style.transitionDuration=e+"ms",this.slideNodeList[i].style.webkitTransform=this.slideNodeList[i].style.transform="translate3d("+t+"px,0,0)")},e.prototype.slideTo=function(i,t,e){this.setTranslate(i,t,e)},e.prototype.getCircle=function(i){return(this.slideNodeListLength+i%this.slideNodeListLength)%this.slideNodeListLength},e.prototype.getDirection=function(i,t){return i===t?"":Math.abs(i)>=Math.abs(t)?i>0?"right":"left":t>0?"down":"up"},i.auiSlide=e}(window);
+/**
+ * aui-slide.js 轮播组件
+ * @author 流浪男
+ * http://www.auicss.com
+ * @todo more things to abstract, e.g. Loading css etc.
+ * Licensed under the MIT license.
+ * http://www.opensource.org/licenses/mit-license.php
+ */
+(function(window) {
+	"use strict";
+
+	var translateVal,
+		firstTouchX,
+		firstTouchY,
+		touchXDelta,
+		handleTranslateVal;
+	var touchStartTime; //开始触摸事件
+	var offsetX,
+		offsetY,
+		isScrolling;
+	// CLASS 组装
+	var	CLASS_SLIDER_NODE = "aui-slide-node",
+		CLASS_SLIDE_PAGE_WRAP = "aui-slide-page-wrap",
+		CLASS_SLIDE_PAGE = "aui-slide-page",
+		CLASS_SLIDE_PAGE_ACTIVE = "aui-slide-page-active",
+		CLASS_SLIDE_PAGE_DOT = "aui-slide-page-dot",
+		CLASS_SLIDE_PAGE_LINE = "aui-slide-page-line";
+
+	var __SLIDER_NODE = "."+CLASS_SLIDER_NODE,
+		__SLIDE_PAGE_WRAP = "."+CLASS_SLIDE_PAGE_WRAP,
+		__SLIDE_PAGE = "."+CLASS_SLIDE_PAGE,
+		__SLIDE_PAGE_ACTIVE = "."+CLASS_SLIDE_PAGE_ACTIVE;
+
+	auiSlide.prototype.options = {
+		container:'',
+		width:'auto',
+		height:'auto',
+		speed: 300, //滑动速速
+		autoPlay: 0, //自动播放
+		pageShow: true, //是否显示分页器
+		pageStyle: 'dot',
+		dotPosition: 'center',
+		friction:1, //阻力
+		loop:true,
+		currentPage:false,
+		PageCount:false
+	};
+	auiSlide.prototype._init = function(options) {
+		extend(this.options, options);
+		if(!this.options.container){
+			return;
+		}
+		this.index = 0; //索引值
+		this.continuous = true;//用于判断长度为2时的特殊处理
+		this.container = this.options.container;
+		// console.log(this.options.loop);
+		this.loop = this.options.loop;
+		this.speed = this.options.speed;
+		this.container.style.position = "relative";
+		this.container.style.width = this.options.width+"px";
+		this.container.style.height = this.options.height+"px";
+
+		var element = this.container.children[0];
+		this.slideWrap = element;
+		this.slideNodeList = this.slideWrap.querySelectorAll(__SLIDER_NODE);
+		if(!element || !this.slideNodeList){
+			return;
+		}
+		// this.options.pageCount(this.slideNodeList.length);
+		this.slideWrapWidth = this.slideWrap.offsetWidth;
+		this.slideNodeListLength = this.slideNodeList.length;
+
+		if (this.slideNodeListLength == 2) { //当长度为2时作特殊处理
+			element.appendChild(this.slideWrap.children[0].cloneNode(true));
+			element.appendChild(this.slideWrap.children[1].cloneNode(true));
+			this.slideWrap = element;
+			this.slideNodeList = this.slideWrap.querySelectorAll(__SLIDER_NODE);
+	    	this.slideNodeListLength = this.slideNodeList.length;
+	    	this.continuous = false;
+	    }
+		for (var i = 0; i < this.slideNodeListLength; i++) {
+			this.slideNodeList[i] && (this.slideNodeList[i].style.webkitTransform = this.slideNodeList[i].style.transform = "translate3d("+(this.slideWrapWidth*i)+"px,0,0)");
+		}
+
+		if(this.slideNodeListLength > 1) {
+			if(this.options.pageShow){
+				this.createPagination(0);
+				this.setPageDotPosition();
+			}
+			if(this.options.autoPlay > 500 && this.loop){
+				this.autoPlay(0);
+			}
+			this.slideWrap.addEventListener('touchstart', this.touchStart.bind(this), false);
+			this.slideWrap.addEventListener('touchmove', this.touchMove.bind(this), false);
+			this.slideWrap.addEventListener('touchend', this.touchEnd.bind(this), false);
+		}
+	};
+	// 当分页器为圆点时位置设置
+	auiSlide.prototype.setPageDotPosition = function(){
+		var self = this;
+		var pageDotPosition = self.options.dotPosition;
+		this.container.querySelector(__SLIDE_PAGE_WRAP).style.textAlign = pageDotPosition;
+	};
+	// 自动播放
+	auiSlide.prototype.autoPlay = function (index) {
+		var self = this;
+		setInterval(function(){
+			self.slideTo(self.getCircle(self.index-1), -self.slideWrapWidth, 0);
+	        self.slideTo(self.getCircle(self.index+2), self.slideWrapWidth, 0);
+	        self.slideTo(self.index, -self.slideWrapWidth, self.options.speed);
+	        self.slideTo(self.getCircle(self.index+1), 0, self.options.speed);
+	        self.index = self.getCircle(self.index+1);
+	        self.setPaginationActive(self.index);
+		}, self.options.autoPlay)
+	};
+	// 设置当前分页
+	auiSlide.prototype.setPaginationActive = function(index){
+		var self = this;
+		if(self.options.currentPage){
+			self.options.currentPage(index);
+		}
+		if(!this.container.querySelector(__SLIDE_PAGE_WRAP)){
+			return;
+		}
+		var pageList = this.container.querySelectorAll(__SLIDE_PAGE);
+		if(this.container.querySelector(__SLIDE_PAGE+__SLIDE_PAGE_ACTIVE)){
+			this.container.querySelector(__SLIDE_PAGE+__SLIDE_PAGE_ACTIVE).classList.remove(CLASS_SLIDE_PAGE_ACTIVE);
+		}
+		if(!this.continuous){
+			if(this.index == 3){
+				pageList[1].classList.add(CLASS_SLIDE_PAGE_ACTIVE);
+			}else if(this.index==2){
+				pageList[0].classList.add(CLASS_SLIDE_PAGE_ACTIVE);
+			}else{
+				pageList[this.index].classList.add(CLASS_SLIDE_PAGE_ACTIVE);
+			}
+		}else{
+			pageList[this.index].classList.add(CLASS_SLIDE_PAGE_ACTIVE);
+		}
+
+	};
+	// 创建分页器
+	auiSlide.prototype.createPagination = function(index){
+		var self = this;
+		var pageWrap = this.container.querySelector(__SLIDE_PAGE_WRAP);
+		if(!pageWrap){
+			return;
+		}
+		pageWrap.innerHTML = '';
+		var pageShowHtml = '';
+		switch (self.options.pageStyle) {
+			case "dot":// 原点
+						if (!this.continuous) {
+							for (var i = 0; i < 2; i++) {
+								pageShowHtml += '<span class="'+CLASS_SLIDE_PAGE+' '+CLASS_SLIDE_PAGE_DOT+'"></span>';
+							}
+						}else{
+							for (var i = 0; i < this.slideNodeListLength; i++) {
+								pageShowHtml += '<span class="'+CLASS_SLIDE_PAGE+' '+CLASS_SLIDE_PAGE_DOT+'"></span>';
+							}
+						}
+						pageWrap.innerHTML = pageShowHtml;
+						self.setPaginationActive(0);
+				break;
+			case "line":// 线条
+						if (!this.continuous) {
+							for (var i = 0; i < 2; i++) {
+								pageShowHtml += '<span class="'+CLASS_SLIDE_PAGE+' '+CLASS_SLIDE_PAGE_LINE+'" style="width:50%"></span>';
+							}
+						}else{
+							for (var i = 0; i < this.slideNodeListLength; i++) {
+								pageShowHtml += '<span class="'+CLASS_SLIDE_PAGE+' '+CLASS_SLIDE_PAGE_LINE+'" style="width:'+(100/this.slideNodeListLength)+'%"></span>';
+							}
+						}
+						pageWrap.innerHTML = pageShowHtml;
+						self.setPaginationActive(0);
+				break;
+		}
+	};
+	// 总页数
+	auiSlide.prototype.pageCount = function() {
+		var self = this;
+		return self.slideNodeList.length;
+	};
+	auiSlide.prototype.touchStart = function(event) {
+		touchStartTime = new Date() * 1;
+		firstTouchX = parseInt(event.changedTouches[0].pageX);
+		firstTouchY = parseInt(event.changedTouches[0].pageY);
+		isScrolling = undefined;
+	};
+	auiSlide.prototype.touchMove = function(event) {
+		var touchMoveObj = event.changedTouches[0],
+				touchX = parseInt(touchMoveObj.pageX);
+			touchXDelta = touchX - firstTouchX;
+			handleTranslateVal = touchXDelta/this.options.friction;
+		//  滑动位移
+		offsetX = parseInt(touchMoveObj.pageX) - firstTouchX;
+        offsetY = parseInt(touchMoveObj.pageY) - firstTouchY;
+        var direction = this.getDirection(offsetX,offsetY);
+        if ( typeof isScrolling == 'undefined') {
+			isScrolling = !!( isScrolling || Math.abs(offsetX) < Math.abs(offsetY) );
+		}
+		if(!isScrolling){
+			event.preventDefault();
+			if(!this.loop){ //不循环
+				if(!this.continuous && this.index==1 && direction=='left'){
+					return;
+				}
+				if(!this.continuous && this.index==0 && direction=='right'){
+					return;
+				}
+				if(this.index == this.slideNodeList.length-1){
+					if(handleTranslateVal <= 0){
+						return;
+					}
+					this.setTranslate(this.getCircle(this.index-1), handleTranslateVal - this.slideWrapWidth, 0);
+				}else if(this.index == 0){
+					if(handleTranslateVal >= 0){
+						return;
+					}
+					this.setTranslate(this.getCircle(this.index+1), this.slideWrapWidth, 0);
+				}
+			}
+
+			this.setTranslate(this.getCircle(this.index-1), handleTranslateVal - this.slideWrapWidth, 0);
+			this.setTranslate(this.index, handleTranslateVal , 0);
+			this.setTranslate(this.getCircle(this.index+1), handleTranslateVal + this.slideWrapWidth, 0);
+
+		}
+	};
+	auiSlide.prototype.touchEnd = function(event) {
+		var touchEndObj = event.changedTouches[0];
+		var touchEndX = parseInt(touchEndObj.pageX) - firstTouchX;
+        var touchEndY = parseInt(touchEndObj.pageY) - firstTouchY;
+		var touchEndxy = {
+				x: touchEndObj.pageX || 0,
+				y: touchEndObj.pageY || 0
+			};
+		var moveDirection = this.getDirection(touchEndX,touchEndY); //滑动方向
+		var boundary = this.slideWrapWidth/4;
+		var duration = (new Date() * 1) - touchStartTime;
+		var isValid = Number(duration) < 250 && Math.abs(offsetX) > 20 || Math.abs(offsetX) > boundary;
+		if (isScrolling) {
+			return;
+		}
+        if(isValid){
+			if(offsetX < 0){
+				if(!this.loop && this.index == this.slideNodeList.length-1){
+					return;
+				}
+
+				if(!this.loop && !this.continuous && this.index==1){
+					return;
+				}
+
+	        	if(offsetX < -boundary && moveDirection == 'left'){
+	        		// left
+					this.slideTo(this.getCircle(this.index-1), -this.slideWrapWidth, 0);
+		            this.slideTo(this.getCircle(this.index+2), this.slideWrapWidth, 0);
+		            this.slideTo(this.index, -this.slideWrapWidth, this.speed);
+		            this.slideTo(this.getCircle(this.index+1), 0, this.speed);
+		            this.index = this.getCircle(this.index+1);
+				}else{
+					// this.slideTo(this.getCircle(this.index-1), -this.slideWrapWidth, this.speed);
+		            this.slideTo(this.index, 0, this.speed);
+		            this.slideTo(this.getCircle(this.index+1), this.slideWrapWidth, this.speed);
+				}
+	        }else if(offsetX > 0){
+	        	if(!this.loop && this.index == 0){
+					return;
+				}
+				if(!this.loop && !this.continuous && this.index==0){
+					return;
+				}
+	        	if(offsetX > boundary && moveDirection == 'right'){
+	        		// right
+		        	this.slideTo(this.getCircle(this.index+1), this.slideWrapWidth, 0);
+		            this.slideTo(this.getCircle(this.index-2), -this.slideWrapWidth, 0);
+		            this.slideTo(this.index, this.slideWrapWidth, this.speed);
+		            this.slideTo(this.getCircle(this.index-1), 0, this.speed);
+		            this.index = this.getCircle(this.index-1);
+	        	}else{
+	        		// this.slideTo(this.getCircle(this.index-1), -this.slideWrapWidth, this.speed);
+		            this.slideTo(this.index, 0, this.speed);
+		            this.slideTo(this.getCircle(this.index+1), this.slideWrapWidth, this.speed);
+	        	}
+	        }
+        }else{
+        	if(offsetX){
+        		this.slideTo(this.getCircle(this.index-1), -this.slideWrapWidth, this.speed);
+	            this.slideTo(this.index, 0, this.speed);
+	            this.slideTo(this.getCircle(this.index+1), this.slideWrapWidth, this.speed);
+        	}
+
+        }
+        this.setPaginationActive(this.index);
+	};
+	auiSlide.prototype.setTranslate = function (index,dist,speed){
+		if(this.slideNodeList[index]){
+			this.slideNodeList[index].style.webkitTransitionDuration =
+	    	this.slideNodeList[index].style.transitionDuration = speed + 'ms';
+	    	this.slideNodeList[index].style.webkitTransform =
+	    	this.slideNodeList[index].style.transform = "translate3d("+dist+"px,0,0)";
+		}
+	};
+	auiSlide.prototype.slideTo = function (index, dist, speed) {
+		this.setTranslate(index, dist, speed);
+		// index = dist;
+	};
+	auiSlide.prototype.getCircle = function (index) {
+	    return (this.slideNodeListLength + (index % this.slideNodeListLength)) % this.slideNodeListLength;
+	};
+	auiSlide.prototype.getDirection = function(x, y) {
+		if (x === y) { return '';}
+		if (Math.abs(x) >= Math.abs(y)) {
+            return x > 0 ? 'right' : 'left';
+        } else {
+           	return y > 0 ? 'down' : 'up';
+        }
+	}
+	function extend (a, b) {
+		for (var key in b) {
+		  	if (b.hasOwnProperty(key)) {
+		  		a[key] = b[key];
+		  	}
+	  	}
+	  	return a;
+	}
+	function auiSlide (options) {
+		this._init(options);
+	}
+	window.auiSlide = auiSlide;
+})(window);

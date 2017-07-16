@@ -1,1 +1,119 @@
-!function(e,t){"use strict";var i=function(){};i.prototype={init:function(e,t){this.frameBounces=e.frameBounces,this.col=e.col,this.buttons=e.buttons,this.cancelTitle=e.cancelTitle,this.maskDiv,this.shareBoxDiv,this.open(e,t)},open:function(e,t){var i="",o=this;if(!o.shareBoxDiv&&o.buttons){if(o.maskDiv||(o.maskDiv=document.createElement("div"),o.maskDiv.className="aui-mask",document.body.appendChild(o.maskDiv)),o.col||(o.col=5),o.shareBoxDiv=document.createElement("div"),o.shareBoxDiv.className="aui-sharebox aui-grid",document.body.appendChild(o.shareBoxDiv),o.buttons&&o.buttons.length){i='<div class="aui-row aui-row-padded">';for(var a=0;a<o.buttons.length;a++)5==o.col?i+='<div class="aui-col-5 aui-sharebox-btn">':i+='<div class="aui-col-xs-'+12/o.col+' aui-sharebox-btn">',o.buttons[a].image&&(i+='<img src="'+o.buttons[a].image+'">'),o.buttons[a].text&&(i+='<div class="aui-grid-label">'+o.buttons[a].text+"</div>"),i+="</div>";i+="</div>"}o.cancelTitle&&(i+='<div class="aui-sharebox-close-btn aui-border-t">'+this.cancelTitle+"</div>"),o.shareBoxDiv.innerHTML=i;o.shareBoxDiv.offsetHeight;o.maskDiv.classList.add("aui-mask-in"),o.shareBoxDiv.style.webkitTransform=o.shareBoxDiv.style.transform="translate3d(0,0,0)",o.shareBoxDiv.style.opacity=1,o.shareBoxDiv.addEventListener("touchmove",function(e){e.preventDefault()}),o.maskDiv.addEventListener("touchmove",function(e){e.preventDefault()}),"undefined"!=typeof api&&"object"==typeof api&&o.frameBounces&&api.setFrameAttr({bounces:!1});var s=document.querySelectorAll(".aui-sharebox-btn");s&&s.length>0&&setTimeout(function(){o.maskDiv.onclick=function(){o.close()};for(var e=0;e<s.length;e++)!function(e){s[e].onclick=function(){if(o.buttons[e].value)i=o.buttons[e].value;else var i=null;t&&t({buttonIndex:e+1,buttonValue:i}),o.close()}}(e)},350),document.querySelector(".aui-sharebox-close-btn").onclick=function(){o.close()}}},close:function(){var e=this;if("undefined"!=typeof api&&"object"==typeof api&&e.frameBounces&&api.setFrameAttr({bounces:!0}),e.shareBoxDiv){var t=e.shareBoxDiv.offsetHeight;e.shareBoxDiv.style.webkitTransform=e.shareBoxDiv.style.transform="translate3d(0,"+t+"px,0)",e.maskDiv.style.opacity=0,setTimeout(function(){e.maskDiv&&e.maskDiv.parentNode.removeChild(e.maskDiv),e.shareBoxDiv.parentNode.removeChild(e.shareBoxDiv),e.maskDiv=e.shareBoxDiv=!1},300)}}},e.auiSharebox=i}(window);
+/**
+ * aui-sharebox.js
+ * @author 流浪男
+ * Licensed under the MIT license.
+ * http://www.opensource.org/licenses/mit-license.php
+ */
+(function( window, undefined ) {
+    "use strict";
+    var auiSharebox = function() {
+    };
+    var isShow = false;
+    auiSharebox.prototype = {
+        init: function(params,callback){
+            this.frameBounces = params.frameBounces;
+            this.col = params.col;
+            this.buttons = params.buttons;
+            this.cancelTitle = params.cancelTitle;
+            this.maskDiv;
+            this.shareBoxDiv;
+            var self = this;
+            self.open(params,callback);
+        },
+        open: function(params,callback) {
+            var shareboxHtml='',buttonsHtml = '';
+        	var self = this;
+            if(self.shareBoxDiv || !self.buttons)return;
+            if(!self.maskDiv){
+                self.maskDiv = document.createElement("div");
+                self.maskDiv.className = "aui-mask";
+                document.body.appendChild(self.maskDiv);
+            }
+            if(!self.col)self.col = 5;
+            self.shareBoxDiv = document.createElement("div");
+            self.shareBoxDiv.className = "aui-sharebox aui-grid";
+            document.body.appendChild(self.shareBoxDiv);
+            if(self.buttons && self.buttons.length){
+                buttonsHtml = '<div class="aui-row aui-row-padded">';
+                for(var i = 0; i < self.buttons.length;i++){
+                    if(self.col == 5){
+                        buttonsHtml += '<div class="aui-col-5 aui-sharebox-btn">';
+                    }else{
+                        buttonsHtml += '<div class="aui-col-xs-'+(12/self.col)+' aui-sharebox-btn">';
+                    }
+                    if(self.buttons[i].image)buttonsHtml += '<img src="'+self.buttons[i].image+'">';
+                    if(self.buttons[i].text)buttonsHtml += '<div class="aui-grid-label">'+self.buttons[i].text+'</div>';
+                    buttonsHtml += '</div>';
+                }
+                buttonsHtml += '</div>';
+            }
+            if(self.cancelTitle){
+                buttonsHtml += '<div class="aui-sharebox-close-btn aui-border-t">'+this.cancelTitle+'</div>';
+            }
+            self.shareBoxDiv.innerHTML = buttonsHtml;
+            var actionsheetHeight = self.shareBoxDiv.offsetHeight;
+            self.maskDiv.classList.add("aui-mask-in");
+            self.shareBoxDiv.style.webkitTransform = self.shareBoxDiv.style.transform = "translate3d(0,0,0)";
+            self.shareBoxDiv.style.opacity = 1;
+            self.shareBoxDiv.addEventListener("touchmove", function(event){
+                event.preventDefault();
+            })
+            self.maskDiv.addEventListener("touchmove", function(event){
+                event.preventDefault();
+            })
+            if(typeof(api) != 'undefined' && typeof(api) == 'object' && self.frameBounces){
+                api.setFrameAttr({
+                    bounces:false
+                });
+            }
+            var shareboxButtons = document.querySelectorAll(".aui-sharebox-btn");
+            if(shareboxButtons && shareboxButtons.length > 0){
+                setTimeout(function(){
+                    self.maskDiv.onclick = function(){self.close();return;};
+                    for(var ii = 0; ii < shareboxButtons.length; ii++){
+                        (function(e){
+                            shareboxButtons[e].onclick = function(){
+                                if(self.buttons[e].value){
+                                    var _value = self.buttons[e].value;
+                                }else{
+                                    var _value = null;
+                                }
+                                if(callback){
+                                    callback({
+                                        buttonIndex: e+1,
+                                        buttonValue:_value
+                                    });
+                                };
+                                self.close();
+                                return;
+                            }
+                        })(ii)
+                    }
+                }, 350)
+
+            }
+            document.querySelector(".aui-sharebox-close-btn").onclick = function(){self.close();return;};
+        },
+        close: function(){
+            var self = this;
+            if(typeof(api) != 'undefined' && typeof(api) == 'object' && self.frameBounces){
+                api.setFrameAttr({
+                    bounces:true
+                });
+            }
+            if(self.shareBoxDiv){
+                var actionsheetHeight = self.shareBoxDiv.offsetHeight;
+                self.shareBoxDiv.style.webkitTransform = self.shareBoxDiv.style.transform = "translate3d(0,"+actionsheetHeight+"px,0)";
+                self.maskDiv.style.opacity = 0;
+                setTimeout(function(){
+                    if(self.maskDiv){
+                        self.maskDiv.parentNode.removeChild(self.maskDiv);
+                    }
+                    self.shareBoxDiv.parentNode.removeChild(self.shareBoxDiv);
+                    self.maskDiv = self.shareBoxDiv = false;
+                }, 300)
+            }
+        }
+    };
+	window.auiSharebox = auiSharebox;
+})(window);

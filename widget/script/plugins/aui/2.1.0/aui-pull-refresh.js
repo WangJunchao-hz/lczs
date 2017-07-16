@@ -1,1 +1,174 @@
-!function(t){"use strict";var r,a,n,e,i=function(t,r){this.extend(this.params,t),this._init(r)},s=!1,o=t.document.documentElement,c={width:t.innerWidth,height:t.innerHeight},u=!1;i.prototype={params:{container:document.querySelector(".aui-refresh-content"),friction:2.5,triggerDistance:100,callback:!1},_init:function(t){var r=this;r.params.container.insertAdjacentHTML("afterbegin",'<div class="aui-refresh-load"><div class="aui-refresh-pull-arrow"></div></div>'),r.params.container.addEventListener("touchstart",function(t){r.touchStart(t)}),r.params.container.addEventListener("touchmove",function(t){r.touchMove(t)}),r.params.container.addEventListener("touchend",function(a){r.touchEnd(a,t)})},touchStart:function(t){if(!s){u=!1,this.params.container.style.webkitTransitionDuration=this.params.container.style.transitionDuration="0ms",r="";var a=t.changedTouches[0];n=parseInt(a.clientY),e=this.scrollY()}},touchMove:function(t){if(s)return void t.preventDefault();var i=this;this.throttle(function(){var s=t.changedTouches[0],o=parseInt(s.clientY);if(r=o-n,0===i.scrollY()&&r>0&&t.preventDefault(),e>0||i.scrollY()>0||0===i.scrollY()&&r<0)return void(n=o);a=Math.pow(r,.85),i.params.container.style.webkitTransform=i.params.container.style.transform="translate3d(0, "+a+"px, 0)",u=!0,r>i.params.triggerDistance?(i.params.container.classList.add("aui-refresh-pull-up"),i.params.container.classList.remove("aui-refresh-pull-down")):(i.params.container.classList.add("aui-refresh-pull-down"),i.params.container.classList.remove("aui-refresh-pull-up"))}(),20)},touchEnd:function(t,a){var n=this;if(s||!u)return void(u=!1);r>=this.params.triggerDistance?(s=!0,t.preventDefault(),this.params.container.style.webkitTransitionDuration=this.params.container.style.transitionDuration="300ms",this.params.container.style.webkitTransform=this.params.container.style.transform="translate3d(0,60px,0)",document.querySelector(".aui-refresh-pull-arrow").style.webkitTransitionDuration=document.querySelector(".aui-refresh-pull-arrow").style.transitionDuration="0ms",n.params.container.classList.add("aui-refreshing"),a&&a({status:"success"})):(this.params.container.style.webkitTransitionDuration=this.params.container.style.transitionDuration="300ms",this.params.container.style.webkitTransform=this.params.container.style.transform="translate3d(0,0,0)",a&&a({status:"fail"})),u=!1},cancelLoading:function(){var t=this;s=!1,t.params.container.classList.remove("aui-refreshing"),document.querySelector(".aui-refresh-pull-arrow").style.webkitTransitionDuration=document.querySelector(".aui-refresh-pull-arrow").style.transitionDuration="300ms",this.params.container.style.webkitTransitionDuration=this.params.container.style.transitionDuration="0ms",t.params.container.style.webkitTransform=t.params.container.style.transform="translate3d(0,0,0)",t.params.container.classList.remove("aui-refresh-pull-up"),t.params.container.classList.add("aui-refresh-pull-down")},scrollY:function(){return t.pageYOffset||o.scrollTop},throttle:function(t,r){var a=!0;return function(n){a&&(a=!1,setTimeout(function(){a=!0},r),t(n))}},winresize:function(){throttle(function(){c={width:t.innerWidth,height:t.innerHeight}}(),10)},extend:function(t,r){for(var a in r)r.hasOwnProperty(a)&&(t[a]=r[a]);return t}},t.auiPullToRefresh=i}(window);
+/**
+ * aui-pull-refresh.js
+ * @author 流浪男
+ * @todo more things to abstract, e.g. Loading css etc.
+ * Licensed under the MIT license.
+ * http://www.opensource.org/licenses/mit-license.php
+ */
+(function(window) {
+	'use strict';
+	/**
+	 * Extend obj function
+	 *
+	 * This is an object extender function. It allows us to extend an object
+	 * by passing in additional variables and overwriting the defaults.
+	 */
+	var auiPullToRefresh = function (params,callback) {
+		this.extend(this.params, params);
+		this._init(callback);
+	}
+	var touchYDelta;
+	var isLoading = false;
+	var docElem = window.document.documentElement,
+		loadWrapH,
+		win = {width: window.innerWidth, height: window.innerHeight},
+		winfactor= 0.2,
+		translateVal,
+		isMoved = false,
+		firstTouchY, initialScroll;
+	auiPullToRefresh.prototype = {
+		params: {
+            container: document.querySelector('.aui-refresh-content'),
+			friction: 2.5,
+			triggerDistance: 100,
+			callback:false
+        },
+        _init : function(callback) {
+			var self = this;
+			var loadingHtml = '<div class="aui-refresh-load"><div class="aui-refresh-pull-arrow"></div></div>';
+			self.params.container.insertAdjacentHTML('afterbegin', loadingHtml);
+			self.params.container.addEventListener('touchstart', function(ev){
+				self.touchStart(ev)
+			});
+			self.params.container.addEventListener('touchmove', function(ev){
+				self.touchMove(ev)
+			});
+			self.params.container.addEventListener('touchend', function(ev){
+				self.touchEnd(ev,callback);
+			});
+		},
+		touchStart : function(ev) {
+			// this.params.container.classList.remove("refreshing");
+			if (isLoading) {
+				return;
+			}
+			isMoved = false;
+			this.params.container.style.webkitTransitionDuration =
+		    this.params.container.style.transitionDuration = '0ms';
+			touchYDelta = '';
+			var touchobj = ev.changedTouches[0];
+			// register first touch "y"
+			firstTouchY = parseInt(touchobj.clientY);
+			initialScroll = this.scrollY();
+		},
+		touchMove : function (ev) {
+			if (isLoading) {
+				ev.preventDefault();
+				return;
+			}
+			var self = this;
+			var moving = function() {
+				var touchobj = ev.changedTouches[0], // reference first touch point for this event
+					touchY = parseInt(touchobj.clientY);
+					touchYDelta = touchY - firstTouchY;
+				if ( self.scrollY() === 0 && touchYDelta > 0  ) {
+					ev.preventDefault();
+				}
+				if ( initialScroll > 0 || self.scrollY() > 0 || self.scrollY() === 0 && touchYDelta < 0 ) {
+					firstTouchY = touchY;
+					return;
+				}
+				translateVal = Math.pow(touchYDelta, 0.85);
+				self.params.container.style.webkitTransform = self.params.container.style.transform = 'translate3d(0, ' + translateVal + 'px, 0)';
+				isMoved = true;
+				if(touchYDelta > self.params.triggerDistance){
+					self.params.container.classList.add("aui-refresh-pull-up");
+					self.params.container.classList.remove("aui-refresh-pull-down");
+				}else{
+					self.params.container.classList.add("aui-refresh-pull-down");
+					self.params.container.classList.remove("aui-refresh-pull-up");
+				}
+			};
+			this.throttle(moving(), 20);
+		},
+		touchEnd : function (ev,callback) {
+			var self =this;
+			if (isLoading|| !isMoved) {
+				isMoved = false;
+				return;
+			}
+			// 根据下拉高度判断是否加载
+			if( touchYDelta >= this.params.triggerDistance) {
+				isLoading = true; //正在加载中
+				ev.preventDefault();
+				this.params.container.style.webkitTransitionDuration =
+		    	this.params.container.style.transitionDuration = '300ms';
+				this.params.container.style.webkitTransform =
+				this.params.container.style.transform = 'translate3d(0,60px,0)';
+				document.querySelector(".aui-refresh-pull-arrow").style.webkitTransitionDuration =
+		    	document.querySelector(".aui-refresh-pull-arrow").style.transitionDuration = '0ms';
+				self.params.container.classList.add("aui-refreshing");
+				if(callback){
+					callback({
+						status:"success"
+					});
+				}
+			}else{
+				this.params.container.style.webkitTransitionDuration =
+		    	this.params.container.style.transitionDuration = '300ms';
+				this.params.container.style.webkitTransform =
+				this.params.container.style.transform = 'translate3d(0,0,0)';
+				if(callback){
+					callback({
+						status:"fail"
+					});
+				}
+			}
+			isMoved = false;
+			return;
+		},
+		cancelLoading : function () {
+			var self =this;
+			isLoading = false;
+			self.params.container.classList.remove("aui-refreshing");
+			document.querySelector(".aui-refresh-pull-arrow").style.webkitTransitionDuration =
+		    	document.querySelector(".aui-refresh-pull-arrow").style.transitionDuration = '300ms';
+			this.params.container.style.webkitTransitionDuration =
+		    	this.params.container.style.transitionDuration = '0ms';
+			self.params.container.style.webkitTransform =
+			self.params.container.style.transform = 'translate3d(0,0,0)';
+			self.params.container.classList.remove("aui-refresh-pull-up");
+			self.params.container.classList.add("aui-refresh-pull-down");
+			return;
+		},
+		scrollY : function() {
+			return window.pageYOffset || docElem.scrollTop;
+		},
+		throttle : function(fn, delay) {
+			var allowSample = true;
+			return function(e) {
+				if (allowSample) {
+					allowSample = false;
+					setTimeout(function() { allowSample = true; }, delay);
+					fn(e);
+				}
+			};
+		},
+		winresize : function () {
+			var resize = function() {
+				win = {width: window.innerWidth, height: window.innerHeight};
+			};
+			throttle(resize(), 10);
+		},
+		extend: function(a, b) {
+			for (var key in b) {
+			  	if (b.hasOwnProperty(key)) {
+			  		a[key] = b[key];
+			  	}
+		  	}
+		  	return a;
+		 }
+	}
+	window.auiPullToRefresh = auiPullToRefresh;
+
+})(window);

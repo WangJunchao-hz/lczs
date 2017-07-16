@@ -1,1 +1,44 @@
-!function(e,i){"use strict";var t=function(e){this.init(e)};t.prototype={init:function(e,i){var t=document.querySelectorAll(".aui-collapse-header");if(t.length)for(var n=0;n<t.length;n++)!function(i){t[i].onclick=function(){t[i].nextSibling.nextElementSibling.className.indexOf("aui-collapse-content")>-1&&(t[i].nextSibling.nextElementSibling.className.indexOf("aui-show")>-1?(t[i].nextSibling.nextElementSibling.classList.remove("aui-show"),t[i].classList.remove("aui-active")):(e.autoHide&&(document.querySelector(".aui-collapse-header.aui-active")&&document.querySelector(".aui-collapse-header.aui-active").classList.remove("aui-active"),document.querySelector(".aui-collapse-content.aui-show")&&document.querySelector(".aui-collapse-content.aui-show").classList.remove("aui-show")),t[i].nextSibling.nextElementSibling.classList.toggle("aui-show"),t[i].classList.toggle("aui-active")))}}(n)}},e.auiCollapse=t}(window);
+/**
+ * aui-collapse.js
+ * @author 流浪男
+ * Licensed under the MIT license.
+ * http://www.opensource.org/licenses/mit-license.php
+ */
+(function( window, undefined ) {
+    "use strict";
+    var auiCollapse = function(params) {
+        this.init(params);
+    };
+    auiCollapse.prototype = {
+        init: function(params,callback){
+            var collapseHeader = document.querySelectorAll(".aui-collapse-header");
+            if(collapseHeader.length){
+                for(var i=0;i<collapseHeader.length;i++){
+                    (function(e){
+                        collapseHeader[e].onclick = function(){
+                            if(collapseHeader[e].nextSibling.nextElementSibling.className.indexOf("aui-collapse-content") > -1){
+                                if(collapseHeader[e].nextSibling.nextElementSibling.className.indexOf("aui-show") > -1){
+                                    collapseHeader[e].nextSibling.nextElementSibling.classList.remove("aui-show");
+                                    collapseHeader[e].classList.remove("aui-active");
+                                }else{
+                                    if(params.autoHide){
+                                        if(document.querySelector(".aui-collapse-header.aui-active")){
+                                            document.querySelector(".aui-collapse-header.aui-active").classList.remove("aui-active");
+                                        }
+                                        if(document.querySelector(".aui-collapse-content.aui-show")){
+                                            document.querySelector(".aui-collapse-content.aui-show").classList.remove("aui-show");
+                                        }
+                                    }
+
+                                    collapseHeader[e].nextSibling.nextElementSibling.classList.toggle("aui-show");
+                                    collapseHeader[e].classList.toggle("aui-active");
+                                }
+                            }
+                        }
+                    })(i)
+                }
+            }
+        }
+    };
+	window.auiCollapse = auiCollapse;
+})(window);

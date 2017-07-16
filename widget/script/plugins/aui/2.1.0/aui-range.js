@@ -1,1 +1,53 @@
-!function(e,t){"use strict";var n,i,l,a=function(e,t){this._init(e,t)},s=null;a.prototype={_init:function(e,t){var a=this;n=Math.abs(e.element.max-e.element.min),i=e.element.offsetLeft,l=e.element.offsetWidth-28,e.element.insertAdjacentHTML("afterend",'<div class="aui-range-tip aui-hide">'+e.element.value+"</div>");var s=l/n*Math.abs(e.element.value-e.element.min);e.element.nextSibling.style.left=i+s-11+"px",e.element.addEventListener("input",function(){a._showTip(e.element,t)}),e.element.addEventListener("touchmove",function(){a._showTip(e.element,t)}),e.element.addEventListener("touchend",function(){a._hideTip(e.element)})},_showTip:function(e,t){e.nextSibling.classList.remove("aui-hide");var a=l/n*Math.abs(e.value-e.min);e.nextSibling.style.left=i+a-11+"px",e.nextSibling.innerText=e.value,t({value:e.value})},_hideTip:function(e){s&&clearTimeout(s),s=setTimeout(function(){e.nextSibling.classList.add("aui-hide")},1500)}},e.auiRange=a}(window);
+/*
+ * AUI JAVASCRIPT PLUGIN
+ * 滑动 aui-range
+ * Copyright (c) 2015 auicss.com @流浪男  QQ：343757327  群：344869952
+ */
+ (function( window, undefined ) {
+    "use strict";
+    var auiRange = function(params,callback) {
+        this._init(params,callback);
+    };
+    var time=null;
+    var distance,offsetLeft,tooltipWidth;
+    auiRange.prototype = {
+        _init: function(params,callback) {
+            var self = this;
+            distance = Math.abs(params.element.max - params.element.min);
+            offsetLeft = params.element.offsetLeft;
+            tooltipWidth = params.element.offsetWidth - 28;
+            params.element.insertAdjacentHTML('afterend','<div class="aui-range-tip aui-hide">'+params.element.value+'</div>');
+            var scaleWidth = (tooltipWidth / distance) * Math.abs(params.element.value - params.element.min);
+            params.element.nextSibling.style.left = (offsetLeft + scaleWidth - 11)+'px';
+            params.element.addEventListener("input",function(){
+                self._showTip(params.element,callback);
+            });
+            params.element.addEventListener("touchmove",function(){
+                self._showTip(params.element,callback);
+            });
+            params.element.addEventListener("touchend",function(){
+                self._hideTip(params.element);
+            });
+        },
+        _showTip: function(el,callback){
+            el.nextSibling.classList.remove("aui-hide");
+            var scaleWidth = (tooltipWidth / distance) * Math.abs(el.value - el.min);
+            el.nextSibling.style.left = (offsetLeft + scaleWidth - 11)+'px';
+            el.nextSibling.innerText = el.value;
+            callback({
+                value:el.value
+            });
+        },
+        _hideTip : function(el){
+            if (time) {
+                clearTimeout(time);
+            }
+            time = setTimeout(function() {
+                el.nextSibling.classList.add("aui-hide");
+            }, 1500);
+        }
+    }
+    window.auiRange = auiRange;
+})(window);
+
+

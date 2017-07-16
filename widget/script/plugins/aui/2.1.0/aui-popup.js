@@ -1,1 +1,94 @@
-!function(e,t){"use strict";var u=function(){this._init()},o=".aui-mask",i=!1;u.prototype={_init:function(){var e=this,t=document.querySelectorAll("[aui-popup-for]");if(t)for(var u=0;u<t.length;u++)t[u].setAttribute("tapmode",""),t[u].onclick=function(t){var u=this.getAttribute("aui-popup-for"),o=document.getElementById(u);o&&(o.className.indexOf("aui-popup-in")>-1||document.querySelector(".aui-popup-in")?e.hide(o):e.show(o))}},show:function(e){var t=this;if(e.className.indexOf("aui-popup-in")>-1||document.querySelector(".aui-popup-in"))return void t.hide(e);if(!i){if(!document.querySelector(o)){document.body.insertAdjacentHTML("beforeend",'<div class="aui-mask"></div>')}e.style.display="block",setTimeout(function(){document.querySelector(o).classList.add("aui-mask-in"),e.classList.add("aui-popup-in"),i=!0},10),document.querySelector(o).addEventListener("touchstart",function(u){u.preventDefault(),t.hide(e)}),e.addEventListener("touchmove",function(e){e.preventDefault()},!1)}},hide:function(e){i&&(document.querySelector(o).classList.remove("aui-mask-in"),document.querySelector(o).classList.add("aui-mask-out"),document.querySelector(".aui-popup-in")&&(document.querySelector(".aui-popup-in").classList.add("aui-popup-out"),document.querySelector(".aui-popup-in").classList.remove("aui-popup-in"),setTimeout(function(){document.querySelector(".aui-popup-out")&&(document.querySelector(".aui-popup-out").style.display="none",document.querySelector(".aui-popup-out").classList.remove("aui-popup-out"),document.querySelector(o)&&document.querySelector(o).parentNode.removeChild(document.querySelector(o)),i=!1)},300)))}},e.auiPopup=u}(window);
+/**
+ * aui-popup.js
+ * @author 流浪男
+ * @todo more things to abstract, e.g. Loading css etc.
+ * Licensed under the MIT license.
+ * http://www.opensource.org/licenses/mit-license.php
+ */
+(function( window, undefined ) {
+    "use strict";
+    var auiPopup = function() {
+        this._init();
+    };
+    var	CLASS_MASK = "aui-mask",
+    	CLASS_MASK_IN = 'aui-mask-in',
+    	CLASS_MASK_OUT = 'aui-mask-out',
+        CLASS_POPUP = 'aui-popup',
+    	CLASS_POPUP_IN = 'aui-popup-in',
+    	CLASS_POPUP_OUT = 'aui-popup-out',
+    	CLASS_POPUP_FOR = 'aui-popup-for';
+    var	__MASK = '.'+CLASS_MASK,
+    	__MASK_IN = '.'+CLASS_MASK_IN,
+    	__MASK_OUT = '.'+CLASS_MASK_OUT,
+        __POPUP = '.'+CLASS_POPUP,
+    	__POPUP_IN = '.'+CLASS_POPUP_IN,
+    	__POPUP_OUT = '.'+CLASS_POPUP_OUT;
+    var popupStatus = false;
+    auiPopup.prototype = {
+        _init: function() {
+        	var self = this;
+        	var _btn = document.querySelectorAll("["+CLASS_POPUP_FOR+"]");
+        	if(_btn){
+        		for(var i=0;i<_btn.length;i++){
+        			_btn[i].setAttribute("tapmode", "");
+        			_btn[i].onclick = function(e){
+        				var popupId = this.getAttribute(CLASS_POPUP_FOR);
+        				var popupDom = document.getElementById(popupId);
+        				if(popupDom){
+							if(popupDom.className.indexOf(CLASS_POPUP_IN) > -1 || document.querySelector(__POPUP_IN)){
+					            self.hide(popupDom);
+					        }else{
+					        	self.show(popupDom);
+					        }
+        				}else{
+        					return;
+        				}
+					}
+        		}
+        	}
+        },
+        show: function(el){
+        	var self = this;
+        	if(el.className.indexOf(CLASS_POPUP_IN) > -1 || document.querySelector(__POPUP_IN)){
+	            self.hide(el);
+	            return;
+	        }
+            if(popupStatus) return;
+        	if(!document.querySelector(__MASK)){
+				var maskHtml = '<div class="aui-mask"></div>';
+				document.body.insertAdjacentHTML('beforeend', maskHtml);
+			}
+        	el.style.display = "block";
+        	setTimeout(function(){
+        		document.querySelector(__MASK).classList.add(CLASS_MASK_IN);
+	            el.classList.add(CLASS_POPUP_IN);
+                popupStatus = true;
+	        }, 10)
+	        document.querySelector(__MASK).addEventListener("touchstart", function(event){
+	        	event.preventDefault();
+	        	self.hide(el);
+	        })
+            el.addEventListener("touchmove", function(event){
+                event.preventDefault();
+            },false)
+        },
+        hide: function(el){
+            if(!popupStatus) return;
+        	document.querySelector(__MASK).classList.remove(CLASS_MASK_IN);
+        	document.querySelector(__MASK).classList.add(CLASS_MASK_OUT);
+        	if(!document.querySelector(__POPUP_IN))return;
+            document.querySelector(__POPUP_IN).classList.add(CLASS_POPUP_OUT);
+            document.querySelector(__POPUP_IN).classList.remove(CLASS_POPUP_IN);
+	        setTimeout(function(){
+                if(!document.querySelector(__POPUP_OUT))return;
+	        	document.querySelector(__POPUP_OUT).style.display = "none";
+	            document.querySelector(__POPUP_OUT).classList.remove(CLASS_POPUP_OUT);
+	            if(document.querySelector(__MASK)){
+					document.querySelector(__MASK).parentNode.removeChild(document.querySelector(__MASK));
+				}
+                popupStatus = false;
+	        }, 300)
+        }
+    };
+	window.auiPopup = auiPopup;
+})(window);

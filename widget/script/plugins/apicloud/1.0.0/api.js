@@ -1,1 +1,612 @@
-!function(e){function n(e,n,t,r){return"function"==typeof n&&(r=t,t=n,n=void 0),"function"!=typeof t&&(r=t,t=void 0),{url:e,data:n,fnSuc:t,dataType:r}}var t={},r=/android/gi.test(navigator.appVersion),a=function(){var n=e.localStorage;return r&&(n=os.localStorage()),n};t.trim=function(e){return String.prototype.trim?null==e?"":String.prototype.trim.call(e):e.replace(/(^\s*)|(\s*$)/g,"")},t.trimAll=function(e){return e.replace(/\s*/g,"")},t.isElement=function(e){return!(!e||1!=e.nodeType)},t.isArray=function(e){return Array.isArray?Array.isArray(e):e instanceof Array},t.isEmptyObject=function(e){return"{}"===JSON.stringify(e)},t.addEvt=function(e,n,r,a){if(!t.isElement(e))return void console.warn("$api.addEvt Function need el param, el param must be DOM Element");a=a||!1,e.addEventListener&&e.addEventListener(n,r,a)},t.rmEvt=function(e,n,r,a){if(!t.isElement(e))return void console.warn("$api.rmEvt Function need el param, el param must be DOM Element");a=a||!1,e.removeEventListener&&e.removeEventListener(n,r,a)},t.one=function(e,n,r,a){if(!t.isElement(e))return void console.warn("$api.one Function need el param, el param must be DOM Element");a=a||!1;var i=this,o=function(){r&&r(),i.rmEvt(e,n,o,a)};i.addEvt(e,n,o,a)},t.dom=function(e,n){if(1===arguments.length&&"string"==typeof arguments[0]){if(document.querySelector)return document.querySelector(arguments[0])}else if(2===arguments.length&&e.querySelector)return e.querySelector(n)},t.domAll=function(e,n){if(1===arguments.length&&"string"==typeof arguments[0]){if(document.querySelectorAll)return document.querySelectorAll(arguments[0])}else if(2===arguments.length&&e.querySelectorAll)return e.querySelectorAll(n)},t.byId=function(e){return document.getElementById(e)},t.first=function(e,n){return 1===arguments.length?t.isElement(e)?e.children[0]:void console.warn("$api.first Function need el param, el param must be DOM Element"):2===arguments.length?this.dom(e,n+":first-child"):void 0},t.last=function(e,n){if(1===arguments.length){if(!t.isElement(e))return void console.warn("$api.last Function need el param, el param must be DOM Element");var r=e.children;return r[r.length-1]}if(2===arguments.length)return this.dom(e,n+":last-child")},t.eq=function(e,n){return this.dom(e,":nth-child("+n+")")},t.not=function(e,n){return this.domAll(e,":not("+n+")")},t.prev=function(e){if(!t.isElement(e))return void console.warn("$api.prev Function need el param, el param must be DOM Element");var n=e.previousSibling;return n.nodeType&&3===n.nodeType?n=n.previousSibling:void 0},t.next=function(e){if(!t.isElement(e))return void console.warn("$api.next Function need el param, el param must be DOM Element");var n=e.nextSibling;return n.nodeType&&3===n.nodeType?n=n.nextSibling:void 0},t.closest=function(e,n){if(!t.isElement(e))return void console.warn("$api.closest Function need el param, el param must be DOM Element");var r,a,i=function(e,n){var t=0,r=e.length;for(t;t<r;t++)if(e[t].isEqualNode(n))return e[t];return!1},o=function(e,n){for(r=t.domAll(e.parentNode,n),a=i(r,e);!a;){if(null!=(e=e.parentNode)&&e.nodeType==e.DOCUMENT_NODE)return!1;o(e,n)}return a};return o(e,n)},t.contains=function(e,n){var t=!1;if(n===e)return t=!0;do{if((n=n.parentNode)===e)return t=!0}while(n===document.body||n===document.documentElement);return t},t.remove=function(e){e&&e.parentNode&&e.parentNode.removeChild(e)},t.attr=function(e,n,r){return t.isElement(e)?2==arguments.length?e.getAttribute(n):3==arguments.length?(e.setAttribute(n,r),e):void 0:void console.warn("$api.attr Function need el param, el param must be DOM Element")},t.removeAttr=function(e,n){if(!t.isElement(e))return void console.warn("$api.removeAttr Function need el param, el param must be DOM Element");2===arguments.length&&e.removeAttribute(n)},t.hasCls=function(e,n){return t.isElement(e)?e.className.indexOf(n)>-1:void console.warn("$api.hasCls Function need el param, el param must be DOM Element")},t.addCls=function(e,n){if(!t.isElement(e))return void console.warn("$api.addCls Function need el param, el param must be DOM Element");if("classList"in e)e.classList.add(n);else{var r=e.className+" "+n;e.className=r}return e},t.removeCls=function(e,n){if(!t.isElement(e))return void console.warn("$api.removeCls Function need el param, el param must be DOM Element");if("classList"in e)e.classList.remove(n);else{var r=e.className.replace(n,"");e.className=r}return e},t.toggleCls=function(e,n){return t.isElement(e)?("classList"in e?e.classList.toggle(n):t.hasCls(e,n)?t.removeCls(e,n):t.addCls(e,n),e):void console.warn("$api.toggleCls Function need el param, el param must be DOM Element")},t.val=function(e,n){if(!t.isElement(e))return void console.warn("$api.val Function need el param, el param must be DOM Element");if(1===arguments.length)switch(e.tagName){case"SELECT":return e.options[e.selectedIndex].value;case"INPUT":case"TEXTAREA":return e.value}if(2===arguments.length)switch(e.tagName){case"SELECT":return e.options[e.selectedIndex].value=n,e;case"INPUT":case"TEXTAREA":return e.value=n,e}},t.prepend=function(e,n){return t.isElement(e)?(e.insertAdjacentHTML("afterbegin",n),e):void console.warn("$api.prepend Function need el param, el param must be DOM Element")},t.append=function(e,n){return t.isElement(e)?(e.insertAdjacentHTML("beforeend",n),e):void console.warn("$api.append Function need el param, el param must be DOM Element")},t.before=function(e,n){return t.isElement(e)?(e.insertAdjacentHTML("beforebegin",n),e):void console.warn("$api.before Function need el param, el param must be DOM Element")},t.after=function(e,n){return t.isElement(e)?(e.insertAdjacentHTML("afterend",n),e):void console.warn("$api.after Function need el param, el param must be DOM Element")},t.html=function(e,n){return t.isElement(e)?1===arguments.length?e.innerHTML:2===arguments.length?(e.innerHTML=n,e):void 0:void console.warn("$api.html Function need el param, el param must be DOM Element")},t.text=function(e,n){return t.isElement(e)?1===arguments.length?e.textContent:2===arguments.length?(e.textContent=n,e):void 0:void console.warn("$api.text Function need el param, el param must be DOM Element")},t.offset=function(e){if(!t.isElement(e))return void console.warn("$api.offset Function need el param, el param must be DOM Element");var n=Math.max(document.documentElement.scrollLeft,document.body.scrollLeft),r=Math.max(document.documentElement.scrollTop,document.body.scrollTop),a=e.getBoundingClientRect();return{l:a.left+n,t:a.top+r,w:e.offsetWidth,h:e.offsetHeight}},t.css=function(e,n){if(!t.isElement(e))return void console.warn("$api.css Function need el param, el param must be DOM Element");"string"==typeof n&&n.indexOf(":")>0&&e.style&&(e.style.cssText+=";"+n)},t.cssVal=function(n,r){return t.isElement(n)?2===arguments.length?e.getComputedStyle(n,null).getPropertyValue(r):void 0:void console.warn("$api.cssVal Function need el param, el param must be DOM Element")},t.jsonToStr=function(e){if("object"==typeof e)return JSON&&JSON.stringify(e)},t.strToJson=function(e){if("string"==typeof e)return JSON&&JSON.parse(e)},t.setStorage=function(e,n){if(2===arguments.length){var t=n;t="object"==typeof t?"obj-"+(t=JSON.stringify(t)):"str-"+t;var r=a();r&&r.setItem(e,t)}},t.getStorage=function(e){var n=a();if(n){var t=n.getItem(e);if(!t)return;if(0===t.indexOf("obj-"))return t=t.slice(4),JSON.parse(t);if(0===t.indexOf("str-"))return t.slice(4)}},t.rmStorage=function(e){var n=a();n&&e&&n.removeItem(e)},t.clearStorage=function(){var e=a();e&&e.clear()},t.fixIos7Bar=function(e){if(!t.isElement(e))return void console.warn("$api.fixIos7Bar Function need el param, el param must be DOM Element");if("ios"==api.systemType){var n=api.systemVersion,r=parseInt(n,10),a=api.fullScreen,i=api.iOS7StatusBarAppearance;r>=7&&!a&&i&&(e.style.paddingTop="20px")}},t.fixStatusBar=function(e){if(!t.isElement(e))return void console.warn("$api.fixStatusBar Function need el param, el param must be DOM Element");var n=api.systemType;if("ios"==n)t.fixIos7Bar(e);else if("android"==n){var r=api.systemVersion;(r=parseFloat(r))>=4.4&&(e.style.paddingTop="25px")}},t.toast=function(e,n,t){var r={},a=function(e,n){api.showProgress(e),setTimeout(function(){api.hideProgress()},n)};if(1===arguments.length){t=t||500;"number"==typeof e?t=e:r.title=e+"",a(r,t)}else if(2===arguments.length){var t=t||500;"number"==typeof(n=n)&&(t=n,n=null),e&&(r.title=e),n&&(r.text=n),a(r,t)}e&&(r.title=e),n&&(r.text=n),a(r,t=t||500)},t.post=function(){var e=n.apply(null,arguments),t={},r=e.fnSuc;if(e.url&&(t.url=e.url),e.data&&(t.data=e.data),e.dataType){var a=e.dataType.toLowerCase();"text"!=a&&"json"!=a||(t.dataType=a)}else t.dataType="json";t.method="post",api.ajax(t,function(e,n){e&&r&&r(e)})},t.get=function(){var e=n.apply(null,arguments),t={},r=e.fnSuc;if(e.url&&(t.url=e.url),e.dataType){var a=e.dataType.toLowerCase();"text"!=a&&"json"!=a||(t.dataType=a)}else t.dataType="text";t.method="get",api.ajax(t,function(e,n){e&&r&&r(e)})},"undefined"!=typeof module&&"object"==typeof exports?module.exports=t:"function"==typeof define&&(define.amd||define.cmd)?define(t):e.$api=t}(window);
+/*
+ * APICloud JavaScript Library
+ * Copyright (c) 2014 apicloud.com
+ */
+(function(window){
+    var u = {};
+    var isAndroid = (/android/gi).test(navigator.appVersion);
+    var uzStorage = function(){
+        var ls = window.localStorage;
+        if(isAndroid){
+           ls = os.localStorage();
+        }
+        return ls;
+    };
+    function parseArguments(url, data, fnSuc, dataType) {
+        if (typeof(data) == 'function') {
+            dataType = fnSuc;
+            fnSuc = data;
+            data = undefined;
+        }
+        if (typeof(fnSuc) != 'function') {
+            dataType = fnSuc;
+            fnSuc = undefined;
+        }
+        return {
+            url: url,
+            data: data,
+            fnSuc: fnSuc,
+            dataType: dataType
+        };
+    }
+    u.trim = function(str){
+        if(String.prototype.trim){
+            return str == null ? "" : String.prototype.trim.call(str);
+        }else{
+            return str.replace(/(^\s*)|(\s*$)/g, "");
+        }
+    };
+    u.trimAll = function(str){
+        return str.replace(/\s*/g,'');
+    };
+    u.isElement = function(obj){
+        return !!(obj && obj.nodeType == 1);
+    };
+    u.isArray = function(obj){
+        if(Array.isArray){
+            return Array.isArray(obj);
+        }else{
+            return obj instanceof Array;
+        }
+    };
+    u.isEmptyObject = function(obj){
+        if(JSON.stringify(obj) === '{}'){
+            return true;
+        }
+        return false;
+    };
+    u.addEvt = function(el, name, fn, useCapture){
+        if(!u.isElement(el)){
+            console.warn('$api.addEvt Function need el param, el param must be DOM Element');
+            return;
+        }
+        useCapture = useCapture || false;
+        if(el.addEventListener) {
+            el.addEventListener(name, fn, useCapture);
+        }
+    };
+    u.rmEvt = function(el, name, fn, useCapture){
+        if(!u.isElement(el)){
+            console.warn('$api.rmEvt Function need el param, el param must be DOM Element');
+            return;
+        }
+        useCapture = useCapture || false;
+        if (el.removeEventListener) {
+            el.removeEventListener(name, fn, useCapture);
+        }
+    };
+    u.one = function(el, name, fn, useCapture){
+        if(!u.isElement(el)){
+            console.warn('$api.one Function need el param, el param must be DOM Element');
+            return;
+        }
+        useCapture = useCapture || false;
+        var that = this;
+        var cb = function(){
+            fn && fn();
+            that.rmEvt(el, name, cb, useCapture);
+        };
+        that.addEvt(el, name, cb, useCapture);
+    };
+    u.dom = function(el, selector){
+        if(arguments.length === 1 && typeof arguments[0] == 'string'){
+            if(document.querySelector){
+                return document.querySelector(arguments[0]);
+            }
+        }else if(arguments.length === 2){
+            if(el.querySelector){
+                return el.querySelector(selector);
+            }
+        }
+    };
+    u.domAll = function(el, selector){
+        if(arguments.length === 1 && typeof arguments[0] == 'string'){
+            if(document.querySelectorAll){
+                return document.querySelectorAll(arguments[0]);
+            }
+        }else if(arguments.length === 2){
+            if(el.querySelectorAll){
+                return el.querySelectorAll(selector);
+            }
+        }
+    };
+    u.byId = function(id){
+        return document.getElementById(id);
+    };
+    u.first = function(el, selector){
+        if(arguments.length === 1){
+            if(!u.isElement(el)){
+                console.warn('$api.first Function need el param, el param must be DOM Element');
+                return;
+            }
+            return el.children[0];
+        }
+        if(arguments.length === 2){
+            return this.dom(el, selector+':first-child');
+        }
+    };
+    u.last = function(el, selector){
+        if(arguments.length === 1){
+            if(!u.isElement(el)){
+                console.warn('$api.last Function need el param, el param must be DOM Element');
+                return;
+            }
+            var children = el.children;
+            return children[children.length - 1];
+        }
+        if(arguments.length === 2){
+            return this.dom(el, selector+':last-child');
+        }
+    };
+    u.eq = function(el, index){
+        return this.dom(el, ':nth-child('+ index +')');
+    };
+    u.not = function(el, selector){
+        return this.domAll(el, ':not('+ selector +')');
+    };
+    u.prev = function(el){
+        if(!u.isElement(el)){
+            console.warn('$api.prev Function need el param, el param must be DOM Element');
+            return;
+        }
+        var node = el.previousSibling;
+        if(node.nodeType && node.nodeType === 3){
+            node = node.previousSibling;
+            return node;
+        }
+    };
+    u.next = function(el){
+        if(!u.isElement(el)){
+            console.warn('$api.next Function need el param, el param must be DOM Element');
+            return;
+        }
+        var node = el.nextSibling;
+        if(node.nodeType && node.nodeType === 3){
+            node = node.nextSibling;
+            return node;
+        }
+    };
+    u.closest = function(el, selector){
+        if(!u.isElement(el)){
+            console.warn('$api.closest Function need el param, el param must be DOM Element');
+            return;
+        }
+        var doms, targetDom;
+        var isSame = function(doms, el){
+            var i = 0, len = doms.length;
+            for(i; i<len; i++){
+                if(doms[i].isEqualNode(el)){
+                    return doms[i];
+                }
+            }
+            return false;
+        };
+        var traversal = function(el, selector){
+            doms = u.domAll(el.parentNode, selector);
+            targetDom = isSame(doms, el);
+            while(!targetDom){
+                el = el.parentNode;
+                if(el != null && el.nodeType == el.DOCUMENT_NODE){
+                    return false;
+                }
+                traversal(el, selector);
+            }
+
+            return targetDom;
+        };
+
+        return traversal(el, selector);
+    };
+    u.contains = function(parent,el){
+        var mark = false;
+        if(el === parent){
+            mark = true;
+            return mark;
+        }else{
+            do{
+                el = el.parentNode;
+                if(el === parent){
+                    mark = true;
+                    return mark;
+                }
+            }while(el === document.body || el === document.documentElement);
+
+            return mark;
+        }
+        
+    };
+    u.remove = function(el){
+        if(el && el.parentNode){
+            el.parentNode.removeChild(el);
+        }
+    };
+    u.attr = function(el, name, value){
+        if(!u.isElement(el)){
+            console.warn('$api.attr Function need el param, el param must be DOM Element');
+            return;
+        }
+        if(arguments.length == 2){
+            return el.getAttribute(name);
+        }else if(arguments.length == 3){
+            el.setAttribute(name, value);
+            return el;
+        }
+    };
+    u.removeAttr = function(el, name){
+        if(!u.isElement(el)){
+            console.warn('$api.removeAttr Function need el param, el param must be DOM Element');
+            return;
+        }
+        if(arguments.length === 2){
+            el.removeAttribute(name);
+        }
+    };
+    u.hasCls = function(el, cls){
+        if(!u.isElement(el)){
+            console.warn('$api.hasCls Function need el param, el param must be DOM Element');
+            return;
+        }
+        if(el.className.indexOf(cls) > -1){
+            return true;
+        }else{
+            return false;
+        }
+    };
+    u.addCls = function(el, cls){
+        if(!u.isElement(el)){
+            console.warn('$api.addCls Function need el param, el param must be DOM Element');
+            return;
+        }
+        if('classList' in el){
+            el.classList.add(cls);
+        }else{
+            var preCls = el.className;
+            var newCls = preCls +' '+ cls;
+            el.className = newCls;
+        }
+        return el;
+    };
+    u.removeCls = function(el, cls){
+        if(!u.isElement(el)){
+            console.warn('$api.removeCls Function need el param, el param must be DOM Element');
+            return;
+        }
+        if('classList' in el){
+            el.classList.remove(cls);
+        }else{
+            var preCls = el.className;
+            var newCls = preCls.replace(cls, '');
+            el.className = newCls;
+        }
+        return el;
+    };
+    u.toggleCls = function(el, cls){
+        if(!u.isElement(el)){
+            console.warn('$api.toggleCls Function need el param, el param must be DOM Element');
+            return;
+        }
+       if('classList' in el){
+            el.classList.toggle(cls);
+        }else{
+            if(u.hasCls(el, cls)){
+                u.removeCls(el, cls);
+            }else{
+                u.addCls(el, cls);
+            }
+        }
+        return el;
+    };
+    u.val = function(el, val){
+        if(!u.isElement(el)){
+            console.warn('$api.val Function need el param, el param must be DOM Element');
+            return;
+        }
+        if(arguments.length === 1){
+            switch(el.tagName){
+                case 'SELECT':
+                    var value = el.options[el.selectedIndex].value;
+                    return value;
+                    break;
+                case 'INPUT':
+                    return el.value;
+                    break;
+                case 'TEXTAREA':
+                    return el.value;
+                    break;
+            }
+        }
+        if(arguments.length === 2){
+            switch(el.tagName){
+                case 'SELECT':
+                    el.options[el.selectedIndex].value = val;
+                    return el;
+                    break;
+                case 'INPUT':
+                    el.value = val;
+                    return el;
+                    break;
+                case 'TEXTAREA':
+                    el.value = val;
+                    return el;
+                    break;
+            }
+        }
+        
+    };
+    u.prepend = function(el, html){
+        if(!u.isElement(el)){
+            console.warn('$api.prepend Function need el param, el param must be DOM Element');
+            return;
+        }
+        el.insertAdjacentHTML('afterbegin', html);
+        return el;
+    };
+    u.append = function(el, html){
+        if(!u.isElement(el)){
+            console.warn('$api.append Function need el param, el param must be DOM Element');
+            return;
+        }
+        el.insertAdjacentHTML('beforeend', html);
+        return el;
+    };
+    u.before = function(el, html){
+        if(!u.isElement(el)){
+            console.warn('$api.before Function need el param, el param must be DOM Element');
+            return;
+        }
+        el.insertAdjacentHTML('beforebegin', html);
+        return el;
+    };
+    u.after = function(el, html){
+        if(!u.isElement(el)){
+            console.warn('$api.after Function need el param, el param must be DOM Element');
+            return;
+        }
+        el.insertAdjacentHTML('afterend', html);
+        return el;
+    };
+    u.html = function(el, html){
+        if(!u.isElement(el)){
+            console.warn('$api.html Function need el param, el param must be DOM Element');
+            return;
+        }
+        if(arguments.length === 1){
+            return el.innerHTML;
+        }else if(arguments.length === 2){
+            el.innerHTML = html;
+            return el;
+        }
+    };
+    u.text = function(el, txt){
+        if(!u.isElement(el)){
+            console.warn('$api.text Function need el param, el param must be DOM Element');
+            return;
+        }
+        if(arguments.length === 1){
+            return el.textContent;
+        }else if(arguments.length === 2){
+            el.textContent = txt;
+            return el;
+        }
+    };
+    u.offset = function(el){
+        if(!u.isElement(el)){
+            console.warn('$api.offset Function need el param, el param must be DOM Element');
+            return;
+        }
+        var sl = Math.max(document.documentElement.scrollLeft, document.body.scrollLeft);
+        var st = Math.max(document.documentElement.scrollTop, document.body.scrollTop);
+
+        var rect = el.getBoundingClientRect();
+        return {
+            l: rect.left + sl,
+            t: rect.top + st,
+            w: el.offsetWidth,
+            h: el.offsetHeight
+        };
+    };
+    u.css = function(el, css){
+        if(!u.isElement(el)){
+            console.warn('$api.css Function need el param, el param must be DOM Element');
+            return;
+        }
+        if(typeof css == 'string' && css.indexOf(':') > 0){
+            el.style && (el.style.cssText += ';' + css);
+        }
+    };
+    u.cssVal = function(el, prop){
+        if(!u.isElement(el)){
+            console.warn('$api.cssVal Function need el param, el param must be DOM Element');
+            return;
+        }
+        if(arguments.length === 2){
+            var computedStyle = window.getComputedStyle(el, null);
+            return computedStyle.getPropertyValue(prop);
+        }
+    };
+    u.jsonToStr = function(json){
+        if(typeof json === 'object'){
+            return JSON && JSON.stringify(json);
+        }
+    };
+    u.strToJson = function(str){
+        if(typeof str === 'string'){
+            return JSON && JSON.parse(str);
+        }
+    };
+    u.setStorage = function(key, value){
+        if(arguments.length === 2){
+            var v = value;
+            if(typeof v == 'object'){
+                v = JSON.stringify(v);
+                v = 'obj-'+ v;
+            }else{
+                v = 'str-'+ v;
+            }
+            var ls = uzStorage();
+            if(ls){
+                ls.setItem(key, v);
+            }
+        }
+    };
+    u.getStorage = function(key){
+        var ls = uzStorage();
+        if(ls){
+            var v = ls.getItem(key);
+            if(!v){return;}
+            if(v.indexOf('obj-') === 0){
+                v = v.slice(4);
+                return JSON.parse(v);
+            }else if(v.indexOf('str-') === 0){
+                return v.slice(4);
+            }
+        }
+    };
+    u.rmStorage = function(key){
+        var ls = uzStorage();
+        if(ls && key){
+            ls.removeItem(key);
+        }
+    };
+    u.clearStorage = function(){
+        var ls = uzStorage();
+        if(ls){
+            ls.clear();
+        }
+    };
+
+   
+    /*by king*/
+    u.fixIos7Bar = function(el){
+        if(!u.isElement(el)){
+            console.warn('$api.fixIos7Bar Function need el param, el param must be DOM Element');
+            return;
+        }
+        var strDM = api.systemType;
+        if (strDM == 'ios') {
+            var strSV = api.systemVersion;
+            var numSV = parseInt(strSV,10);
+            var fullScreen = api.fullScreen;
+            var iOS7StatusBarAppearance = api.iOS7StatusBarAppearance;
+            if (numSV >= 7 && !fullScreen && iOS7StatusBarAppearance) {
+                el.style.paddingTop = '20px';
+            }
+        }
+    };
+    u.fixStatusBar = function(el){
+        if(!u.isElement(el)){
+            console.warn('$api.fixStatusBar Function need el param, el param must be DOM Element');
+            return;
+        }
+        var sysType = api.systemType;
+        if(sysType == 'ios'){
+            u.fixIos7Bar(el);
+        }else if(sysType == 'android'){
+            var ver = api.systemVersion;
+            ver = parseFloat(ver);
+            if(ver >= 4.4){
+                el.style.paddingTop = '25px';
+            }
+        }
+    };
+    u.toast = function(title, text, time){
+        var opts = {};
+        var show = function(opts, time){
+            api.showProgress(opts);
+            setTimeout(function(){
+                api.hideProgress();
+            },time);
+        };
+        if(arguments.length === 1){
+            var time = time || 500;
+            if(typeof title === 'number'){
+                time = title;
+            }else{
+                opts.title = title+'';
+            }
+            show(opts, time);
+        }else if(arguments.length === 2){
+            var time = time || 500;
+            var text = text;
+            if(typeof text === "number"){
+                var tmp = text;
+                time = tmp;
+                text = null;
+            }
+            if(title){
+                opts.title = title;
+            }
+            if(text){
+                opts.text = text;
+            }
+            show(opts, time);
+        }
+        if(title){
+            opts.title = title;
+        }
+        if(text){
+            opts.text = text;
+        }
+        time = time || 500;
+        show(opts, time);
+    };
+    u.post = function(/*url,data,fnSuc,dataType*/){
+        var argsToJson = parseArguments.apply(null, arguments);
+        var json = {};
+        var fnSuc = argsToJson.fnSuc;
+        argsToJson.url && (json.url = argsToJson.url);
+        argsToJson.data && (json.data = argsToJson.data);
+        if(argsToJson.dataType){
+            var type = argsToJson.dataType.toLowerCase();
+            if (type == 'text'||type == 'json') {
+                json.dataType = type;
+            }
+        }else{
+            json.dataType = 'json';
+        }
+        json.method = 'post';
+        api.ajax(json,
+            function(ret,err){
+                if (ret) {
+                    fnSuc && fnSuc(ret);
+                }
+            }
+        );
+    };
+    u.get = function(/*url,fnSuc,dataType*/){
+        var argsToJson = parseArguments.apply(null, arguments);
+        var json = {};
+        var fnSuc = argsToJson.fnSuc;
+        argsToJson.url && (json.url = argsToJson.url);
+        //argsToJson.data && (json.data = argsToJson.data);
+        if(argsToJson.dataType){
+            var type = argsToJson.dataType.toLowerCase();
+            if (type == 'text'||type == 'json') {
+                json.dataType = type;
+            }
+        }else{
+            json.dataType = 'text';
+        }
+        json.method = 'get';
+        api.ajax(json,
+            function(ret,err){
+                if (ret) {
+                    fnSuc && fnSuc(ret);
+                }
+            }
+        );
+    };
+
+/*end*/
+    
+    
+    if (typeof module !== 'undefined' && typeof exports === 'object') {
+        module.exports = u;
+    } else if (typeof define === 'function' && (define.amd || define.cmd)) {
+        define(u);
+    } else {
+        window.$api = u;
+    }
+})(window);
+
+

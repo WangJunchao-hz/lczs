@@ -1,1 +1,73 @@
-!function(e){function t(){this.options={baseFont:20,design:375,dpr:1,scale:1},this.initParams(),this.initUI(),this.refreshRem(),this.initEvent()}t.prototype.initParams=function(){var e=this;e.doc=document,e.docEl=e.doc.documentElement,e.meta=e.doc.querySelector('meta[name="viewport"]')},t.prototype.initUI=function(){var e=this;if(e.meta)e.meta.setAttribute("content","initial-scale="+e.options.scale+",maximum-scale="+e.options.scale+",minimum-scale="+e.options.scale+",user-scalable=no,width=device-width");else if(e.meta=e.doc.createElement("meta"),e.meta.setAttribute("name","viewport"),e.meta.setAttribute("content","initial-scale="+e.options.scale+",maximum-scale="+e.options.scale+",minimum-scale="+e.options.scale+",user-scalable=no,width=device-width"),e.docEl.firstElementChild)e.docEl.firstElementChild.appendChild(e.meta);else{var t=e.doc.createElement("div");t.appendChild(e.meta),e.doc.write(t.innerHTML)}},t.prototype.refreshRem=function(){var e=this;e.width=window.screen.width/e.options.scale,e.scale=e.width/e.options.design,e.baseFont=e.scale*e.options.baseFont,e.docEl.style.fontSize=e.baseFont+"px",e.docEl.setAttribute("data-dpr",e.options.dpr)},t.prototype.initEvent=function(){var t=this;e.addEventListener("resize",function(){t.initParams(),t.initUI(),t.refreshRem()})},"undefined"!=typeof module&&"object"==typeof exports?module.exports=new t:"function"==typeof define&&(define.amd||define.cmd)?define(new t):e.Rem=new t}("undefined"!=typeof window?window:global);
+/**
+ * @Author: 鑫木
+ * @Date:   2017/3/31
+ * @Last Modified by:   鑫木
+ * @Last Modified time: 2017/3/31
+ * @description {根字体基数可跟实际项目需求更改建议10px，以750px宽度的设计稿为基数等比缩放,devicePixelRatio兼容性有问题IE，Firefox不支持所以dpr=1}
+ */
+;(function (global) {
+    function Rem() {
+        this.options = {
+            baseFont: 20, //字体基数
+            design: 750 / 2, //设计稿宽度
+            dpr: 1,
+            scale: 1 //缩放比例为
+        };
+        this.initParams();
+        this.initUI();
+        this.refreshRem();
+        this.initEvent();
+    };
+
+    Rem.prototype.initParams = function () {
+        var self = this;
+        self.doc = document;
+        self.docEl = self.doc.documentElement;
+        self.meta = self.doc.querySelector('meta[name="viewport"]');
+    };
+
+    Rem.prototype.initUI = function () {
+        var self = this;
+        if (self.meta) {
+            self.meta.setAttribute('content', 'initial-scale=' + self.options.scale + ',maximum-scale=' + self.options.scale + ',minimum-scale=' + self.options.scale + ',user-scalable=no,width=device-width');
+        } else {
+            self.meta = self.doc.createElement('meta');
+            self.meta.setAttribute('name', 'viewport');
+            self.meta.setAttribute('content', 'initial-scale=' + self.options.scale + ',maximum-scale=' + self.options.scale + ',minimum-scale=' + self.options.scale + ',user-scalable=no,width=device-width');
+            if (self.docEl.firstElementChild) {
+                self.docEl.firstElementChild.appendChild(self.meta);
+            } else {
+                var wrap = self.doc.createElement('div');
+                wrap.appendChild(self.meta);
+                self.doc.write(wrap.innerHTML);
+            }
+        }
+    };
+
+    Rem.prototype.refreshRem = function () {
+        var self = this;
+        // self.width = self.docEl.getBoundingClientRect().width;
+        self.width = window.screen.width/self.options.scale;
+        self.scale = self.width / self.options.design;
+        self.baseFont = self.scale * self.options.baseFont;
+        self.docEl.style.fontSize = self.baseFont + 'px';
+        self.docEl.setAttribute('data-dpr', self.options.dpr);
+    };
+
+    Rem.prototype.initEvent = function () {
+        var self = this;
+        global.addEventListener('resize', function () {
+            self.initParams();
+            self.initUI();
+            self.refreshRem();
+        });
+    };
+
+    if (typeof module !== 'undefined' && typeof exports === 'object') {
+        module.exports = new Rem();
+    } else if (typeof define === 'function' && (define.amd || define.cmd)) {
+        define(new Rem());
+    } else {
+        global.Rem = new Rem();
+    }
+})(typeof window !== 'undefined' ? window : global);
