@@ -67,6 +67,5 @@ npm-debug.log
 .build_*
 .installed
 
-css/
 docs/
 release/
