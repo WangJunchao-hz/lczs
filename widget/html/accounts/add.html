@@ -1,0 +1,64 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <script src="../../script/lib/utils/rem/1.0.0/rem.js"></script>
+    <meta name="viewport"
+          content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,initial-scale=1.0,width=device-width"/>
+    <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+    <title>选择账户类型</title>
+    <link rel="stylesheet" type="text/css" href="../../css/aui/2.1.0/aui.css"/>
+    <!-- <link rel="stylesheet" type="text/css" href="../fonts/iconfont.css" />-->
+    <link rel="stylesheet" type="text/css" href="http://at.alicdn.com/t/font_hdy4esq7wjqbyb9.css"/>
+    <link rel="stylesheet" type="text/css" href="../../css/conf/accounts/add.css"/>
+</head>
+
+<body>
+<div id="app">
+    <header id="jHeader" class="aui-bar aui-bar-nav">
+        <div id="jBack" class="aui-pull-left aui-btn">
+            <span class="iconfont icon-fanhui"></span>
+        </div>
+        <div class="aui-title">选择账户类型</div>
+    </header>
+    <div id="jContent">
+        <div class="account-item bg-default">
+            <div class="fc-0"><i class="iconfont icon-xianjin fl"></i><span>现金</span></div>
+        </div>
+        <div class="account-item bg-default">
+            <div class="fc-1"><i class="iconfont icon-yhk fl"></i><span>储蓄卡</span></div>
+        </div>
+        <div class="account-item bg-default">
+            <div class="fc-2"><i class="iconfont icon-zfb fl"></i><span>支付宝</span></div>
+        </div>
+        <div class="account-item bg-default">
+            <div class="fc-3"><i class="iconfont icon-weixin fl"></i><span>微信</span></div>
+        </div>
+        <div class="account-item bg-default">
+            <div class="fc-4"><i class="iconfont icon-gupiao fl"></i><span>投资账户</span></div>
+        </div>
+        <div class="account-item bg-default">
+            <div class="fc-5"><i class="iconfont icon-xunibi fl"></i><span>虚拟币账户</span></div>
+        </div>
+        <div class="account-item bg-default">
+            <div class="fc-6"><i class="iconfont icon-caipiao fl"></i><span>彩票账户</span></div>
+        </div>
+        <div class="account-item bg-default">
+            <div class="fc-7"><i class="iconfont icon-cxg fl"></i><span>固定理财</span></div>
+        </div>
+        <div class="account-item bg-default">
+            <div class="fc-8"><i class="iconfont icon-licai fl"></i><span>其它账户</span></div>
+        </div>
+    </div>
+</div>
+</body>
+<script type="text/javascript" data-main="../../script/app" src="../../script/lib/require/2.1.11/require.js"></script>
+<!-- apiready必须放在这里才能生效 -->
+<script type="text/javascript">
+    apiready = function () {
+        require(['conf/accounts/add']);
+    };
+</script>
+
+</html>

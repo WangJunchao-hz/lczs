@@ -3,13 +3,13 @@
  * @Date:   2017/5/4
  * @Last Modified by:   鑫木
  * @Last Modified time: 2017/5/4
- * @file 首页脚本
+ * @file 添加账户脚本
  */
-define(['common','date'],function(common,date) {
+define(['common'],function(common) {
     /**
      * @description: 新建一个类
      */
-    function Main() {
+    function Add() {
         this.init();
         this.initUI();
         this.events();
@@ -18,26 +18,26 @@ define(['common','date'],function(common,date) {
     /**
      * @description: 初始化参数(全局变量+常量)
      */
-    Main.prototype.init = function() {
+    Add.prototype.init = function() {
         var self = this;
 
         //缓存全局变量
-        self.title = date.periods() + '好';
+
 
         //缓存全局dom对象
-        self.footerDom = $('#jFooter');
+
     };
 
     /**
      * @description: 初始化页面(首屏)
      */
-    Main.prototype.initUI = function() {
+    Add.prototype.initUI = function() {
         var self = this;
 
         self.app = new Vue({
             el: '#app',
             data: {
-                message: self.title
+
             },
             beforeCreate: function() {
 
@@ -54,25 +54,18 @@ define(['common','date'],function(common,date) {
     /**
      * @description: 事件管理
      */
-    Main.prototype.events = function() {
+    Add.prototype.events = function() {
         var self = this;
-        $('#jAddAccount').click(function () {
-            api.openWin({
-                name: 'addAccount',
-                url: './accounts/add.html',
-                delay: delay,
-                bounces: false,
-                animation:{
-                    type:'fade'
-                }
-            });
-        });
+        // $('#jBack').click(function () {
+        //     alert('sss');
+        //     api.closeWin();
+        // });
     };
 
     /**
      * @description: ajax管理
      */
-    Main.prototype.https = function() {
+    Add.prototype.https = function() {
         var self = this;
         return {
 
@@ -82,12 +75,12 @@ define(['common','date'],function(common,date) {
     /**
      * @description: 方法管理
      */
-    Main.prototype.methods = function() {
+    Add.prototype.methods = function() {
         var self = this;
         return {
 
         };
     };
 
-    new Main();
+    new Add();
 });

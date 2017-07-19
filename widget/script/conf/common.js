@@ -12,6 +12,7 @@ define(["zepto","api","vue"],function($,$api,Vue) {
     function Common() {
         this.init();
         this.initUI();
+        this.events();
     }
 
     /**
@@ -29,6 +30,7 @@ define(["zepto","api","vue"],function($,$api,Vue) {
         if (api.systemType != 'ios') {
             delay = 300;
         }
+        window.delay = delay;
         self.delay = delay; //页面打开延时
     };
 
@@ -48,7 +50,12 @@ define(["zepto","api","vue"],function($,$api,Vue) {
      */
     Common.prototype.events = function() {
         var self = this;
-
+        var hasBack = $('#jBack').length != 0 ? true : false;
+        if(hasBack){
+            $('html').on('click','#jBack',function () {
+                api.closeWin();
+            });
+        }
     };
 
     /**
