@@ -19,11 +19,11 @@
     <div class="card-li bg-default">
         <div class="card-li-inner">
             <div class="fl fc-2b2525 aui-font-size-18">总资产</div>
-            <div class="fr fc-1b1515 fc-bold aui-font-size-20">0.0</div>
+            <div class="fr fc-1b1515 fc-bold aui-font-size-20">0.00</div>
         </div>
     </div>
     <div id="jCardList">
-        <div class="card-li" v-for="item in accountLists" v-bind:class="'bg-'+ item.color" v-bind:data-id="item.id" v-bind:data-color="item.color">
+        <div class="card-li" v-for="item in accountLists" v-bind:class="'bg-'+ item.color" v-bind:data-value="JSON.stringify(item)">
             <div class="card-li-inner">
                 <div class="fl fc-default">
                     <i class="iconfont fl" v-bind:class="icons[item.type]"></i>
@@ -97,18 +97,21 @@
                     var data = common.methods().readFile('accounts');
                     self.app.accountLists = data.contents;
                 });
-                
+
                 $('#jCardList').on('click','.card-li',function () {
-                    var id = $(this).attr('data-id');
-                    var name = $(this).find('.name').text();
-                    var color = $(this).attr('data-color');
-                    common.methods().openWin('accountDetail','./accounts/accountDetail.html',{
-                        id:id,
-                        name:name,
-                        color:color
+                    var data = $(this).attr('data-value');
+                    api.openWin({
+                        name: 'accountDetail',
+                        url: './accounts/accountDetail.html',
+                        pageParam: {
+                            data:data
+                        },
+                        animation: {
+                            type:'push'
+                        }
                     });
                 });
-                
+
                 $('#jAddAccount').click(function () {
                     api.openWin({
                         name: 'add',

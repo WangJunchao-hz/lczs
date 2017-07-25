@@ -98,7 +98,7 @@
 <!-- apiready必须放在这里才能生效 -->
 <script type="text/javascript">
     apiready = function () {
-        require(['common'],function(common) {
+        require(['common','date'],function(common,date) {
             /**
              * @description: 新建一个类
              */
@@ -183,13 +183,21 @@
                 $('#jSure').on('click',function () {
                     if(!hasClick){
                         var id = common.methods().uuid(8,16);
+                        var now = date.format("yyyy-MM-dd HH:mm:ss");
                         var data = {
                             "id":id,
                             "type":self.pageType,
                             "name":self.app.accountName,
                             "remark":self.app.remark,
+                            "color":self.app.colorType,
                             "amount":self.app.amount,
-                            "color":self.app.colorType
+                            "balance":self.app.amount,
+                            "rose":"+0.00",
+                            "inflow":"0.00",
+                            "outflow":"0.00",
+                            "addDate":now,
+                            "upDate":now,
+                            "details":[]
                         };
                         common.methods().writeFile('accounts',data,'添加账户成功');
 

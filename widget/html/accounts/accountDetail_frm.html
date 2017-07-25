@@ -4,28 +4,29 @@
 <head>
     <meta charset="utf-8">
     <script src="../../script/lib/utils/rem/1.0.0/rem.js"></script>
-    <meta name="viewport"
-          content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,initial-scale=1.0,width=device-width"/>
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,initial-scale=1.0,width=device-width" />
     <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
     <title>账户详情</title>
-    <link rel="stylesheet" type="text/css" href="../../css/aui/2.1.0/aui.css"/>
+    <link rel="stylesheet" type="text/css" href="../../css/aui/2.1.0/aui.css" />
     <!-- <link rel="stylesheet" type="text/css" href="../fonts/iconfont.css" />-->
-    <link rel="stylesheet" type="text/css" href="http://at.alicdn.com/t/font_hdy4esq7wjqbyb9.css"/>
-    <link rel="stylesheet" type="text/css" href="../../css/conf/accounts/accountDetail.css"/>
+    <link rel="stylesheet" type="text/css" href="http://at.alicdn.com/t/font_otbtdta6oxls1yvi.css" />
+    <link rel="stylesheet" type="text/css" href="../../css/conf/accounts/accountDetail.css" />
 </head>
 
 <body>
-<div id="app">
-    <div id="jContent">
-
+    <div id="app">
+        <div id="jContent aui-content-padded content">
+            <div id="jAdd" class="add" v-bind:class="'bg-'+itemData.color">
+                <i class="iconfont icon-jia"></i>
+            </div>
+        </div>
     </div>
-</div>
 </body>
 <script type="text/javascript" data-main="../../script/app" src="../../script/lib/require/2.1.11/require.js"></script>
 <!-- apiready必须放在这里才能生效 -->
 <script type="text/javascript">
-    apiready = function () {
-        require(['common'],function(common) {
+    apiready = function() {
+        require(['common'], function(common) {
             /**
              * @description: 新建一个类
              */
@@ -42,7 +43,7 @@
                 var self = this;
 
                 //缓存全局变量
-                self.id = api.pageParam.id;
+                self.data = JSON.parse(api.pageParam.data);
 
 
                 //缓存全局dom对象
@@ -55,12 +56,12 @@
             AccountDetail.prototype.initUI = function() {
                 var self = this;
 
-                var data = common.methods().queryData('accounts',self.id);
-                alert(JSON.stringify(data));
+                var data = common.methods().queryData('accounts', self.id);
+//                                alert(JSON.stringify(data));
                 self.app = new Vue({
                     el: '#app',
                     data: {
-
+                        itemData:self.data
                     }
                 });
             };
@@ -71,10 +72,10 @@
             AccountDetail.prototype.events = function() {
                 var self = this;
 
-                $('#jContent').on('click','.account-item',function () {
+                $('#jContent').on('click', '.account-item', function() {
                     var type = $(this).attr('data-type');
-                    common.methods().openWin('add_new','./add_new.html',{
-                        type:type
+                    common.methods().openWin('add_new', './add_new.html', {
+                        type: type
                     });
                 });
             };
@@ -103,4 +104,5 @@
         });
     };
 </script>
+
 </html>

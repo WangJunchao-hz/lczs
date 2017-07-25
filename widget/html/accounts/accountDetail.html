@@ -10,19 +10,47 @@
     <title>账户详情</title>
     <link rel="stylesheet" type="text/css" href="../../css/aui/2.1.0/aui.css"/>
     <!-- <link rel="stylesheet" type="text/css" href="../fonts/iconfont.css" />-->
-    <link rel="stylesheet" type="text/css" href="http://at.alicdn.com/t/font_vbi1zn4tlcy2e29.css"/>
+    <link rel="stylesheet" type="text/css" href="http://at.alicdn.com/t/font_otbtdta6oxls1yvi.css"/>
     <link rel="stylesheet" type="text/css" href="../../css/conf/accounts/accountDetail.css"/>
 </head>
 
 <body>
 <div id="app">
-    <header id="jHeader" class="aui-bar aui-bar-nav">
+    <header id="jHeader" class="aui-bar aui-bar-nav" v-bind:class="'bg-'+accountDetail.color">
         <div id="jBack" class="aui-pull-left aui-btn">
             <span class="iconfont icon-fanhui"></span>
         </div>
-        <div class="aui-title">选择账户类型</div>
+        <div class="aui-title">{{accountDetail.name}}</div>
         <div id="jDelete" class="aui-pull-right aui-btn">编辑</div>
     </header>
+    <div id="jMod1" class="mod1" v-bind:class="'bg-'+accountDetail.color">
+        <div class="overview">
+            <p class="total">
+                <span>{{accountDetail.balance || '0.00'}}</span>
+                <span class="up fc-red"><i class="iconfont icon-zhang"></i>{{accountDetail.rose || '+0.00'}}%</span>
+                <span class="down fc-green aui-hide"><i class="iconfont icon-die"></i>-100%</span>
+            </p>
+            <p class="remark fc-d7d7d7 aui-font-size-14">{{accountDetail.remark}}</p>
+        </div>
+        <div>
+            <section class="aui-grid">
+                <div class="aui-row">
+                    <div class="aui-col-xs-4">
+                        <div class="fc-default">{{accountDetail.amount}}</div>
+                        <div class="aui-grid-label fc-d7d7d7">本金</div>
+                    </div>
+                    <div class="aui-col-xs-4">
+                        <div class="fc-default">{{accountDetail.inflow || '0.00'}}</div>
+                        <div class="aui-grid-label fc-d7d7d7">流入</div>
+                    </div>
+                    <div class="aui-col-xs-4">
+                        <div class="fc-default">{{accountDetail.outflow || '0.00'}}</div>
+                        <div class="aui-grid-label fc-d7d7d7">流出</div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
 </div>
 </body>
 <script type="text/javascript" data-main="../../script/app" src="../../script/lib/require/2.1.11/require.js"></script>
@@ -30,13 +58,31 @@
 <script type="text/javascript">
     apiready = function () {
         require(['common'],function (common) {
-            var name = api.pageParam.name;
-            var color = api.pageParam.color;
-            $('#jHeader').addClass('bg-'+color);
-            $('#jHeader .aui-title').html(name);
-            common.methods().openFrame('accountDetail_frm','./accountDetail_frm.html',0,{
-                id:api.pageParam.id
-            },true);
+            var accountDetail = JSON.parse(api.pageParam.data);
+            var headerH = $api.offset($api.byId("jHeader")).h;
+            var mod1H = $api.offset($api.byId("jMod1")).h;
+
+            self.app = new Vue({
+                el: '#app',
+                data: {
+                    accountDetail:accountDetail
+                }
+            });
+
+            api.openFrame({
+                name: 'accountDetail_frm',
+                url: './accountDetail_frm.html',
+                rect: {
+                    x: 0,
+                    y: headerH+mod1H,
+                    w: 'auto',
+                    h: 'auto'
+                },
+                pageParam: {
+                    data:api.pageParam.data
+                },
+                bounces: true
+            });
         });
     };
 </script>

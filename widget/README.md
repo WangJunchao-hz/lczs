@@ -22,8 +22,24 @@
 
 ## 缓存
     isFist----是否首次安装app
-## 数据库表名
-    accounts----存储账户信息
+## 数据库表名+字段
+    accounts----表名存储账户信息
+        contents----所有账户信息
+            id----账户id
+            type----账户类型
+            name----账户名
+            remark----账户备注
+            color----账户颜色
+            balance----余额
+            amount----本金
+            rose----涨幅
+            inflow----流入
+            outflow----流出
+            addDate----添加时间
+            upDate----更新时间
+            details----每笔流入流出详细记录
+                id----账单id
+
 ## 字典
 ### 账户类型
         0----现金
