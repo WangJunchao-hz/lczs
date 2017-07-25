@@ -1,0 +1,112 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <script src="../../script/lib/utils/rem/1.0.0/rem.js"></script>
+    <meta name="viewport"
+          content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,initial-scale=1.0,width=device-width"/>
+    <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+    <title>选择账户类型</title>
+    <link rel="stylesheet" type="text/css" href="../../css/aui/2.1.0/aui.css"/>
+    <!-- <link rel="stylesheet" type="text/css" href="../fonts/iconfont.css" />-->
+    <link rel="stylesheet" type="text/css" href="http://at.alicdn.com/t/font_hdy4esq7wjqbyb9.css"/>
+    <link rel="stylesheet" type="text/css" href="../../css/conf/accounts/add.css"/>
+</head>
+
+<body>
+<div id="app">
+    <div id="jContent">
+        <div v-for="item in accountTypeLists" class="account-item bg-default" v-bind:data-type="item.accountType" tapmode>
+            <div v-bind:class="'fc-'+item.accountType"><i class="iconfont fl" v-bind:class="item.accountIcon"></i><span>{{item.accountName}}</span></div>
+        </div>
+    </div>
+</div>
+</body>
+<script type="text/javascript" data-main="../../script/app" src="../../script/lib/require/2.1.11/require.js"></script>
+<!-- apiready必须放在这里才能生效 -->
+<script type="text/javascript">
+    apiready = function () {
+        require(['common'],function(common) {
+            /**
+             * @description: 新建一个类
+             */
+            function Add() {
+                this.init();
+                this.initUI();
+                this.events();
+            }
+
+            /**
+             * @description: 初始化参数(全局变量+常量)
+             */
+            Add.prototype.init = function() {
+                var self = this;
+
+                //缓存全局变量
+                self.pageType = api.pageParam.type;
+
+
+                //缓存全局dom对象
+
+            };
+
+            /**
+             * @description: 初始化页面(首屏)
+             */
+            Add.prototype.initUI = function() {
+                var self = this;
+
+                var data = common.methods().readFile('widget://data/default.json');
+
+                if(self.pageType == '2'){
+
+                }
+
+                self.app = new Vue({
+                    el: '#app',
+                    data: {
+                        accountTypeLists:data.accountTypeLists
+                    }
+                });
+            };
+
+            /**
+             * @description: 事件管理
+             */
+            Add.prototype.events = function() {
+                var self = this;
+
+                $('#jContent').on('click','.account-item',function () {
+                    var type = $(this).attr('data-type');
+                    common.methods().openWin('add_new','./add_new.html',{
+                        type:type
+                    });
+                });
+            };
+
+            /**
+             * @description: ajax管理
+             */
+            Add.prototype.https = function() {
+                var self = this;
+                return {
+
+                };
+            };
+
+            /**
+             * @description: 方法管理
+             */
+            Add.prototype.methods = function() {
+                var self = this;
+                return {
+
+                };
+            };
+
+            new Add();
+        });
+    };
+</script>
+</html>

@@ -1,6 +1,6 @@
 <widget id="A6948324930764" version="0.0.1">
 
-    <name>资产助手</name>
+    <name>鑫钱包</name>
 
     <description>
 
@@ -8,7 +8,7 @@
 
     </description>
 
-    <author email="鑫木hz@foxmail.com" href="http://www.apicloud.com">
+    <author email="" href="http://www.apicloud.com">
 
         Developer
 
@@ -24,7 +24,7 @@
 
     <preference name="windowBackground" value="rgba(0,0,0,0.0)"/>
 
-    <preference name="frameBackgroundColor" value="rgba(0,0,0,0.0)"/>
+    <preference name="frameBackgroundColor" value="rgba(240,240,240,1)"/>
 
     <preference name="hScrollBarEnabled" value="true"/>
 

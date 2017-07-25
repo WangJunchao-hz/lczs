@@ -1,0 +1,236 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <script src="../../script/lib/utils/rem/1.0.0/rem.js"></script>
+    <meta name="viewport"
+          content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,initial-scale=1.0,width=device-width"/>
+    <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+    <title>新建账户</title>
+    <link rel="stylesheet" type="text/css" href="../../css/aui/2.1.0/aui.css"/>
+    <!-- <link rel="stylesheet" type="text/css" href="../fonts/iconfont.css" />-->
+    <link rel="stylesheet" type="text/css" href="http://at.alicdn.com/t/font_jtcpxfrms4i.css"/>
+    <link rel="stylesheet" type="text/css" href="../../css/conf/accounts/add.css"/>
+</head>
+
+<body>
+<div id="app">
+    <header id="jHeader" class="aui-bar aui-bar-nav">
+        <div id="jBack" class="aui-pull-left aui-btn">
+            <span class="iconfont icon-fanhui"></span>
+        </div>
+        <div class="aui-title">新建{{name}}账户</div>
+        <div id="jSure" class="aui-pull-right aui-btn">确定</div>
+    </header>
+    <div class="content aui-content-padded">
+        <div class="card-li" v-bind:class="'bg-'+colorType">
+            <div class="card-li-inner">
+                <div class="fl fc-default">
+                    <i class="iconfont fl" v-bind:class="icon"></i>
+                    <span class="name aui-ellipsis-1">{{accountName}}</span>
+                    <span class="remark aui-font-size-14 fc-d7d7d7 aui-ellipsis-1">{{remark}}</span>
+                </div>
+                <div class="fr fc-default">{{amount}}</div>
+            </div>
+        </div>
+        <ul class="aui-list aui-form-list">
+            <li class="aui-list-item">
+                <div class="aui-list-item-inner">
+                    <div class="aui-list-item-label">
+                        账户名
+                    </div>
+                    <div class="aui-list-item-input">
+                        <input name="accountName" type="text" v-bind:placeholder="accountName">
+                    </div>
+                </div>
+            </li>
+            <li class="aui-list-item">
+                <div class="aui-list-item-inner">
+                    <div class="aui-list-item-label">
+                        备注
+                    </div>
+                    <div class="aui-list-item-input">
+                        <input name="accountRemark" type="text" v-bind:placeholder="remark">
+                    </div>
+                </div>
+            </li>
+            <li class="aui-list-item">
+                <div class="aui-list-item-inner">
+                    <div class="aui-list-item-label">
+                        金额
+                    </div>
+                    <div class="aui-list-item-input">
+                        <input name="accountAmount" type="number" v-bind:placeholder="amount">
+                    </div>
+                </div>
+            </li>
+            <li class="aui-list-item">
+                <div class="aui-list-item-inner">
+                    <div class="aui-list-item-label">
+                        账户颜色
+                    </div>
+                    <div id="jColorShow" class="aui-list-item-input">
+                        <div class="color-item" v-bind:class="'bg-'+colorType"></div>
+                    </div>
+                </div>
+            </li>
+            <li class="aui-list-item" v-show="colorListsShow">
+                <div class="aui-list-item-inner">
+                    <div class="aui-list-item-label">
+                    </div>
+                    <div class="aui-list-item-input">
+                        <section class="aui-grid">
+                            <div id="jColors" class="aui-row">
+                                <div class="aui-col-xs-2" v-for="n in colorNum" v-bind:data-color="(n-1)">
+                                    <div class="color-item" v-bind:class="'bg-'+(n-1)"><i v-if="(n-1) == colorType" class="iconfont icon-sure fc-default aui-font-size-16"></i></div>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+                </div>
+            </li>
+        </ul>
+    </div>
+</div>
+</body>
+<script type="text/javascript" data-main="../../script/app" src="../../script/lib/require/2.1.11/require.js"></script>
+<!-- apiready必须放在这里才能生效 -->
+<script type="text/javascript">
+    apiready = function () {
+        require(['common'],function(common) {
+            /**
+             * @description: 新建一个类
+             */
+            function AddNew() {
+                this.init();
+                this.initUI();
+                this.events();
+            }
+
+            /**
+             * @description: 初始化参数(全局变量+常量)
+             */
+            AddNew.prototype.init = function() {
+                var self = this;
+
+                //缓存全局变量
+                self.pageType = api.pageParam.type;
+
+
+                //缓存全局dom对象
+
+            };
+
+            /**
+             * @description: 初始化页面(首屏)
+             */
+            AddNew.prototype.initUI = function() {
+                var self = this;
+                var accountsArry = ['现金','储蓄卡','支付宝','微信','投资','虚拟币','彩票','固定理财','其它'];
+                var iconsArry = ['icon-xianjin','icon-yhk','icon-zfb','icon-weixin','icon-gupiao','icon-xunibi','icon-caipiao','icon-cxg','icon-licai'];
+                self.app = new Vue({
+                    el: '#app',
+                    data: {
+                        type:self.pageType,
+                        colorType:self.pageType,
+                        name:accountsArry[self.pageType],
+                        accountName:accountsArry[self.pageType],
+                        remark:"备注",
+                        icon:iconsArry[self.pageType],
+                        amount:"0.00",
+                        colorNum:29,
+                        colorListsShow:false
+                    }
+                });
+            };
+
+            /**
+             * @description: 事件管理
+             */
+            AddNew.prototype.events = function() {
+                var self = this;
+
+                $('input[name="accountName"]').on('input',function () {
+                    var val = $(this).val();
+                    self.app.accountName = val;
+                });
+
+                $('input[name="accountRemark"]').on('input',function () {
+                    var val = $(this).val();
+                    self.app.remark = val;
+                });
+
+                $('input[name="accountAmount"]').on('input',function () {
+                    var val = $(this).val();
+                    self.app.amount = common.methods().toThousands(val);
+                });
+
+                $('#jColors').on('click','.aui-col-xs-2',function () {
+                    var color = $(this).attr('data-color');
+                    self.app.colorType = color;
+                });
+
+                $('#jColorShow').on('click',function () {
+                    if(self.app.colorListsShow){
+                        self.app.colorListsShow = false;
+                    }else {
+                        self.app.colorListsShow = true;
+                    }
+                });
+
+                var hasClick = false;
+                $('#jSure').on('click',function () {
+                    if(!hasClick){
+                        var id = common.methods().uuid(8,16);
+                        var data = {
+                            "id":id,
+                            "type":self.pageType,
+                            "name":self.app.accountName,
+                            "remark":self.app.remark,
+                            "amount":self.app.amount,
+                            "color":self.app.colorType
+                        };
+                        common.methods().writeFile('accounts',data,'添加账户成功');
+
+                        api.sendEvent({
+                            name: 'addAccountSuccess'
+                        });
+
+                        $api.setStorage('isFist','1');
+                        setTimeout(function () {
+                            api.closeToWin({
+                                name: 'root'
+                            });
+                        },300);
+                        hasClick = true;
+                    }
+                });
+            };
+
+            /**
+             * @description: ajax管理
+             */
+            AddNew.prototype.https = function() {
+                var self = this;
+                return {
+
+                };
+            };
+
+            /**
+             * @description: 方法管理
+             */
+            AddNew.prototype.methods = function() {
+                var self = this;
+                return {
+
+                };
+            };
+
+            new AddNew();
+        });
+    };
+</script>
+
+</html>

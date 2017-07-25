@@ -19,62 +19,18 @@
     <div class="card-li bg-default">
         <div class="card-li-inner">
             <div class="fl fc-2b2525 aui-font-size-18">总资产</div>
-            <div class="fr fc-1b1515 fc-bold aui-font-size-20">10000</div>
+            <div class="fr fc-1b1515 fc-bold aui-font-size-20">0.0</div>
         </div>
     </div>
     <div id="jCardList">
-        <div class="card-li bg-0">
+        <div class="card-li" v-for="item in accountLists" v-bind:class="'bg-'+ item.color" v-bind:data-id="item.id" v-bind:data-color="item.color">
             <div class="card-li-inner">
-                <div class="fl fc-default"><i class="iconfont icon-xianjin fl"></i><span>现金</span></div>
-                <div class="fr fc-default">10000</div>
-            </div>
-        </div>
-        <div class="card-li bg-1">
-            <div class="card-li-inner">
-                <div class="fl fc-default"><i class="iconfont icon-yhk fl"></i><span>储蓄卡</span></div>
-                <div class="fr fc-default">10000</div>
-            </div>
-        </div>
-        <div class="card-li bg-2">
-            <div class="card-li-inner">
-                <div class="fl fc-default"><i class="iconfont icon-zfb fl"></i><span>支付宝</span></div>
-                <div class="fr fc-default">10000</div>
-            </div>
-        </div>
-        <div class="card-li bg-3">
-            <div class="card-li-inner">
-                <div class="fl fc-default"><i class="iconfont icon-weixin fl"></i><span>微信</span></div>
-                <div class="fr fc-default">10000</div>
-            </div>
-        </div>
-        <div class="card-li bg-4">
-            <div class="card-li-inner">
-                <div class="fl fc-default"><i class="iconfont icon-gupiao fl"></i><span>投资账户</span></div>
-                <div class="fr fc-default">10000</div>
-            </div>
-        </div>
-        <div class="card-li bg-5">
-            <div class="card-li-inner">
-                <div class="fl fc-default"><i class="iconfont icon-xunibi fl"></i><span>虚拟币账户</span></div>
-                <div class="fr fc-default">10000</div>
-            </div>
-        </div>
-        <div class="card-li bg-6">
-            <div class="card-li-inner">
-                <div class="fl fc-default"><i class="iconfont icon-caipiao fl"></i><span>彩票账户</span></div>
-                <div class="fr fc-default">10000</div>
-            </div>
-        </div>
-        <div class="card-li bg-7">
-            <div class="card-li-inner">
-                <div class="fl fc-default"><i class="iconfont icon-cxg fl"></i><span>固定理财</span></div>
-                <div class="fr fc-default">10000</div>
-            </div>
-        </div>
-        <div class="card-li bg-8">
-            <div class="card-li-inner">
-                <div class="fl fc-default"><i class="iconfont icon-licai fl"></i><span>其它账户</span></div>
-                <div class="fr fc-default">10000</div>
+                <div class="fl fc-default">
+                    <i class="iconfont fl" v-bind:class="icons[item.type]"></i>
+                    <span class="name aui-ellipsis-1">{{item.name}}</span>
+                    <span class="remark aui-font-size-14 fc-d7d7d7 aui-ellipsis-1">{{item.remark}}</span>
+                </div>
+                <div class="fr fc-default">{{item.amount}}</div>
             </div>
         </div>
     </div>
@@ -89,7 +45,108 @@
 <!-- apiready必须放在这里才能生效 -->
 <script type="text/javascript">
     apiready = function () {
-        require(['conf/main']);
+        require(['common','date'],function(common,date) {
+            /**
+             * @description: 新建一个类
+             */
+            function Main() {
+                this.init();
+                this.initUI();
+                this.events();
+            }
+
+            /**
+             * @description: 初始化参数(全局变量+常量)
+             */
+            Main.prototype.init = function() {
+                var self = this;
+
+                //缓存全局变量
+                self.title = date.periods() + '好';
+
+                //缓存全局dom对象
+                self.footerDom = $('#jFooter');
+            };
+
+            /**
+             * @description: 初始化页面(首屏)
+             */
+            Main.prototype.initUI = function() {
+                var self = this;
+
+                var iconsArry = ['icon-xianjin','icon-yhk','icon-zfb','icon-weixin','icon-gupiao','icon-xunibi','icon-caipiao','icon-cxg','icon-licai'];
+                var data = common.methods().readFile('accounts');
+                self.app = new Vue({
+                    el: '#app',
+                    data: {
+                        accountLists: data.contents,
+                        icons:iconsArry
+                    }
+                });
+            };
+
+            /**
+             * @description: 事件管理
+             */
+            Main.prototype.events = function() {
+                var self = this;
+
+                api.addEventListener({
+                    name: 'addAccountSuccess'
+                }, function(ret, err){
+                    var data = common.methods().readFile('accounts');
+                    self.app.accountLists = data.contents;
+                });
+                
+                $('#jCardList').on('click','.card-li',function () {
+                    var id = $(this).attr('data-id');
+                    var name = $(this).find('.name').text();
+                    var color = $(this).attr('data-color');
+                    common.methods().openWin('accountDetail','./accounts/accountDetail.html',{
+                        id:id,
+                        name:name,
+                        color:color
+                    });
+                });
+                
+                $('#jAddAccount').click(function () {
+                    api.openWin({
+                        name: 'add',
+                        url: './accounts/add.html',
+                        delay: delay,
+                        bounces: false,
+                        pageParam: {
+                            type:'1'
+                        },
+                        animation:{
+                            type:'fade'
+                        }
+                    });
+                });
+            };
+
+            /**
+             * @description: ajax管理
+             */
+            Main.prototype.https = function() {
+                var self = this;
+                return {
+
+                };
+            };
+
+            /**
+             * @description: 方法管理
+             */
+            Main.prototype.methods = function() {
+                var self = this;
+                return {
+
+                };
+            };
+
+            new Main();
+        });
     };
 </script>
 

@@ -1,0 +1,44 @@
+@import "./common";
+.aui-bar-tab{
+	color: #b7b7b7;
+}
+/*底部start*/
+.aui-bar-tab {
+	background-color: #fff;
+}
+
+.aui-bar-tab .aui-active {
+	color: #00a2ac;
+}
+
+.add {
+	display: inline-block;
+	width: 2rem;
+	height: 2rem;
+	border-radius: 100%;
+	box-shadow: 0 0.2rem 0.6rem rgba(0, 0, 0, .5);
+}
+
+.icon-tianjia {
+	font-size: 2rem;
+	line-height: 2rem;
+	color: #269d80;
+}
+
+.icon-keai {
+	font-size: 2rem;
+	line-height: 2rem;
+	color: #d96831;
+}
+
+.icon-tianjia:active {
+	color: #00949d;
+}
+
+.icon-zichan{
+    position: relative;
+    top:0.2rem;
+    font-size: 1.2rem;
+    line-height: 1rem;
+}
+/*底部end*/

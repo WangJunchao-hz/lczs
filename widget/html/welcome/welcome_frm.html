@@ -1,0 +1,121 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <script src="../../script/lib/utils/rem/1.0.0/rem.js"></script>
+    <meta name="viewport"
+          content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,initial-scale=1.0,width=device-width"/>
+    <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+    <title>欢迎页</title>
+    <link rel="stylesheet" type="text/css" href="../../css/aui/2.1.0/aui.css"/>
+    <!-- <link rel="stylesheet" type="text/css" href="../fonts/iconfont.css" />-->
+    <link rel="stylesheet" type="text/css" href="http://at.alicdn.com/t/font_t0d0y6lfw9widx6r.css"/>
+    <link rel="stylesheet" type="text/css" href="../../css/conf/welcome/welcome.css"/>
+</head>
+
+<body>
+<div id="jWelcome" class="welcome-tip aui-content-padded">
+    <i class="iconfont icon-keai fc-7"></i>
+    <div class="tip">
+        <p>欢迎使用小鑫,</p>
+        <p>未来有您的陪伴,</p>
+        <p>小鑫定会越来越好!</p>
+        <div class="guide">
+            <p>快来添加一个账户吧!</p>
+            <i class="iconfont icon-arrows-5-5 fc-4"></i>
+        </div>
+    </div>
+</div>
+<div id="jNoData" class="no-data">
+    <div class="content">
+        <i class="iconfont icon-zwsj"></i>
+        <p>暂无流水记录</p>
+    </div>
+</div>
+<div id="app">
+    <div id="jContent">
+
+    </div>
+</div>
+</body>
+<script type="text/javascript" data-main="../../script/app" src="../../script/lib/require/2.1.11/require.js"></script>
+<!-- apiready必须放在这里才能生效 -->
+<script type="text/javascript">
+    apiready = function () {
+        require(['common'],function(common) {
+            /**
+             * @description: 新建一个类
+             */
+            function Welcome() {
+                this.init();
+                this.initUI();
+                this.events();
+            }
+
+            /**
+             * @description: 初始化参数(全局变量+常量)
+             */
+            Welcome.prototype.init = function() {
+                var self = this;
+
+                //缓存全局变量
+                self.isFist = $api.getStorage('isFist');
+
+                //缓存全局dom对象
+
+            };
+
+            /**
+             * @description: 初始化页面(首屏)
+             */
+            Welcome.prototype.initUI = function() {
+                var self = this;
+
+                if(self.isFist == '1'){
+                    $('#jWelcome').addClass('aui-hide');
+                    $('#app').removeClass('aui-hide');
+                }else {
+                    $('#app').addClass('aui-hide');
+                    $('#jWelcome').removeClass('aui-hide');
+                }
+                self.app = new Vue({
+                    el: '#app',
+                    data: {
+
+                    }
+                });
+            };
+
+            /**
+             * @description: 事件管理
+             */
+            Welcome.prototype.events = function() {
+                var self = this;
+            };
+
+            /**
+             * @description: ajax管理
+             */
+            Welcome.prototype.https = function() {
+                var self = this;
+                return {
+
+                };
+            };
+
+            /**
+             * @description: 方法管理
+             */
+            Welcome.prototype.methods = function() {
+                var self = this;
+                return {
+
+                };
+            };
+
+            new Welcome();
+        });
+    };
+</script>
+</html>

@@ -7,11 +7,11 @@
     <meta name="viewport"
           content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,initial-scale=1.0,width=device-width"/>
     <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
-    <title>选择账户类型</title>
+    <title>账户详情</title>
     <link rel="stylesheet" type="text/css" href="../../css/aui/2.1.0/aui.css"/>
     <!-- <link rel="stylesheet" type="text/css" href="../fonts/iconfont.css" />-->
-    <link rel="stylesheet" type="text/css" href="http://at.alicdn.com/t/font_hdy4esq7wjqbyb9.css"/>
-    <link rel="stylesheet" type="text/css" href="../../css/conf/accounts/add.css"/>
+    <link rel="stylesheet" type="text/css" href="http://at.alicdn.com/t/font_vbi1zn4tlcy2e29.css"/>
+    <link rel="stylesheet" type="text/css" href="../../css/conf/accounts/accountDetail.css"/>
 </head>
 
 <body>
@@ -21,6 +21,7 @@
             <span class="iconfont icon-fanhui"></span>
         </div>
         <div class="aui-title">选择账户类型</div>
+        <div id="jDelete" class="aui-pull-right aui-btn">编辑</div>
     </header>
 </div>
 </body>
@@ -29,8 +30,12 @@
 <script type="text/javascript">
     apiready = function () {
         require(['common'],function (common) {
-            common.methods().openFrame('add_frm','./add_frm.html',0,{
-                type:api.pageParam.type
+            var name = api.pageParam.name;
+            var color = api.pageParam.color;
+            $('#jHeader').addClass('bg-'+color);
+            $('#jHeader .aui-title').html(name);
+            common.methods().openFrame('accountDetail_frm','./accountDetail_frm.html',0,{
+                id:api.pageParam.id
             },true);
         });
     };
