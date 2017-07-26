@@ -10,7 +10,7 @@
     <title>首页</title>
     <link rel="stylesheet" type="text/css" href="../css/aui/2.1.0/aui.css"/>
     <!-- <link rel="stylesheet" type="text/css" href="../fonts/iconfont.css" />-->
-    <link rel="stylesheet" type="text/css" href="http://at.alicdn.com/t/font_hdy4esq7wjqbyb9.css"/>
+    <link rel="stylesheet" type="text/css" href="http://at.alicdn.com/t/font_otbtdta6oxls1yvi.css"/>
     <link rel="stylesheet" type="text/css" href="../css/conf/main_frm.css"/>
 </head>
 
@@ -24,13 +24,16 @@
     </div>
     <div id="jCardList">
         <div class="card-li" v-for="item in accountLists" v-bind:class="'bg-'+ item.color" v-bind:data-value="JSON.stringify(item)">
-            <div class="card-li-inner">
+            <div class="card-li-inner clear">
                 <div class="fl fc-default">
                     <i class="iconfont fl" v-bind:class="icons[item.type]"></i>
                     <span class="name aui-ellipsis-1">{{item.name}}</span>
                     <span class="remark aui-font-size-14 fc-d7d7d7 aui-ellipsis-1">{{item.remark}}</span>
                 </div>
-                <div class="fr fc-default">{{item.amount}}</div>
+                <div class="fr fc-default">
+                    <span>{{item.amount}}<i class="iconfont icon-zhang aui-font-size-12"></i></span>
+                    <span></span>
+                </div>
             </div>
         </div>
     </div>

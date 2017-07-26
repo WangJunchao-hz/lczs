@@ -33,6 +33,7 @@
             balance----余额
             amount----本金
             rose----涨幅
+            roseType----涨幅类型 0涨 1跌
             inflow----流入
             outflow----流出
             addDate----添加时间
