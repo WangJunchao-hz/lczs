@@ -7,7 +7,7 @@
     <meta name="viewport"
           content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,initial-scale=1.0,width=device-width"/>
     <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
-    <title>新建账户</title>
+    <title>编辑账户</title>
     <link rel="stylesheet" type="text/css" href="../../css/aui/2.1.0/aui.css"/>
     <!-- <link rel="stylesheet" type="text/css" href="../fonts/iconfont.css" />-->
     <link rel="stylesheet" type="text/css" href="http://at.alicdn.com/t/font_jtcpxfrms4i.css"/>
@@ -20,7 +20,7 @@
         <div id="jBack" class="aui-pull-left aui-btn">
             <span class="iconfont icon-fanhui"></span>
         </div>
-        <div class="aui-title">新建{{name}}账户</div>
+        <div class="aui-title">编辑{{name}}账户</div>
         <div id="jSure" class="aui-pull-right aui-btn">确定</div>
     </header>
     <div class="content aui-content-padded">
@@ -102,7 +102,7 @@
             /**
              * @description: 新建一个类
              */
-            function AddNew() {
+            function Edit() {
                 this.init();
                 this.initUI();
                 this.events();
@@ -111,11 +111,11 @@
             /**
              * @description: 初始化参数(全局变量+常量)
              */
-            AddNew.prototype.init = function() {
+            Edit.prototype.init = function() {
                 var self = this;
 
                 //缓存全局变量
-                self.pageType = api.pageParam.type;
+                self.data = JSON.parse(api.pageParam.data);
 
                 //缓存全局dom对象
 
@@ -124,20 +124,20 @@
             /**
              * @description: 初始化页面(首屏)
              */
-            AddNew.prototype.initUI = function() {
+            Edit.prototype.initUI = function() {
                 var self = this;
                 var accountsArry = ['现金','储蓄卡','支付宝','微信','投资','虚拟币','彩票','固定理财','其它'];
                 var iconsArry = ['icon-xianjin','icon-yhk','icon-zfb','icon-weixin','icon-gupiao','icon-xunibi','icon-caipiao','icon-cxg','icon-licai'];
                 self.app = new Vue({
                     el: '#app',
                     data: {
-                        type:self.pageType,
-                        colorType:self.pageType,
-                        name:accountsArry[self.pageType],
-                        accountName:accountsArry[self.pageType],
-                        remark:"备注",
-                        icon:iconsArry[self.pageType],
-                        amount:"0.00",
+                        type:self.data.type,
+                        colorType:self.data.color,
+                        name:accountsArry[self.data.type],
+                        accountName:self.data.name,
+                        remark:self.data.remark,
+                        icon:iconsArry[self.data.type],
+                        amount:self.data.amount,
                         colorNum:29,
                         colorListsShow:false
                     }
@@ -147,7 +147,7 @@
             /**
              * @description: 事件管理
              */
-            AddNew.prototype.events = function() {
+            Edit.prototype.events = function() {
                 var self = this;
 
                 $('input[name="accountName"]').on('input',function () {
@@ -219,7 +219,7 @@
             /**
              * @description: ajax管理
              */
-            AddNew.prototype.https = function() {
+            Edit.prototype.https = function() {
                 var self = this;
                 return {
 
@@ -229,14 +229,14 @@
             /**
              * @description: 方法管理
              */
-            AddNew.prototype.methods = function() {
+            Edit.prototype.methods = function() {
                 var self = this;
                 return {
 
                 };
             };
 
-            new AddNew();
+            new Edit();
         });
     };
 </script>

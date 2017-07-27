@@ -36,6 +36,7 @@
 </footer>
 </body>
 <script type="text/javascript" data-main="./script/app" src="./script/lib/require/2.1.11/require.js"></script>
+<script type="text/javascript" src="./script/app.js"></script>
 <!-- apiready必须放在这里才能生效 -->
 <script type="text/javascript">
     apiready = function () {
@@ -55,7 +56,7 @@
             Index.prototype.init = function() {
                 var self = this;
                 //缓存全局变量
-                self.title = (date.periods().indexOf('深夜') != -1 ?  '夜深了,请注意休息' : (date.periods().indexOf('晨') != -1 ? '早起的鸟儿有虫吃' : '亲爱的主人,' + date.periods() + '好'));
+                self.title = (date.periods().indexOf('深夜') != -1 ?  '夜深了,请注意休息' : (date.periods().indexOf('晨') != -1 ? '早起的鸟儿有虫吃' : date.periods() + '好'));
 
                 //缓存全局dom对象
             };

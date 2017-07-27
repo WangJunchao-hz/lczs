@@ -21,7 +21,7 @@
             <span class="iconfont icon-fanhui"></span>
         </div>
         <div class="aui-title">{{accountDetail.name}}</div>
-        <div id="jDelete" class="aui-pull-right aui-btn">编辑</div>
+        <div id="jEdit" class="aui-pull-right aui-btn">编辑</div>
     </header>
     <div id="jMod1" class="mod1" v-bind:class="'bg-'+accountDetail.color">
         <div class="overview">
@@ -67,6 +67,12 @@
                 data: {
                     accountDetail:accountDetail
                 }
+            });
+
+            $('#jEdit').on('click',function () {
+                common.methods().openWin('edit','./edit.html',{
+                    data:api.pageParam.data
+                });
             });
 
             api.openFrame({

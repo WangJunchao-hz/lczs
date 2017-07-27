@@ -148,6 +148,34 @@ define(["zepto", "api", "vue"], function ($, $api, Vue) {
                     self.methods().showMsg("读取数据失败");
                 }
             },
+            deleteData:function (name,id) { //删除数据
+                try{
+                    var all = self.methods().readFile(name);
+                    var index;
+                    $.each(all.contents,function (i,obj) {
+                        if(obj.id == id){
+                            index = i;
+                            return false;
+                        }
+                    });
+                    var newData = all.contents.splice(index,1);
+                    var json = {"contents":[]};
+                    json.contents = newData;
+                    alert(json.contents.length);
+                    api.writeFile({
+                        path: 'fs://data/' + name + '.json',
+                        data: JSON.stringify(json)
+                    }, function (ret, err) {
+                        if (ret.status) {
+                            self.methods().showMsg("删除数据失败");
+                        } else {
+                            self.methods().showMsg(JSON.stringify(err));
+                        }
+                    });
+                }catch (e){
+                    self.methods().showMsg("删除数据失败");
+                }
+            },
             queryData: function (name,id) { //查询数据
                 try{
                     var all = self.methods().readFile(name);
