@@ -17,62 +17,83 @@
 <body>
 <div id="app">
     <header id="jHeader" class="aui-bar aui-bar-nav" v-bind:class="'bg-'+accountDetail.color">
-        <div id="jBack" class="aui-pull-left aui-btn">
+        <div id="jBack" class="aui-pull-left aui-btn" onclick="closeWin()" tapmode>
             <span class="iconfont icon-fanhui"></span>
         </div>
-        <div class="aui-title">{{accountDetail.name}}</div>
-        <div id="jEdit" class="aui-pull-right aui-btn">编辑</div>
+        <div class="aui-title" v-text="accountDetail.name"></div>
+        <div id="jEdit" v-on:click="edit()" class="aui-pull-right aui-btn" tapmode>编辑</div>
     </header>
     <div id="jMod1" class="mod1" v-bind:class="'bg-'+accountDetail.color">
         <div class="overview">
             <p class="total">
-                <span>{{accountDetail.balance || '0.00'}}</span>
-                <span class="up fc-red"><i class="iconfont icon-zhang"></i>{{accountDetail.rose || '+0.00'}}%</span>
-                <span class="down fc-green aui-hide"><i class="iconfont icon-die"></i>-100%</span>
+                <span v-text="accountDetail.balance"></span>
+                <span class="aui-font-size-12 fc-d7d7d7">余额</span>
+                <span v-if="accountDetail.roseType != -1" class="up fc-red"><i class="iconfont icon-zhang"></i>+{{accountDetail.rose}}%</span>
+                <span v-else class="down fc-green aui-hide"><i class="iconfont icon-die"></i>-{{accountDetail.rose}}%</span>
             </p>
             <p class="remark fc-d7d7d7 aui-font-size-14">{{accountDetail.remark}}</p>
         </div>
-        <div>
-            <section class="aui-grid">
-                <div class="aui-row">
-                    <div class="aui-col-xs-4">
-                        <div class="fc-default">{{accountDetail.amount}}</div>
-                        <div class="aui-grid-label fc-d7d7d7">本金</div>
-                    </div>
-                    <div class="aui-col-xs-4">
-                        <div class="fc-default">{{accountDetail.inflow || '0.00'}}</div>
-                        <div class="aui-grid-label fc-d7d7d7">流入</div>
-                    </div>
-                    <div class="aui-col-xs-4">
-                        <div class="fc-default">{{accountDetail.outflow || '0.00'}}</div>
-                        <div class="aui-grid-label fc-d7d7d7">流出</div>
-                    </div>
+        <section class="aui-grid">
+            <div class="aui-row">
+                <div class="aui-col-xs-3 fc-d7d7d7">
+                    <div class="aui-grid-label">{{accountDetail.amount}}</div>
+                    <div class="aui-grid-label">本金</div>
                 </div>
-            </section>
-        </div>
+                <div class="aui-col-xs-3 fc-red">
+                    <div class="aui-grid-label">{{accountDetail.inflow}}</div>
+                    <div class="aui-grid-label">流入</div>
+                </div>
+                <div class="aui-col-xs-3 fc-green">
+                    <div class="aui-grid-label">{{accountDetail.outflow}}</div>
+                    <div class="aui-grid-label">流出</div>
+                </div>
+                <div v-if="accountDetail.roseType != -1" class="aui-col-xs-3 fc-red">
+                    <div class="aui-grid-label">+{{accountDetail.difference}}</div>
+                    <div class="aui-grid-label">差额</div>
+                </div>
+                <div v-else class="aui-col-xs-3 fc-green">
+                    <div class="aui-grid-label">-{{accountDetail.difference}}</div>
+                    <div class="aui-grid-label">差额</div>
+                </div>
+            </div>
+        </section>
     </div>
 </div>
 </body>
 <script type="text/javascript" data-main="../../script/app" src="../../script/lib/require/2.1.11/require.js"></script>
-<!-- apiready必须放在这里才能生效 -->
+<script src="../../script/app.js"></script>
+<script src="../../script/conf/common.js"></script>
 <script type="text/javascript">
     apiready = function () {
-        require(['common'],function (common) {
-            var accountDetail = JSON.parse(api.pageParam.data);
+        require(['api', 'vue'], function ($api, Vue) {
+            setHeader($api, 'jHeader');
+            var accountDetail = api.pageParam.data;
             var headerH = $api.offset($api.byId("jHeader")).h;
             var mod1H = $api.offset($api.byId("jMod1")).h;
 
-            self.app = new Vue({
+            var app = new Vue({
                 el: '#app',
                 data: {
-                    accountDetail:accountDetail
+                    accountDetail: accountDetail
+                },
+                mounted: function () {
+                    api.parseTapmode();
+                },
+                methods: {
+                    edit: function () { // 去编辑账户
+                        openWin('edit', './edit.html', {
+                            data: api.pageParam.data
+                        });
+                    }
                 }
             });
 
-            $('#jEdit').on('click',function () {
-                common.methods().openWin('edit','./edit.html',{
-                    data:api.pageParam.data
-                });
+            api.addEventListener({
+                name: 'addAccountUpdate'
+            }, function(ret, err){
+                if( ret ){
+                    app.accountDetail = extend(app.accountDetail,ret.value.eidtData);
+                }
             });
 
             api.openFrame({
@@ -80,12 +101,12 @@
                 url: './accountDetail_frm.html',
                 rect: {
                     x: 0,
-                    y: headerH+mod1H,
+                    y: headerH + mod1H,
                     w: 'auto',
                     h: 'auto'
                 },
                 pageParam: {
-                    data:api.pageParam.data
+                    data: api.pageParam.data
                 },
                 bounces: true
             });

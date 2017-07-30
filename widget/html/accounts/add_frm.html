@@ -15,26 +15,27 @@
 </head>
 
 <body>
-<div id="app">
+<div id="app" v-cloak>
     <div id="jContent">
-        <div v-for="item in accountTypeLists" class="account-item bg-default" v-bind:data-type="item.accountType" tapmode>
+        <div v-for="item in accountTypeLists" class="account-item bg-default" v-on:click="addNew(item.accountType)" tapmode>
             <div v-bind:class="'fc-'+item.accountType"><i class="iconfont fl" v-bind:class="item.accountIcon"></i><span>{{item.accountName}}</span></div>
         </div>
     </div>
 </div>
 </body>
 <script type="text/javascript" data-main="../../script/app" src="../../script/lib/require/2.1.11/require.js"></script>
-<!-- apiready必须放在这里才能生效 -->
+<script src="../../script/app.js"></script>
+<script src="../../script/conf/common.js"></script>
 <script type="text/javascript">
     apiready = function () {
-        require(['common'],function(common) {
+        require(['api','vue'],function($api,Vue) {
             /**
              * @description: 新建一个类
              */
             function Add() {
                 this.init();
                 this.initUI();
-                this.events();
+//                this.events();
             }
 
             /**
@@ -44,7 +45,6 @@
                 var self = this;
 
                 //缓存全局变量
-                self.pageType = api.pageParam.type;
 
 
                 //缓存全局dom对象
@@ -57,16 +57,21 @@
             Add.prototype.initUI = function() {
                 var self = this;
 
-                var data = common.methods().readFile('widget://data/default.json');
-
-                if(self.pageType == '2'){
-
-                }
-
+                var data = readFile('widget://data/default.json');
                 self.app = new Vue({
                     el: '#app',
                     data: {
                         accountTypeLists:data.accountTypeLists
+                    },
+                    mounted:function () {
+                        api.parseTapmode();
+                    },
+                    methods:{
+                        addNew:function (type) {
+                            openWin('add_new','./add_new.html',{
+                                type:type
+                            });
+                        }
                     }
                 });
             };
@@ -79,7 +84,7 @@
 
                 $('#jContent').on('click','.account-item',function () {
                     var type = $(this).attr('data-type');
-                    common.methods().openWin('add_new','./add_new.html',{
+                    openWin('add_new','./add_new.html',{
                         type:type
                     });
                 });

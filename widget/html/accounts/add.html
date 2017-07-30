@@ -17,7 +17,7 @@
 <body>
 <div id="app">
     <header id="jHeader" class="aui-bar aui-bar-nav">
-        <div id="jBack" class="aui-pull-left aui-btn">
+        <div id="jBack" class="aui-pull-left aui-btn" onclick="closeWin()" tapmode>
             <span class="iconfont icon-fanhui"></span>
         </div>
         <div class="aui-title">选择账户类型</div>
@@ -25,13 +25,14 @@
 </div>
 </body>
 <script type="text/javascript" data-main="../../script/app" src="../../script/lib/require/2.1.11/require.js"></script>
-<!-- apiready必须放在这里才能生效 -->
+<script src="../../script/app.js"></script>
+<script src="../../script/conf/common.js"></script>
 <script type="text/javascript">
     apiready = function () {
-        require(['common'],function (common) {
-            common.methods().openFrame('add_frm','./add_frm.html',0,{
-                type:api.pageParam.type
-            },true);
+        api.parseTapmode();
+        require(['api'],function ($api) {
+            setHeader($api,'jHeader');
+            openFrame($api,'add_frm','./add_frm.html',0,'',true);
         });
     };
 </script>

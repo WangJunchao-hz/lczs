@@ -15,13 +15,13 @@
 </head>
 
 <body>
-<div id="app">
+<div id="app" v-cloak>
     <header id="jHeader" class="aui-bar aui-bar-nav">
-        <div id="jBack" class="aui-pull-left aui-btn">
+        <div id="jBack" class="aui-pull-left aui-btn" onclick="closeWin()" tapmode>
             <span class="iconfont icon-fanhui"></span>
         </div>
         <div class="aui-title">新建{{name}}账户</div>
-        <div id="jSure" class="aui-pull-right aui-btn">确定</div>
+        <div id="jSure" class="aui-pull-right aui-btn" v-on:click="sureAdd()" tapmode>确定</div>
     </header>
     <div class="content aui-content-padded">
         <div class="card-li" v-bind:class="'bg-'+colorType">
@@ -41,7 +41,7 @@
                         账户名
                     </div>
                     <div class="aui-list-item-input">
-                        <input name="accountName" type="text" v-bind:placeholder="accountName">
+                        <input name="accountName" type="text" v-bind:placeholder="accountName" v-on:input="inputWatch(1,event)">
                     </div>
                 </div>
             </li>
@@ -51,7 +51,7 @@
                         备注
                     </div>
                     <div class="aui-list-item-input">
-                        <input name="accountRemark" type="text" v-bind:placeholder="remark">
+                        <input name="accountRemark" type="text" v-bind:placeholder="remark" v-on:input="inputWatch(2,event)">
                     </div>
                 </div>
             </li>
@@ -61,7 +61,7 @@
                         金额
                     </div>
                     <div class="aui-list-item-input">
-                        <input name="accountAmount" type="number" v-bind:placeholder="amount">
+                        <input name="accountAmount" type="number" v-bind:placeholder="amount" v-on:input="inputWatch(3,event)">
                     </div>
                 </div>
             </li>
@@ -70,7 +70,7 @@
                     <div class="aui-list-item-label">
                         账户颜色
                     </div>
-                    <div id="jColorShow" class="aui-list-item-input">
+                    <div id="jColorShow" class="aui-list-item-input" v-on:click="colorIsShow()" tapmode>
                         <div class="color-item" v-bind:class="'bg-'+colorType"></div>
                     </div>
                 </div>
@@ -82,7 +82,7 @@
                     <div class="aui-list-item-input">
                         <section class="aui-grid">
                             <div id="jColors" class="aui-row">
-                                <div class="aui-col-xs-2" v-for="n in colorNum" v-bind:data-color="(n-1)">
+                                <div class="aui-col-xs-2" v-for="n in colorNum" v-on:click="changeColor(n-1)" tapmode>
                                     <div class="color-item" v-bind:class="'bg-'+(n-1)"><i v-if="(n-1) == colorType" class="iconfont icon-sure fc-default aui-font-size-16"></i></div>
                                 </div>
                             </div>
@@ -95,10 +95,11 @@
 </div>
 </body>
 <script type="text/javascript" data-main="../../script/app" src="../../script/lib/require/2.1.11/require.js"></script>
-<!-- apiready必须放在这里才能生效 -->
+<script src="../../script/app.js"></script>
+<script src="../../script/conf/common.js"></script>
 <script type="text/javascript">
     apiready = function () {
-        require(['common','date'],function(common,date) {
+        require(['api','vue','date'],function($api,Vue,date) {
             /**
              * @description: 新建一个类
              */
@@ -116,6 +117,7 @@
 
                 //缓存全局变量
                 self.pageType = api.pageParam.type;
+                self.hasClick = false;
 
                 //缓存全局dom对象
 
@@ -126,6 +128,7 @@
              */
             AddNew.prototype.initUI = function() {
                 var self = this;
+                setHeader($api,'jHeader');
                 var accountsArry = ['现金','储蓄卡','支付宝','微信','投资','虚拟币','彩票','固定理财','其它'];
                 var iconsArry = ['icon-xianjin','icon-yhk','icon-zfb','icon-weixin','icon-gupiao','icon-xunibi','icon-caipiao','icon-cxg','icon-licai'];
                 self.app = new Vue({
@@ -140,6 +143,79 @@
                         amount:"0.00",
                         colorNum:29,
                         colorListsShow:false
+                    },
+                    mounted:function () {
+                        api.parseTapmode();
+                    },
+                    methods:{
+                        inputWatch:function (type,event) { // 实时显示输入信息
+                            var val = event.target.value;
+                            switch (type){
+                                case 1:
+                                    self.app.accountName = val;
+                                    break;
+                                case 2:
+                                    self.app.remark = val;
+                                    break;
+                                case 3:
+                                    self.app.amount = toThousands(val);
+                                    break;
+                            }
+                        },
+                        colorIsShow:function () { // 显示/隐藏 颜色选项卡
+                            if(self.app.colorListsShow){
+                                self.app.colorListsShow = false;
+                            }else {
+                                self.app.colorListsShow = true;
+                            }
+                        },
+                        changeColor:function (color) { // 改变颜色
+                            self.app.colorType = color;
+                        },
+                        sureAdd:function () { // 确定
+                            api.confirm({
+                                title: '添加账户提示',
+                                msg: '你真的要添加这个账户吗?',
+                                buttons: ['确定', '取消']
+                            }, function(ret, err) {
+                                var index = ret.buttonIndex;
+                                if(index == 1){
+                                    if(!self.hasClick){
+                                        var id = uuid(8,16);
+                                        var now = date.format("yyyy-MM-dd HH:mm:ss");
+                                        var data = {
+                                            "id":id,
+                                            "type":self.pageType,
+                                            "name":self.app.accountName,
+                                            "remark":self.app.remark,
+                                            "color":self.app.colorType,
+                                            "amount":self.app.amount,
+                                            "balance":self.app.amount,
+                                            "difference":"0.00",
+                                            "rose":"0.00",
+                                            "roseType":0,
+                                            "inflow":"0.00",
+                                            "outflow":"0.00",
+                                            "addDate":now,
+                                            "upDate":now
+                                        };
+                                        addData('accounts',data,'添加账户成功');
+
+                                        api.sendEvent({
+                                            name: 'addAccountSuccess'
+                                        });
+
+                                        $api.setStorage('isFist',1);
+                                        setTimeout(function () {
+                                            api.closeToWin({
+                                                name: 'root'
+                                            });
+                                        },300);
+                                        self.hasClick = true;
+                                    }
+                                }
+                            });
+                        }
                     }
                 });
             };
@@ -150,70 +226,6 @@
             AddNew.prototype.events = function() {
                 var self = this;
 
-                $('input[name="accountName"]').on('input',function () {
-                    var val = $(this).val();
-                    self.app.accountName = val;
-                });
-
-                $('input[name="accountRemark"]').on('input',function () {
-                    var val = $(this).val();
-                    self.app.remark = val;
-                });
-
-                $('input[name="accountAmount"]').on('input',function () {
-                    var val = $(this).val();
-                    self.app.amount = common.methods().toThousands(val);
-                });
-
-                $('#jColors').on('click','.aui-col-xs-2',function () {
-                    var color = $(this).attr('data-color');
-                    self.app.colorType = color;
-                });
-
-                $('#jColorShow').on('click',function () {
-                    if(self.app.colorListsShow){
-                        self.app.colorListsShow = false;
-                    }else {
-                        self.app.colorListsShow = true;
-                    }
-                });
-
-                var hasClick = false;
-                $('#jSure').on('click',function () {
-                    if(!hasClick){
-                        var id = common.methods().uuid(8,16);
-                        var now = date.format("yyyy-MM-dd HH:mm:ss");
-                        var data = {
-                            "id":id,
-                            "type":self.pageType,
-                            "name":self.app.accountName,
-                            "remark":self.app.remark,
-                            "color":self.app.colorType,
-                            "amount":self.app.amount,
-                            "balance":self.app.amount,
-                            "rose":"0.00",
-                            "roseType":0,
-                            "inflow":"0.00",
-                            "outflow":"0.00",
-                            "addDate":now,
-                            "upDate":now,
-                            "details":[]
-                        };
-                        common.methods().writeFile('accounts',data,'添加账户成功');
-
-                        api.sendEvent({
-                            name: 'addAccountSuccess'
-                        });
-
-                        $api.setStorage('isFist','1');
-                        setTimeout(function () {
-                            api.closeToWin({
-                                name: 'root'
-                            });
-                        },300);
-                        hasClick = true;
-                    }
-                });
             };
 
             /**

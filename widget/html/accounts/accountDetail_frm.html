@@ -14,7 +14,7 @@
 </head>
 
 <body>
-    <div id="app">
+    <div id="app" v-cloak>
         <div id="jContent aui-content-padded content">
             <div id="jAdd" class="add" v-bind:class="'bg-'+itemData.color">
                 <i class="iconfont icon-jia"></i>
@@ -23,10 +23,11 @@
     </div>
 </body>
 <script type="text/javascript" data-main="../../script/app" src="../../script/lib/require/2.1.11/require.js"></script>
-<!-- apiready必须放在这里才能生效 -->
+<script src="../../script/app.js"></script>
+<script src="../../script/conf/common.js"></script>
 <script type="text/javascript">
     apiready = function() {
-        require(['common'], function(common) {
+        require(['api','vue'], function($api,Vue) {
             /**
              * @description: 新建一个类
              */
@@ -43,7 +44,7 @@
                 var self = this;
 
                 //缓存全局变量
-                self.data = JSON.parse(api.pageParam.data);
+                self.data = api.pageParam.data;
 
 
                 //缓存全局dom对象
@@ -55,9 +56,6 @@
              */
             AccountDetail.prototype.initUI = function() {
                 var self = this;
-
-                var data = common.methods().queryData('accounts', self.id);
-//                                alert(JSON.stringify(data));
                 self.app = new Vue({
                     el: '#app',
                     data: {
@@ -72,11 +70,12 @@
             AccountDetail.prototype.events = function() {
                 var self = this;
 
-                $('#jContent').on('click', '.account-item', function() {
-                    var type = $(this).attr('data-type');
-                    common.methods().openWin('add_new', './add_new.html', {
-                        type: type
-                    });
+                api.addEventListener({
+                    name: 'addAccountUpdate'
+                }, function(ret, err){
+                    if( ret ){
+                        self.app.itemData = extend(self.app.itemData,ret.value.eidtData);
+                    }
                 });
             };
 

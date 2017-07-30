@@ -15,35 +15,36 @@
 </head>
 
 <body>
-<div id="jWelcome" class="welcome-tip aui-content-padded">
-    <i class="iconfont icon-keai fc-7"></i>
-    <div class="tip">
-        <p>欢迎使用小鑫,</p>
-        <p>未来有您的陪伴,</p>
-        <p>小鑫定会越来越好!</p>
-        <div class="guide">
-            <p>快来添加一个账户吧!</p>
-            <i class="iconfont icon-arrows-5-5 fc-4"></i>
+<div id="app" v-cloak>
+    <div id="jWelcome" class="welcome-tip aui-content-padded" v-show="isFist">
+        <i class="iconfont icon-keai fc-7"></i>
+        <div class="tip">
+            <p>欢迎使用小鑫,</p>
+            <p>未来有您的陪伴,</p>
+            <p>小鑫定会越来越好!</p>
+            <div class="guide">
+                <p>快来添加一个账户吧!</p>
+                <i class="iconfont icon-arrows-5-5 fc-4"></i>
+            </div>
         </div>
     </div>
-</div>
-<div id="jNoData" class="no-data">
-    <div class="content">
-        <i class="iconfont icon-zwsj"></i>
-        <p>暂无流水记录</p>
-    </div>
-</div>
-<div id="app">
     <div id="jContent">
 
+    </div>
+    <div id="jNoData" class="no-data" v-show="isNoData">
+        <div class="content">
+            <i class="iconfont icon-zwsj"></i>
+            <p>暂无记录</p>
+        </div>
     </div>
 </div>
 </body>
 <script type="text/javascript" data-main="../../script/app" src="../../script/lib/require/2.1.11/require.js"></script>
-<!-- apiready必须放在这里才能生效 -->
+<script type="text/javascript" src="../../script/app.js"></script>
+<script type="text/javascript" src="../../script/conf/common.js"></script>
 <script type="text/javascript">
     apiready = function () {
-        require(['common'],function(common) {
+        require(['vue','api'],function(Vue,$api) {
             /**
              * @description: 新建一个类
              */
@@ -71,18 +72,21 @@
              */
             Welcome.prototype.initUI = function() {
                 var self = this;
-
-                if(self.isFist == '1'){
-                    $('#jWelcome').addClass('aui-hide');
-                    $('#app').removeClass('aui-hide');
-                }else {
-                    $('#app').addClass('aui-hide');
-                    $('#jWelcome').removeClass('aui-hide');
-                }
                 self.app = new Vue({
                     el: '#app',
                     data: {
-
+                        isNoData:true
+                    },
+                    computed:{
+                        isFist:function () {
+                            var res = true;
+                            if(self.isFist == 1){
+                                res = false;
+                            }else {
+                                this.isNoData = false;
+                            }
+                            return res;
+                        }
                     }
                 });
             };

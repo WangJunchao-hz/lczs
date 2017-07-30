@@ -21,7 +21,7 @@
         README.md(说明文档)
 
 ## 缓存
-    isFist----是否首次安装app
+    isFist----是否首次安装app 1否
 ## 数据库表名+字段
     accounts----表名存储账户信息
         contents----所有账户信息
@@ -32,15 +32,13 @@
             color----账户颜色
             balance----余额
             amount----本金
+            difference----差额
             rose----涨幅
-            roseType----涨幅类型 0涨 1跌
+            roseType----涨幅类型 -1亏损 0持平  1赢利
             inflow----流入
             outflow----流出
             addDate----添加时间
             upDate----更新时间
-            details----每笔流入流出详细记录
-                id----账单id
-
 ## 字典
 ### 账户类型
         0----现金
