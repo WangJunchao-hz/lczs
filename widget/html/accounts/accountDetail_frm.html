@@ -4,30 +4,364 @@
 <head>
     <meta charset="utf-8">
     <script src="../../script/lib/utils/rem/1.0.0/rem.js"></script>
-    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,initial-scale=1.0,width=device-width" />
+    <meta name="viewport"
+          content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,initial-scale=1.0,width=device-width"/>
     <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
     <title>账户详情</title>
-    <link rel="stylesheet" type="text/css" href="../../css/aui/2.1.0/aui.css" />
+    <link rel="stylesheet" type="text/css" href="../../css/aui/2.1.0/aui.css"/>
     <!-- <link rel="stylesheet" type="text/css" href="../fonts/iconfont.css" />-->
-    <link rel="stylesheet" type="text/css" href="http://at.alicdn.com/t/font_otbtdta6oxls1yvi.css" />
-    <link rel="stylesheet" type="text/css" href="../../css/conf/accounts/accountDetail.css" />
+    <link rel="stylesheet" type="text/css" href="http://at.alicdn.com/t/font_ypzo2rybek84obt9.css"/>
+    <link rel="stylesheet" type="text/css" href="../../css/conf/accounts/accountDetail.css"/>
 </head>
 
 <body>
-    <div id="app" v-cloak>
-        <div id="jContent aui-content-padded content">
-            <div id="jAdd" class="add" v-bind:class="'bg-'+itemData.color">
-                <i class="iconfont icon-jia"></i>
+<div id="app">
+    <div id="jContent aui-content-padded content">
+        <div class="aui-timeline">
+            <div class="aui-timeline-item-header">2017-1-8 12:23:33</div>
+            <div class="aui-timeline-item">
+                <div class="aui-timeline-item-label text-light bg-red fc-default">流入</div>
+                <div class="aui-timeline-item-inner">
+                    <div class="aui-card-list">
+                        <div class="aui-card-list-content-padded">
+                            发工资有钱了,哈哈哈
+                        </div>
+                        <div class="clear">
+                            <span class="btn btn-2 fl bg-theme">金额</span>
+                            <span class="btn btn-2 fr bg-red">3000</span>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
+        <div class="aui-timeline">
+            <div class="aui-timeline-item-header">2017-2-5 12:23:33</div>
+            <div class="aui-timeline-item">
+                <div class="aui-timeline-item-label text-light bg-green fc-default">流出</div>
+                <div class="aui-timeline-item-inner">
+                    <div class="aui-card-list">
+                        <div class="aui-card-list-content-padded">
+                            还花呗3000元,我的钱啊....
+                        </div>
+                        <div class="clear">
+                            <span class="btn btn-2 fl bg-theme">金额</span>
+                            <span class="btn btn-2 fr bg-green">3000</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="aui-timeline">
+            <div class="aui-timeline-item-header">2017-4-8 12:23:33</div>
+            <div class="aui-timeline-item">
+                <div class="aui-timeline-item-label text-light bg-theme fc-default">建仓</div>
+                <div class="aui-timeline-item-inner">
+                    <div class="aui-card-list">
+                        <div class="aui-card-list-header aui-border-b">
+                            <div>买入中国中铁100股</div>
+                        </div>
+                        <div class="aui-card-list-content-padded">
+                            等到10%就卖
+                        </div>
+                        <div class="aui-timeline border-t">
+                            <div class="aui-timeline-item-header">2017-2-5 12:23:33</div>
+                            <div class="aui-timeline-item">
+                                <div class="aui-timeline-item-label text-light bg-f0ad4e fc-default">加仓</div>
+                                <div class="aui-timeline-item-inner">
+                                    <div class="aui-card-list">
+                                        <div class="aui-card-list-content-padded bg-ececec">
+                                            中国中铁加仓100股
+                                        </div>
+                                        <div class="clear">
+                                            <span class="btn btn-2 fl bg-theme">金额</span>
+                                            <span class="btn btn-2 fr bg-5cb85c">3000</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="aui-timeline-item">
+                                <div class="aui-timeline-item-label text-light bg-f0ad4e fc-default">加仓</div>
+                                <div class="aui-timeline-item-inner">
+                                    <div class="aui-card-list">
+                                        <div class="aui-card-list-content-padded bg-ececec">
+                                            中国中铁加仓100股
+                                        </div>
+                                        <div class="clear">
+                                            <span class="btn btn-2 fl bg-theme">金额</span>
+                                            <span class="btn btn-2 fr bg-5cb85c">3000</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="clear">
+                            <span class="btn btn-4 fl bg-337ab7">数量</span>
+                            <span class="btn btn-4 fl bg-5bc0de">300</span>
+                            <span class="btn btn-4 fl bg-337ab7">单价</span>
+                            <span class="btn btn-4 fl bg-5bc0de">8.3</span>
+                        </div>
+                        <div class="clear">
+                            <span class="btn btn-4 fl fc-red">
+                                <i class="dis-in-block">+5%</i>
+                                <i class="dis-in-block">200.25</i>
+                            </span>
+                            <span class="btn btn-4 fl fc-red">
+                                <i class="dis-in-block">+10%</i>
+                                <i class="dis-in-block">200.25</i>
+                            </span>
+                            <span class="btn btn-4 fl fc-red">
+                                <i class="dis-in-block">+15%</i>
+                                <i class="dis-in-block">200.25</i>
+                            </span>
+                            <span class="btn btn-4 fl fc-red">
+                                <i class="dis-in-block">+20%</i>
+                                <i class="dis-in-block">200.25</i>
+                            </span>
+                        </div>
+                        <div class="clear">
+                            <span class="btn btn-4 fl fc-green">
+                                <i class="dis-in-block">-5%</i>
+                                <i class="dis-in-block">200.25</i>
+                            </span>
+                            <span class="btn btn-4 fl fc-green">
+                                <i class="dis-in-block">-10%</i>
+                                <i class="dis-in-block">200.25</i>
+                            </span>
+                            <span class="btn btn-4 fl fc-green">
+                                <i class="dis-in-block">-15%</i>
+                                <i class="dis-in-block">200.25</i>
+                            </span>
+                            <span class="btn btn-4 fl fc-green">
+                                <i class="dis-in-block">-20%</i>
+                                <i class="dis-in-block">200.25</i>
+                            </span>
+                        </div>
+                        <div class="clear">
+                            <span class="btn btn-4 fl bg-theme">成本</span>
+                            <span class="btn btn-4 fl bg-5cb85c">3000</span>
+                            <span class="btn btn-4 fl bg-f0ad4e">加仓</span>
+                            <span class="btn btn-4 fl bg-d9534f">减仓</span>
+                        </div>
+                        <div class="clear border-t">
+                            <span class="btn btn-2 fl bg-5bc0de">进行中</span>
+                            <span class="btn btn-2 fl bg-red">清仓</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="aui-timeline">
+            <div class="aui-timeline-item-header">2017-4-8 12:23:33</div>
+            <div class="aui-timeline-item">
+                <div class="aui-timeline-item-label text-light bg-5cb85c fc-default">已完成</div>
+                <div class="aui-timeline-item-inner">
+                    <div class="aui-card-list">
+                        <div class="aui-card-list-header aui-border-b">
+                            <div>买入中国中铁100股</div>
+                        </div>
+                        <div class="aui-card-list-content-padded">
+                            等到10%就卖
+                        </div>
+                        <div class="aui-timeline border-t">
+                            <div class="aui-timeline-item-header">2017-2-5 12:23:33</div>
+                            <div class="aui-timeline-item">
+                                <div class="aui-timeline-item-label text-light bg-f0ad4e fc-default">加仓</div>
+                                <div class="aui-timeline-item-inner">
+                                    <div class="aui-card-list">
+                                        <div class="aui-card-list-content-padded bg-ececec">
+                                            中国中铁加仓100股
+                                        </div>
+                                        <div class="clear">
+                                            <span class="btn btn-2 fl bg-theme">金额</span>
+                                            <span class="btn btn-2 fr bg-5cb85c">3000</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="aui-timeline-item">
+                                <div class="aui-timeline-item-label text-light bg-f0ad4e fc-default">加仓</div>
+                                <div class="aui-timeline-item-inner">
+                                    <div class="aui-card-list">
+                                        <div class="aui-card-list-content-padded bg-ececec">
+                                            中国中铁加仓100股
+                                        </div>
+                                        <div class="clear">
+                                            <span class="btn btn-2 fl bg-theme">金额</span>
+                                            <span class="btn btn-2 fr bg-5cb85c">3000</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="clear">
+                            <span class="btn btn-4 fl bg-337ab7">数量</span>
+                            <span class="btn btn-4 fl bg-5bc0de">300</span>
+                            <span class="btn btn-4 fl bg-337ab7">单价</span>
+                            <span class="btn btn-4 fl bg-5bc0de">8.3</span>
+                        </div>
+                        <div class="clear">
+                            <span class="btn btn-4 fl fc-red">
+                                <i class="dis-in-block">+5%</i>
+                                <i class="dis-in-block">200.25</i>
+                            </span>
+                            <span class="btn btn-4 fl fc-red">
+                                <i class="dis-in-block">+10%</i>
+                                <i class="dis-in-block">200.25</i>
+                            </span>
+                            <span class="btn btn-4 fl fc-red">
+                                <i class="dis-in-block">+15%</i>
+                                <i class="dis-in-block">200.25</i>
+                            </span>
+                            <span class="btn btn-4 fl fc-red">
+                                <i class="dis-in-block">+20%</i>
+                                <i class="dis-in-block">200.25</i>
+                            </span>
+                        </div>
+                        <div class="clear">
+                            <span class="btn btn-4 fl fc-green">
+                                <i class="dis-in-block">-5%</i>
+                                <i class="dis-in-block">200.25</i>
+                            </span>
+                            <span class="btn btn-4 fl fc-green">
+                                <i class="dis-in-block">-10%</i>
+                                <i class="dis-in-block">200.25</i>
+                            </span>
+                            <span class="btn btn-4 fl fc-green">
+                                <i class="dis-in-block">-15%</i>
+                                <i class="dis-in-block">200.25</i>
+                            </span>
+                            <span class="btn btn-4 fl fc-green">
+                                <i class="dis-in-block">-20%</i>
+                                <i class="dis-in-block">200.25</i>
+                            </span>
+                        </div>
+                        <div class="clear">
+                            <span class="btn btn-4 fl bg-theme">成本</span>
+                            <span class="btn btn-4 fl bg-5cb85c">3000</span>
+                            <span class="btn btn-4 fl bg-disabled">加仓</span>
+                            <span class="btn btn-4 fl bg-disabled">减仓</span>
+                        </div>
+                        <div class="clear border-t">
+                            <span class="btn btn-2 fl bg-red">赚234.23</span>
+                            <span class="btn btn-2 fl bg-disabled">清仓</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="res bg-red">+2000%</div>
+        </div>
+        <div class="aui-timeline">
+            <div class="aui-timeline-item-header">2017-4-8 12:23:33</div>
+            <div class="aui-timeline-item">
+                <div class="aui-timeline-item-label text-light bg-5cb85c fc-default">已完成</div>
+                <div class="aui-timeline-item-inner">
+                    <div class="aui-card-list">
+                        <div class="aui-card-list-header aui-border-b">
+                            <div>买入中国中铁100股</div>
+                        </div>
+                        <div class="aui-card-list-content-padded">
+                            等到10%就卖
+                        </div>
+                        <div class="aui-timeline border-t">
+                            <div class="aui-timeline-item-header">2017-2-5 12:23:33</div>
+                            <div class="aui-timeline-item">
+                                <div class="aui-timeline-item-label text-light bg-f0ad4e fc-default">加仓</div>
+                                <div class="aui-timeline-item-inner">
+                                    <div class="aui-card-list">
+                                        <div class="aui-card-list-content-padded bg-ececec">
+                                            中国中铁加仓100股
+                                        </div>
+                                        <div class="clear">
+                                            <span class="btn btn-2 fl bg-theme">金额</span>
+                                            <span class="btn btn-2 fr bg-5cb85c">3000</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="aui-timeline-item">
+                                <div class="aui-timeline-item-label text-light bg-f0ad4e fc-default">加仓</div>
+                                <div class="aui-timeline-item-inner">
+                                    <div class="aui-card-list">
+                                        <div class="aui-card-list-content-padded bg-ececec">
+                                            中国中铁加仓100股
+                                        </div>
+                                        <div class="clear">
+                                            <span class="btn btn-2 fl bg-theme">金额</span>
+                                            <span class="btn btn-2 fr bg-5cb85c">3000</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="clear">
+                            <span class="btn btn-4 fl bg-337ab7">数量</span>
+                            <span class="btn btn-4 fl bg-5bc0de">300</span>
+                            <span class="btn btn-4 fl bg-337ab7">单价</span>
+                            <span class="btn btn-4 fl bg-5bc0de">8.3</span>
+                        </div>
+                        <div class="clear">
+                            <span class="btn btn-4 fl fc-red">
+                                <i class="dis-in-block">+5%</i>
+                                <i class="dis-in-block">200.25</i>
+                            </span>
+                            <span class="btn btn-4 fl fc-red">
+                                <i class="dis-in-block">+10%</i>
+                                <i class="dis-in-block">200.25</i>
+                            </span>
+                            <span class="btn btn-4 fl fc-red">
+                                <i class="dis-in-block">+15%</i>
+                                <i class="dis-in-block">200.25</i>
+                            </span>
+                            <span class="btn btn-4 fl fc-red">
+                                <i class="dis-in-block">+20%</i>
+                                <i class="dis-in-block">200.25</i>
+                            </span>
+                        </div>
+                        <div class="clear">
+                            <span class="btn btn-4 fl fc-green">
+                                <i class="dis-in-block">-5%</i>
+                                <i class="dis-in-block">200.25</i>
+                            </span>
+                            <span class="btn btn-4 fl fc-green">
+                                <i class="dis-in-block">-10%</i>
+                                <i class="dis-in-block">200.25</i>
+                            </span>
+                            <span class="btn btn-4 fl fc-green">
+                                <i class="dis-in-block">-15%</i>
+                                <i class="dis-in-block">200.25</i>
+                            </span>
+                            <span class="btn btn-4 fl fc-green">
+                                <i class="dis-in-block">-20%</i>
+                                <i class="dis-in-block">200.25</i>
+                            </span>
+                        </div>
+                        <div class="clear">
+                            <span class="btn btn-4 fl bg-theme">成本</span>
+                            <span class="btn btn-4 fl bg-5cb85c">3000</span>
+                            <span class="btn btn-4 fl bg-disabled">加仓</span>
+                            <span class="btn btn-4 fl bg-disabled">减仓</span>
+                        </div>
+                        <div class="clear border-t">
+                            <span class="btn btn-2 fl bg-green">亏234.23</span>
+                            <span class="btn btn-2 fl bg-disabled">清仓</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="res bg-green">-2000%</div>
+        </div>
     </div>
+    <div id="jAdd" class="add" v-bind:class="'bg-'+itemData.color" v-on:click="addRecord()" tapmode>
+        <i class="iconfont icon-jia"></i>
+    </div>
+</div>
 </body>
 <script type="text/javascript" data-main="../../script/app" src="../../script/lib/require/2.1.11/require.js"></script>
 <script src="../../script/app.js"></script>
 <script src="../../script/conf/common.js"></script>
 <script type="text/javascript">
-    apiready = function() {
-        require(['api','vue'], function($api,Vue) {
+    apiready = function () {
+        require(['api', 'vue'], function ($api, Vue) {
             /**
              * @description: 新建一个类
              */
@@ -40,7 +374,7 @@
             /**
              * @description: 初始化参数(全局变量+常量)
              */
-            AccountDetail.prototype.init = function() {
+            AccountDetail.prototype.init = function () {
                 var self = this;
 
                 //缓存全局变量
@@ -54,12 +388,22 @@
             /**
              * @description: 初始化页面(首屏)
              */
-            AccountDetail.prototype.initUI = function() {
+            AccountDetail.prototype.initUI = function () {
                 var self = this;
                 self.app = new Vue({
                     el: '#app',
                     data: {
-                        itemData:self.data
+                        itemData: self.data
+                    },
+                    mounted: function () {
+                        api.parseTapmode();
+                    },
+                    methods: {
+                        addRecord: function () {
+                            openWin('addRecord', '../records/addRecord.html', {
+                                id: self.data.id
+                            });
+                        }
                     }
                 });
             };
@@ -67,14 +411,14 @@
             /**
              * @description: 事件管理
              */
-            AccountDetail.prototype.events = function() {
+            AccountDetail.prototype.events = function () {
                 var self = this;
 
                 api.addEventListener({
                     name: 'addAccountUpdate'
-                }, function(ret, err){
-                    if( ret ){
-                        self.app.itemData = extend(self.app.itemData,ret.value.eidtData);
+                }, function (ret, err) {
+                    if (ret) {
+                        self.app.itemData = extend(self.app.itemData, ret.value.eidtData);
                     }
                 });
             };
@@ -82,21 +426,17 @@
             /**
              * @description: ajax管理
              */
-            AccountDetail.prototype.https = function() {
+            AccountDetail.prototype.https = function () {
                 var self = this;
-                return {
-
-                };
+                return {};
             };
 
             /**
              * @description: 方法管理
              */
-            AccountDetail.prototype.methods = function() {
+            AccountDetail.prototype.methods = function () {
                 var self = this;
-                return {
-
-                };
+                return {};
             };
 
             new AccountDetail();

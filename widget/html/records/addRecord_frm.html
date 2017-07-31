@@ -1,0 +1,226 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <script src="../../script/lib/utils/rem/1.0.0/rem.js"></script>
+    <meta name="viewport"
+          content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,initial-scale=1.0,width=device-width"/>
+    <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+    <title>添加记录</title>
+    <link rel="stylesheet" type="text/css" href="../../css/aui/2.1.0/aui.css"/>
+    <!-- <link rel="stylesheet" type="text/css" href="../fonts/iconfont.css" />-->
+    <link rel="stylesheet" type="text/css" href="http://at.alicdn.com/t/font_jtcpxfrms4i.css"/>
+    <link rel="stylesheet" type="text/css" href="../../css/conf/records/records.css"/>
+</head>
+
+<body>
+<div id="app">
+    <div class="content aui-content-padded">
+        <ul class="aui-list aui-form-list">
+            <li class="aui-list-item">
+                <div class="aui-list-item-inner">
+                    <div class="aui-list-item-label">
+                        记录方式
+                    </div>
+                    <div class="aui-list-item-input">
+                        <select>
+                            <option value="0">请选择</option>
+                            <option value="1">普通记录</option>
+                            <option value="2">投资记录</option>
+                        </select>
+                    </div>
+                </div>
+            </li>
+            <li class="aui-list-item">
+                <div class="aui-list-item-inner">
+                    <div class="aui-list-item-label">
+                        记录类型
+                    </div>
+                    <div class="aui-list-item-input">
+                        <label><input class="aui-radio" type="radio" name="demo1" checked>流入</label>
+                        <label><input class="aui-radio" type="radio" name="demo1">流出</label>
+                    </div>
+                </div>
+            </li>
+            <li class="aui-list-item">
+                <div class="aui-list-item-inner">
+                    <div class="aui-list-item-label">
+                        Text
+                    </div>
+                    <div class="aui-list-item-input">
+                        <input type="text" placeholder="Name">
+                    </div>
+                </div>
+            </li>
+            <li class="aui-list-item">
+                <div class="aui-list-item-inner">
+                    <div class="aui-list-item-label">
+                        Password
+                    </div>
+                    <div class="aui-list-item-input">
+                        <input type="password" placeholder="Password">
+                    </div>
+                </div>
+            </li>
+            <li class="aui-list-item">
+                <div class="aui-list-item-inner">
+                    <div class="aui-list-item-label">
+                        金额
+                    </div>
+                    <div class="aui-list-item-input">
+                        <input type="number" placeholder="Number">
+                    </div>
+                </div>
+            </li>
+        </ul>
+    </div>
+</div>
+</body>
+<script type="text/javascript" data-main="../../script/app" src="../../script/lib/require/2.1.11/require.js"></script>
+<script src="../../script/app.js"></script>
+<script src="../../script/conf/common.js"></script>
+<script type="text/javascript">
+    apiready = function () {
+        require(['api','vue','date'],function($api,Vue,date) {
+            /**
+             * @description: 新建一个类
+             */
+            function AddRecords() {
+                this.init();
+                this.initUI();
+                this.events();
+            }
+
+            /**
+             * @description: 初始化参数(全局变量+常量)
+             */
+            AddRecords.prototype.init = function() {
+                var self = this;
+
+                //缓存全局变量
+                self.id = api.pageParam.id;
+                //缓存全局dom对象
+
+            };
+
+            /**
+             * @description: 初始化页面(首屏)
+             */
+            AddRecords.prototype.initUI = function() {
+                var self = this;
+                self.app = new Vue({
+                    el: '#app',
+                    data: {
+
+                    },
+                    mounted:function () {
+                        api.parseTapmode();
+                    },
+                    methods:{
+                        inputWatch:function (type,event) { // 实时显示输入信息
+                            var val = event.target.value;
+                            switch (type){
+                                case 1:
+                                    self.app.accountName = val;
+                                    break;
+                                case 2:
+                                    self.app.remark = val;
+                                    break;
+                                case 3:
+                                    self.app.amount = toThousands(val);
+                                    break;
+                            }
+                        },
+                        colorIsShow:function () { // 显示/隐藏 颜色选项卡
+                            if(self.app.colorListsShow){
+                                self.app.colorListsShow = false;
+                            }else {
+                                self.app.colorListsShow = true;
+                            }
+                        },
+                        changeColor:function (color) { // 改变颜色
+                            self.app.colorType = color;
+                        },
+                        sureAdd:function () { // 确定
+                            api.confirm({
+                                title: '添加账户提示',
+                                msg: '你真的要添加这个账户吗?',
+                                buttons: ['确定', '取消']
+                            }, function(ret, err) {
+                                var index = ret.buttonIndex;
+                                if(index == 1){
+                                    if(!self.hasClick){
+                                        var id = uuid(8,16);
+                                        var now = date.format("yyyy-MM-dd HH:mm:ss");
+                                        var data = {
+                                            "id":id,
+                                            "type":self.pageType,
+                                            "name":self.app.accountName,
+                                            "remark":self.app.remark,
+                                            "color":self.app.colorType,
+                                            "amount":self.app.amount,
+                                            "balance":self.app.amount,
+                                            "difference":"0.00",
+                                            "rose":"0.00",
+                                            "roseType":0,
+                                            "inflow":"0.00",
+                                            "outflow":"0.00",
+                                            "addDate":now,
+                                            "upDate":now
+                                        };
+                                        addData('accounts',data,'添加账户成功');
+
+                                        api.sendEvent({
+                                            name: 'addAccountSuccess'
+                                        });
+
+                                        $api.setStorage('isFist',1);
+                                        setTimeout(function () {
+                                            api.closeToWin({
+                                                name: 'root'
+                                            });
+                                        },300);
+                                        self.hasClick = true;
+                                    }
+                                }
+                            });
+                        }
+                    }
+                });
+            };
+
+            /**
+             * @description: 事件管理
+             */
+            AddRecords.prototype.events = function() {
+                var self = this;
+
+            };
+
+            /**
+             * @description: ajax管理
+             */
+            AddRecords.prototype.https = function() {
+                var self = this;
+                return {
+
+                };
+            };
+
+            /**
+             * @description: 方法管理
+             */
+            AddRecords.prototype.methods = function() {
+                var self = this;
+                return {
+
+                };
+            };
+
+            new AddRecords();
+        });
+    };
+</script>
+
+</html>

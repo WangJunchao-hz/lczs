@@ -1,0 +1,48 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <script src="../../script/lib/utils/rem/1.0.0/rem.js"></script>
+    <meta name="viewport"
+          content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,initial-scale=1.0,width=device-width"/>
+    <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+    <title>添加记录</title>
+    <link rel="stylesheet" type="text/css" href="../../css/aui/2.1.0/aui.css"/>
+    <!-- <link rel="stylesheet" type="text/css" href="../fonts/iconfont.css" />-->
+    <link rel="stylesheet" type="text/css" href="http://at.alicdn.com/t/font_hdy4esq7wjqbyb9.css"/>
+    <link rel="stylesheet" type="text/css" href="../../css/conf/records/records.css"/>
+</head>
+
+<body>
+<div id="app">
+    <header id="jHeader" class="aui-bar aui-bar-nav">
+        <div id="jBack" class="aui-pull-left aui-btn" onclick="closeWin()" tapmode>
+            <span class="iconfont icon-fanhui"></span>
+        </div>
+        <div class="aui-title">添加流水记录</div>
+        <div id="jSure" class="aui-pull-right aui-btn" onclick="onSure()" tapmode>确定</div>
+    </header>
+</div>
+</body>
+<script type="text/javascript" data-main="../../script/app" src="../../script/lib/require/2.1.11/require.js"></script>
+<script src="../../script/app.js"></script>
+<script src="../../script/conf/common.js"></script>
+<script type="text/javascript">
+    apiready = function () {
+        api.parseTapmode();
+        require(['api'],function ($api) {
+            setHeader($api,'jHeader');
+            openFrame($api,'addRecord_frm','./addRecord_frm.html',0,{
+                id:api.pageParam.id
+            },true);
+        });
+    };
+    function onSure() {
+        api.sendEvent({
+            name: 'onSureClick'
+        });
+    }
+</script>
+
+</html>

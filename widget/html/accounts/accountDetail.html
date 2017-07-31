@@ -68,8 +68,6 @@
         require(['api', 'vue'], function ($api, Vue) {
             setHeader($api, 'jHeader');
             var accountDetail = api.pageParam.data;
-            var headerH = $api.offset($api.byId("jHeader")).h;
-            var mod1H = $api.offset($api.byId("jMod1")).h;
 
             var app = new Vue({
                 el: '#app',
@@ -77,7 +75,23 @@
                     accountDetail: accountDetail
                 },
                 mounted: function () {
+                    var headerH = $api.offset($api.byId("jHeader")).h;
+                    var mod1H = $api.offset($api.byId("jMod1")).h;
                     api.parseTapmode();
+                    api.openFrame({
+                        name: 'accountDetail_frm',
+                        url: './accountDetail_frm.html',
+                        rect: {
+                            x: 0,
+                            y: headerH + mod1H,
+                            w: 'auto',
+                            h: 'auto'
+                        },
+                        pageParam: {
+                            data: api.pageParam.data
+                        },
+                        bounces: true
+                    });
                 },
                 methods: {
                     edit: function () { // 去编辑账户
@@ -94,21 +108,6 @@
                 if( ret ){
                     app.accountDetail = extend(app.accountDetail,ret.value.eidtData);
                 }
-            });
-
-            api.openFrame({
-                name: 'accountDetail_frm',
-                url: './accountDetail_frm.html',
-                rect: {
-                    x: 0,
-                    y: headerH + mod1H,
-                    w: 'auto',
-                    h: 'auto'
-                },
-                pageParam: {
-                    data: api.pageParam.data
-                },
-                bounces: true
             });
         });
     };
