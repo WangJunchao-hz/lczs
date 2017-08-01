@@ -24,7 +24,7 @@
                         记录方式
                     </div>
                     <div class="aui-list-item-input">
-                        <select>
+                        <select v-on:change="onselect(event)">
                             <option value="0">请选择</option>
                             <option value="1">普通记录</option>
                             <option value="2">投资记录</option>
@@ -43,7 +43,7 @@
                     </div>
                 </div>
             </li>
-            <li class="aui-list-item">
+            <li class="aui-list-item" v-if="!isNormal && isInvest">
                 <div class="aui-list-item-inner">
                     <div class="aui-list-item-label">
                         主题
@@ -53,7 +53,7 @@
                     </div>
                 </div>
             </li>
-            <li class="aui-list-item">
+            <li class="aui-list-item" v-if="!isNormal && isInvest">
                 <div class="aui-list-item-inner">
                     <div class="aui-list-item-label">
                         数量
@@ -63,7 +63,7 @@
                     </div>
                 </div>
             </li>
-            <li class="aui-list-item">
+            <li class="aui-list-item" v-if="!isNormal && isInvest">
                 <div class="aui-list-item-inner">
                     <div class="aui-list-item-label">
                         单价
@@ -73,7 +73,7 @@
                     </div>
                 </div>
             </li>
-            <li class="aui-list-item">
+            <li class="aui-list-item" v-if="isNormal && !isInvest">
                 <div class="aui-list-item-inner">
                     <div class="aui-list-item-label">
                         金额
@@ -83,7 +83,7 @@
                     </div>
                 </div>
             </li>
-            <li class="aui-list-item">
+            <li class="aui-list-item" v-if="isNormal || isInvest">
                 <div class="aui-list-item-inner">
                     <div class="aui-list-item-label">
                         说明
@@ -132,23 +132,25 @@
                 self.app = new Vue({
                     el: '#app',
                     data: {
-
+                        isNormal:false,
+                        isInvest:false
                     },
                     mounted:function () {
                         api.parseTapmode();
                     },
                     methods:{
-                        inputWatch:function (type,event) { // 实时显示输入信息
+                        onselect:function (event) { // 监听选择框
                             var val = event.target.value;
-                            switch (type){
-                                case 1:
-                                    self.app.accountName = val;
+                            switch (val){
+                                case '0':
                                     break;
-                                case 2:
-                                    self.app.remark = val;
+                                case '1': // 普通记录
+                                    self.app.isNormal = true;
+                                    self.app.isInvest = false;
                                     break;
-                                case 3:
-                                    self.app.amount = toThousands(val);
+                                case '2': // 投资记录
+                                    self.app.isNormal = false;
+                                    self.app.isInvest = true;
                                     break;
                             }
                         },
