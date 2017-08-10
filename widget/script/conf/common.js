@@ -5,6 +5,10 @@
  * @Last Modified time: 2017/5/4
  * @file 常用的方法
  */
+// 数据库表名
+var diaries = 'diaries'; // 实时记录表
+
+
 function setHeader($api, id) {
     var headerDom = $api.byId(id);
     if (headerDom) {
@@ -100,6 +104,9 @@ function readFile(name) { // 读取数据
 }
 
 function deleteData(name, id,tip) { //删除数据
+    if(typeof tip === 'undefined'){
+        var tip = '删除成功';
+    }
     try {
         var all = readFile(name);
         var index;
@@ -109,8 +116,12 @@ function deleteData(name, id,tip) { //删除数据
                 break;
             }
         }
-        all.contents.splice(index, 1);
-        writeFile(name,all,tip);
+        if(index != 'undefined'){
+            all.contents.splice(index, 1);
+            writeFile(name,all,tip);
+        }else {
+            showMsg("删除失败");
+        }
     } catch (e) {
         showMsg("删除失败");
     }

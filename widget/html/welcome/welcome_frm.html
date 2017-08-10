@@ -4,379 +4,129 @@
 <head>
     <meta charset="utf-8">
     <script src="../../script/lib/utils/rem/1.0.0/rem.js"></script>
-    <meta name="viewport"
-          content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,initial-scale=1.0,width=device-width"/>
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,initial-scale=1.0,width=device-width" />
     <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
     <title>欢迎页</title>
-    <link rel="stylesheet" type="text/css" href="../../css/aui/2.1.0/aui.css"/>
+    <link rel="stylesheet" type="text/css" href="../../css/aui/2.1.0/aui.css" />
     <!-- <link rel="stylesheet" type="text/css" href="../fonts/iconfont.css" />-->
-    <link rel="stylesheet" type="text/css" href="http://at.alicdn.com/t/font_t0d0y6lfw9widx6r.css"/>
-    <link rel="stylesheet" type="text/css" href="../../css/conf/welcome/welcome.css"/>
+    <link rel="stylesheet" type="text/css" href="http://at.alicdn.com/t/font_t0d0y6lfw9widx6r.css" />
+    <link rel="stylesheet" type="text/css" href="../../css/conf/welcome/welcome.css" />
 </head>
 
 <body>
-<div id="app" v-cloak>
-    <div id="jWelcome" class="welcome-tip aui-content-padded" v-show="isFist">
-        <i class="iconfont icon-keai fc-7"></i>
-        <div class="tip">
-            <p>欢迎使用小鑫,</p>
-            <p>未来有您的陪伴,</p>
-            <p>小鑫定会越来越好!</p>
-            <div class="guide">
-                <p>快来添加一个账户吧!</p>
-                <i class="iconfont icon-arrows-5-5 fc-4"></i>
+    <div id="app" v-cloak>
+        <div id="jWelcome" class="welcome-tip aui-content-padded" v-show="isFist">
+            <i class="iconfont icon-keai fc-7"></i>
+            <div class="tip">
+                <p>欢迎使用小鑫,</p>
+                <p>未来有您的陪伴,</p>
+                <p>小鑫定会越来越好!</p>
+                <div class="guide">
+                    <p>快来添加一个账户吧!</p>
+                    <i class="iconfont icon-arrows-5-5 fc-4"></i>
+                </div>
+            </div>
+        </div>
+        <div id="jContent" v-if="!isNoData">
+            <div class="aui-timeline" v-for="item in listArrays">
+                <div class="aui-timeline-item-header" v-text="item.addDate">2017-4-8 12:23:33</div>
+                <div class="aui-timeline-item">
+                    <div v-if="item.state == 0" class="aui-timeline-item-label text-light bg-337ab7 fc-default">建仓</div>
+                    <div v-else-if="item.state == 1" class="aui-timeline-item-label text-light bg-5cb85c fc-default">已完成</div>
+                    <div class="aui-timeline-item-inner">
+                        <div class="aui-card-list">
+                            <div class="aui-card-list-content-padded" v-text="item.explain">
+                                等到10%就卖
+                            </div>
+                            <div class="aui-timeline border-t" v-for="addList in item.add_list">
+                                <div class="aui-timeline-item-header">2017-2-5 12:23:33</div>
+                                <div class="aui-timeline-item">
+                                    <div class="aui-timeline-item-label text-light bg-5bc0de fc-default">加仓</div>
+                                    <div class="aui-timeline-item-inner">
+                                        <div class="aui-card-list">
+                                            <div class="clear">
+                                                <span class="btn btn-2 fl bg-theme">金额</span>
+                                                <span class="btn btn-2 fr bg-5cb85c">3000</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="clear">
+                                <span class="btn btn-1 fl bg-red">止盈</span>
+                            </div>
+                            <div class="clear">
+                                <span class="btn btn-4 fl fc-red">
+                                <i class="dis-in-block">+5%</i>
+                                <i class="dis-in-block" v-text="item.target_profit[0]">200.25</i>
+                            </span>
+                                <span class="btn btn-4 fl fc-red">
+                                <i class="dis-in-block">+10%</i>
+                                <i class="dis-in-block" v-text="item.target_profit[1]">200.25</i>
+                            </span>
+                                <span class="btn btn-4 fl fc-red">
+                                <i class="dis-in-block">+15%</i>
+                                <i class="dis-in-block" v-text="item.target_profit[2]">200.25</i>
+                            </span>
+                                <span class="btn btn-4 fl fc-red">
+                                <i class="dis-in-block">+20%</i>
+                                <i class="dis-in-block" v-text="item.target_profit[3]">200.25</i>
+                            </span>
+                            </div>
+                            <div class="clear">
+                                <span class="btn btn-1 fl bg-green">止损</span>
+                            </div>
+                            <div class="clear">
+                                <span class="btn btn-4 fl fc-green">
+                                <i class="dis-in-block">-5%</i>
+                                <i class="dis-in-block" v-text="item.target_stop[0]">200.25</i>
+                            </span>
+                                <span class="btn btn-4 fl fc-green">
+                                <i class="dis-in-block">-10%</i>
+                                <i class="dis-in-block" v-text="item.target_stop[1]">200.25</i>
+                            </span>
+                                <span class="btn btn-4 fl fc-green">
+                                <i class="dis-in-block">-15%</i>
+                                <i class="dis-in-block" v-text="item.target_stop[2]">200.25</i>
+                            </span>
+                                <span class="btn btn-4 fl fc-green">
+                                <i class="dis-in-block">-20%</i>
+                                <i class="dis-in-block" v-text="item.target_stop[3]">200.25</i>
+                            </span>
+                            </div>
+                            <div class="clear">
+                                <span class="btn btn-2 fl bg-theme">成本</span>
+                                <span class="btn btn-2 fl bg-5cb85c" v-text="item.cost">3000</span>
+                            </div>
+                            <div class="clear">
+                                <span class="btn btn-2 fl bg-5bc0de" v-on:click="add(item.id)">加仓</span>
+                                <span class="btn btn-2 fl bg-f0ad4e">清仓</span>
+                            </div>
+                            <div class="clear border-t">
+                                <span class="btn btn-2 fl bg-5cb85c" v-if="item.state == 0">进行中</span>
+                                <span class="btn btn-2 fl bg-red" v-else-if="item.state == 1">赚234.23</span>
+                                <span class="btn btn-2 fl bg-d9534f" v-on:click="deleteData(item.id)">删除记录</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="res bg-red" v-if="item.state == 1">+2000%</div>
+            </div>
+        </div>
+        <div id="jNoData" class="no-data" v-if="isNoData">
+            <div class="content">
+                <i class="iconfont icon-zwsj"></i>
+                <p>暂无记录</p>
             </div>
         </div>
     </div>
-    <div id="jContent">
-        <div class="aui-timeline">
-            <div class="aui-timeline-item-header">2017-1-8 12:23:33</div>
-            <div class="aui-timeline-item">
-                <div class="aui-timeline-item-label text-light bg-red fc-default">流入</div>
-                <div class="aui-timeline-item-inner">
-                    <div class="aui-card-list">
-                        <div class="aui-card-list-content-padded">
-                            发工资有钱了,哈哈哈
-                        </div>
-                        <div class="clear">
-                            <span class="btn btn-2 fl bg-theme">金额</span>
-                            <span class="btn btn-2 fr bg-red">3000</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="aui-timeline">
-            <div class="aui-timeline-item-header">2017-2-5 12:23:33</div>
-            <div class="aui-timeline-item">
-                <div class="aui-timeline-item-label text-light bg-green fc-default">流出</div>
-                <div class="aui-timeline-item-inner">
-                    <div class="aui-card-list">
-                        <div class="aui-card-list-content-padded">
-                            还花呗3000元,我的钱啊....
-                        </div>
-                        <div class="clear">
-                            <span class="btn btn-2 fl bg-theme">金额</span>
-                            <span class="btn btn-2 fr bg-green">3000</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="aui-timeline">
-            <div class="aui-timeline-item-header">2017-4-8 12:23:33</div>
-            <div class="aui-timeline-item">
-                <div class="aui-timeline-item-label text-light bg-theme fc-default">建仓</div>
-                <div class="aui-timeline-item-inner">
-                    <div class="aui-card-list">
-                        <div class="aui-card-list-header aui-border-b">
-                            <div>买入中国中铁100股</div>
-                        </div>
-                        <div class="aui-card-list-content-padded">
-                            等到10%就卖
-                        </div>
-                        <div class="aui-timeline border-t">
-                            <div class="aui-timeline-item-header">2017-2-5 12:23:33</div>
-                            <div class="aui-timeline-item">
-                                <div class="aui-timeline-item-label text-light bg-f0ad4e fc-default">加仓</div>
-                                <div class="aui-timeline-item-inner">
-                                    <div class="aui-card-list">
-                                        <div class="aui-card-list-content-padded bg-ececec">
-                                            中国中铁加仓100股
-                                        </div>
-                                        <div class="clear">
-                                            <span class="btn btn-2 fl bg-theme">金额</span>
-                                            <span class="btn btn-2 fr bg-5cb85c">3000</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="aui-timeline-item">
-                                <div class="aui-timeline-item-label text-light bg-f0ad4e fc-default">加仓</div>
-                                <div class="aui-timeline-item-inner">
-                                    <div class="aui-card-list">
-                                        <div class="aui-card-list-content-padded bg-ececec">
-                                            中国中铁加仓100股
-                                        </div>
-                                        <div class="clear">
-                                            <span class="btn btn-2 fl bg-theme">金额</span>
-                                            <span class="btn btn-2 fr bg-5cb85c">3000</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="clear">
-                            <span class="btn btn-4 fl bg-337ab7">数量</span>
-                            <span class="btn btn-4 fl bg-5bc0de">300</span>
-                            <span class="btn btn-4 fl bg-337ab7">单价</span>
-                            <span class="btn btn-4 fl bg-5bc0de">8.3</span>
-                        </div>
-                        <div class="clear">
-                            <span class="btn btn-4 fl fc-red">
-                                <i class="dis-in-block">+5%</i>
-                                <i class="dis-in-block">200.25</i>
-                            </span>
-                            <span class="btn btn-4 fl fc-red">
-                                <i class="dis-in-block">+10%</i>
-                                <i class="dis-in-block">200.25</i>
-                            </span>
-                            <span class="btn btn-4 fl fc-red">
-                                <i class="dis-in-block">+15%</i>
-                                <i class="dis-in-block">200.25</i>
-                            </span>
-                            <span class="btn btn-4 fl fc-red">
-                                <i class="dis-in-block">+20%</i>
-                                <i class="dis-in-block">200.25</i>
-                            </span>
-                        </div>
-                        <div class="clear">
-                            <span class="btn btn-4 fl fc-green">
-                                <i class="dis-in-block">-5%</i>
-                                <i class="dis-in-block">200.25</i>
-                            </span>
-                            <span class="btn btn-4 fl fc-green">
-                                <i class="dis-in-block">-10%</i>
-                                <i class="dis-in-block">200.25</i>
-                            </span>
-                            <span class="btn btn-4 fl fc-green">
-                                <i class="dis-in-block">-15%</i>
-                                <i class="dis-in-block">200.25</i>
-                            </span>
-                            <span class="btn btn-4 fl fc-green">
-                                <i class="dis-in-block">-20%</i>
-                                <i class="dis-in-block">200.25</i>
-                            </span>
-                        </div>
-                        <div class="clear">
-                            <span class="btn btn-4 fl bg-theme">成本</span>
-                            <span class="btn btn-4 fl bg-5cb85c">3000</span>
-                            <span class="btn btn-4 fl bg-f0ad4e">加仓</span>
-                            <span class="btn btn-4 fl bg-d9534f">减仓</span>
-                        </div>
-                        <div class="clear border-t">
-                            <span class="btn btn-2 fl bg-5bc0de">进行中</span>
-                            <span class="btn btn-2 fl bg-red">清仓</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="aui-timeline">
-            <div class="aui-timeline-item-header">2017-4-8 12:23:33</div>
-            <div class="aui-timeline-item">
-                <div class="aui-timeline-item-label text-light bg-5cb85c fc-default">已完成</div>
-                <div class="aui-timeline-item-inner">
-                    <div class="aui-card-list">
-                        <div class="aui-card-list-header aui-border-b">
-                            <div>买入中国中铁100股</div>
-                        </div>
-                        <div class="aui-card-list-content-padded">
-                            等到10%就卖
-                        </div>
-                        <div class="aui-timeline border-t">
-                            <div class="aui-timeline-item-header">2017-2-5 12:23:33</div>
-                            <div class="aui-timeline-item">
-                                <div class="aui-timeline-item-label text-light bg-f0ad4e fc-default">加仓</div>
-                                <div class="aui-timeline-item-inner">
-                                    <div class="aui-card-list">
-                                        <div class="aui-card-list-content-padded bg-ececec">
-                                            中国中铁加仓100股
-                                        </div>
-                                        <div class="clear">
-                                            <span class="btn btn-2 fl bg-theme">金额</span>
-                                            <span class="btn btn-2 fr bg-5cb85c">3000</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="aui-timeline-item">
-                                <div class="aui-timeline-item-label text-light bg-f0ad4e fc-default">加仓</div>
-                                <div class="aui-timeline-item-inner">
-                                    <div class="aui-card-list">
-                                        <div class="aui-card-list-content-padded bg-ececec">
-                                            中国中铁加仓100股
-                                        </div>
-                                        <div class="clear">
-                                            <span class="btn btn-2 fl bg-theme">金额</span>
-                                            <span class="btn btn-2 fr bg-5cb85c">3000</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="clear">
-                            <span class="btn btn-4 fl bg-337ab7">数量</span>
-                            <span class="btn btn-4 fl bg-5bc0de">300</span>
-                            <span class="btn btn-4 fl bg-337ab7">单价</span>
-                            <span class="btn btn-4 fl bg-5bc0de">8.3</span>
-                        </div>
-                        <div class="clear">
-                            <span class="btn btn-4 fl fc-red">
-                                <i class="dis-in-block">+5%</i>
-                                <i class="dis-in-block">200.25</i>
-                            </span>
-                            <span class="btn btn-4 fl fc-red">
-                                <i class="dis-in-block">+10%</i>
-                                <i class="dis-in-block">200.25</i>
-                            </span>
-                            <span class="btn btn-4 fl fc-red">
-                                <i class="dis-in-block">+15%</i>
-                                <i class="dis-in-block">200.25</i>
-                            </span>
-                            <span class="btn btn-4 fl fc-red">
-                                <i class="dis-in-block">+20%</i>
-                                <i class="dis-in-block">200.25</i>
-                            </span>
-                        </div>
-                        <div class="clear">
-                            <span class="btn btn-4 fl fc-green">
-                                <i class="dis-in-block">-5%</i>
-                                <i class="dis-in-block">200.25</i>
-                            </span>
-                            <span class="btn btn-4 fl fc-green">
-                                <i class="dis-in-block">-10%</i>
-                                <i class="dis-in-block">200.25</i>
-                            </span>
-                            <span class="btn btn-4 fl fc-green">
-                                <i class="dis-in-block">-15%</i>
-                                <i class="dis-in-block">200.25</i>
-                            </span>
-                            <span class="btn btn-4 fl fc-green">
-                                <i class="dis-in-block">-20%</i>
-                                <i class="dis-in-block">200.25</i>
-                            </span>
-                        </div>
-                        <div class="clear">
-                            <span class="btn btn-4 fl bg-theme">成本</span>
-                            <span class="btn btn-4 fl bg-5cb85c">3000</span>
-                            <span class="btn btn-4 fl bg-disabled">加仓</span>
-                            <span class="btn btn-4 fl bg-disabled">减仓</span>
-                        </div>
-                        <div class="clear border-t">
-                            <span class="btn btn-2 fl bg-red">赚234.23</span>
-                            <span class="btn btn-2 fl bg-disabled">清仓</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="res bg-red">+2000%</div>
-        </div>
-        <div class="aui-timeline">
-            <div class="aui-timeline-item-header">2017-4-8 12:23:33</div>
-            <div class="aui-timeline-item">
-                <div class="aui-timeline-item-label text-light bg-5cb85c fc-default">已完成</div>
-                <div class="aui-timeline-item-inner">
-                    <div class="aui-card-list">
-                        <div class="aui-card-list-header aui-border-b">
-                            <div>买入中国中铁100股</div>
-                        </div>
-                        <div class="aui-card-list-content-padded">
-                            等到10%就卖
-                        </div>
-                        <div class="aui-timeline border-t">
-                            <div class="aui-timeline-item-header">2017-2-5 12:23:33</div>
-                            <div class="aui-timeline-item">
-                                <div class="aui-timeline-item-label text-light bg-f0ad4e fc-default">加仓</div>
-                                <div class="aui-timeline-item-inner">
-                                    <div class="aui-card-list">
-                                        <div class="aui-card-list-content-padded bg-ececec">
-                                            中国中铁加仓100股
-                                        </div>
-                                        <div class="clear">
-                                            <span class="btn btn-2 fl bg-theme">金额</span>
-                                            <span class="btn btn-2 fr bg-5cb85c">3000</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="aui-timeline-item">
-                                <div class="aui-timeline-item-label text-light bg-f0ad4e fc-default">加仓</div>
-                                <div class="aui-timeline-item-inner">
-                                    <div class="aui-card-list">
-                                        <div class="aui-card-list-content-padded bg-ececec">
-                                            中国中铁加仓100股
-                                        </div>
-                                        <div class="clear">
-                                            <span class="btn btn-2 fl bg-theme">金额</span>
-                                            <span class="btn btn-2 fr bg-5cb85c">3000</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="clear">
-                            <span class="btn btn-4 fl bg-337ab7">数量</span>
-                            <span class="btn btn-4 fl bg-5bc0de">300</span>
-                            <span class="btn btn-4 fl bg-337ab7">单价</span>
-                            <span class="btn btn-4 fl bg-5bc0de">8.3</span>
-                        </div>
-                        <div class="clear">
-                            <span class="btn btn-4 fl fc-red">
-                                <i class="dis-in-block">+5%</i>
-                                <i class="dis-in-block">200.25</i>
-                            </span>
-                            <span class="btn btn-4 fl fc-red">
-                                <i class="dis-in-block">+10%</i>
-                                <i class="dis-in-block">200.25</i>
-                            </span>
-                            <span class="btn btn-4 fl fc-red">
-                                <i class="dis-in-block">+15%</i>
-                                <i class="dis-in-block">200.25</i>
-                            </span>
-                            <span class="btn btn-4 fl fc-red">
-                                <i class="dis-in-block">+20%</i>
-                                <i class="dis-in-block">200.25</i>
-                            </span>
-                        </div>
-                        <div class="clear">
-                            <span class="btn btn-4 fl fc-green">
-                                <i class="dis-in-block">-5%</i>
-                                <i class="dis-in-block">200.25</i>
-                            </span>
-                            <span class="btn btn-4 fl fc-green">
-                                <i class="dis-in-block">-10%</i>
-                                <i class="dis-in-block">200.25</i>
-                            </span>
-                            <span class="btn btn-4 fl fc-green">
-                                <i class="dis-in-block">-15%</i>
-                                <i class="dis-in-block">200.25</i>
-                            </span>
-                            <span class="btn btn-4 fl fc-green">
-                                <i class="dis-in-block">-20%</i>
-                                <i class="dis-in-block">200.25</i>
-                            </span>
-                        </div>
-                        <div class="clear">
-                            <span class="btn btn-4 fl bg-theme">成本</span>
-                            <span class="btn btn-4 fl bg-5cb85c">3000</span>
-                            <span class="btn btn-4 fl bg-disabled">加仓</span>
-                            <span class="btn btn-4 fl bg-disabled">减仓</span>
-                        </div>
-                        <div class="clear border-t">
-                            <span class="btn btn-2 fl bg-green">亏234.23</span>
-                            <span class="btn btn-2 fl bg-disabled">清仓</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="res bg-green">-2000%</div>
-        </div>
-    </div>
-    <div id="jNoData" class="no-data" v-show="isNoData">
-        <div class="content">
-            <i class="iconfont icon-zwsj"></i>
-            <p>暂无记录</p>
-        </div>
-    </div>
-</div>
 </body>
 <script type="text/javascript" data-main="../../script/app" src="../../script/lib/require/2.1.11/require.js"></script>
 <script type="text/javascript" src="../../script/app.js"></script>
 <script type="text/javascript" src="../../script/conf/common.js"></script>
 <script type="text/javascript">
-    apiready = function () {
-        require(['vue','api'],function(Vue,$api) {
+    apiready = function() {
+        require(['vue', 'api'], function(Vue, $api) {
             /**
              * @description: 新建一个类
              */
@@ -391,7 +141,10 @@
              */
             Welcome.prototype.init = function() {
                 var self = this;
-
+                self.delay = 0;
+                if (api.systemType != 'ios') {
+                    self.delay = 300;
+                }
                 //缓存全局变量
                 self.isFist = $api.getStorage('isFist');
 
@@ -404,20 +157,56 @@
              */
             Welcome.prototype.initUI = function() {
                 var self = this;
+                self.data = readFile(diaries);
                 self.app = new Vue({
                     el: '#app',
                     data: {
-                        isNoData:false
+                        listArrays: self.data.contents
                     },
-                    computed:{
-                        isFist:function () {
-                            var res = true;
-                            if(self.isFist == 1){
-                                res = false;
-                            }else {
-                                this.isNoData = false;
+                    computed: {
+                        isNoData: function() {
+                            var res = false;
+                            if (this.listArrays.length == 0) {
+                                res = true;
                             }
                             return res;
+                        },
+                        isFist: function() {
+                            var res = true;
+                            if (self.isFist == 1) {
+                                res = false;
+                            } else {
+                                this.isNoData = false;
+                            }
+                            return false;
+                        }
+                    },
+                    methods:{
+                        add:function (id) { // 加仓
+                            api.openFrame({
+                                name: 'scaleIn',
+                                url: '../popup/scaleIn.html',
+                                rect: {
+                                    x: 0,
+                                    y: 0,
+                                    w: 'auto',
+                                    h: 'auto'
+                                },
+                                delay:self.delay,
+                                pageParam: {
+                                    id: id
+                                },
+                                bgColor: 'rgba(0,0,0,0.5)'
+                            });
+
+                        },
+                        deleteData:function (id) {
+                            deleteData(diaries,id,'删除记录成功');
+                            this.refresh();
+                        },
+                        refresh:function () {
+                            var newData = readFile(diaries);
+                            self.app.listArrays = newData.contents;
                         }
                     }
                 });
@@ -428,6 +217,11 @@
              */
             Welcome.prototype.events = function() {
                 var self = this;
+                api.addEventListener({ // 保存数据
+                    name: 'addDiarySuccess'
+                }, function(ret, err) {
+                    self.app.refresh();
+                });
             };
 
             /**
@@ -435,9 +229,7 @@
              */
             Welcome.prototype.https = function() {
                 var self = this;
-                return {
-
-                };
+                return {};
             };
 
             /**
@@ -445,13 +237,12 @@
              */
             Welcome.prototype.methods = function() {
                 var self = this;
-                return {
-
-                };
+                return {};
             };
 
             new Welcome();
         });
     };
 </script>
+
 </html>

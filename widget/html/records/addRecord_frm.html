@@ -32,7 +32,7 @@
                     </div>
                 </div>
             </li>
-            <li class="aui-list-item">
+            <li class="aui-list-item" v-show="isNormal && !isInvest">
                 <div class="aui-list-item-inner">
                     <div class="aui-list-item-label">
                         记录类型
@@ -43,53 +43,33 @@
                     </div>
                 </div>
             </li>
-            <li class="aui-list-item" v-if="!isNormal && isInvest">
+            <li class="aui-list-item" v-show="!isNormal && isInvest">
                 <div class="aui-list-item-inner">
                     <div class="aui-list-item-label">
-                        主题
+                        成本
                     </div>
                     <div class="aui-list-item-input">
-                        <input type="text" placeholder="主题">
+                        <input type="number" placeholder="必填" v-on:input="inputWatch('成本',event)">
                     </div>
                 </div>
             </li>
-            <li class="aui-list-item" v-if="!isNormal && isInvest">
-                <div class="aui-list-item-inner">
-                    <div class="aui-list-item-label">
-                        数量
-                    </div>
-                    <div class="aui-list-item-input">
-                        <input type="number" placeholder="数量">
-                    </div>
-                </div>
-            </li>
-            <li class="aui-list-item" v-if="!isNormal && isInvest">
-                <div class="aui-list-item-inner">
-                    <div class="aui-list-item-label">
-                        单价
-                    </div>
-                    <div class="aui-list-item-input">
-                        <input type="number" placeholder="单价">
-                    </div>
-                </div>
-            </li>
-            <li class="aui-list-item" v-if="isNormal && !isInvest">
+            <li class="aui-list-item" v-show="isNormal && !isInvest">
                 <div class="aui-list-item-inner">
                     <div class="aui-list-item-label">
                         金额
                     </div>
                     <div class="aui-list-item-input">
-                        <input type="number" placeholder="金额">
+                        <input type="number" placeholder="必填" v-on:input="inputWatch('金额',event)">
                     </div>
                 </div>
             </li>
-            <li class="aui-list-item" v-if="isNormal || isInvest">
+            <li class="aui-list-item" v-show="isNormal || isInvest">
                 <div class="aui-list-item-inner">
                     <div class="aui-list-item-label">
                         说明
                     </div>
                     <div class="aui-list-item-input">
-                        <textarea placeholder="说明"></textarea>
+                        <textarea placeholder="选填" v-on:input="inputWatch('说明',event)"></textarea>
                     </div>
                 </div>
             </li>
@@ -102,7 +82,7 @@
 <script src="../../script/conf/common.js"></script>
 <script type="text/javascript">
     apiready = function () {
-        require(['api','vue','date'],function($api,Vue,date) {
+        require(['api', 'vue', 'date'], function ($api, Vue, date) {
             /**
              * @description: 新建一个类
              */
@@ -115,7 +95,7 @@
             /**
              * @description: 初始化参数(全局变量+常量)
              */
-            AddRecords.prototype.init = function() {
+            AddRecords.prototype.init = function () {
                 var self = this;
 
                 //缓存全局变量
@@ -127,21 +107,22 @@
             /**
              * @description: 初始化页面(首屏)
              */
-            AddRecords.prototype.initUI = function() {
+            AddRecords.prototype.initUI = function () {
                 var self = this;
                 self.app = new Vue({
                     el: '#app',
                     data: {
-                        isNormal:false,
-                        isInvest:false
+                        isNormal: false,
+                        isInvest: false
                     },
-                    mounted:function () {
+                    mounted: function () {
                         api.parseTapmode();
                     },
-                    methods:{
-                        onselect:function (event) { // 监听选择框
+                    methods: {
+                        onselect: function (event) { // 监听选择框
                             var val = event.target.value;
-                            switch (val){
+                            self.type = val;
+                            switch (val) {
                                 case '0':
                                     break;
                                 case '1': // 普通记录
@@ -154,59 +135,19 @@
                                     break;
                             }
                         },
-                        colorIsShow:function () { // 显示/隐藏 颜色选项卡
-                            if(self.app.colorListsShow){
-                                self.app.colorListsShow = false;
-                            }else {
-                                self.app.colorListsShow = true;
+                        inputWatch: function (name, event) { // 实时缓存输入信息
+                            var val = event.target.value;
+                            switch (name) {
+                                case '成本':
+                                    self.cost = parseFloat(val);
+                                    break;
+                                case '金额':
+                                    self.amount = val;
+                                    break;
+                                case '说明':
+                                    self.explain = val;
+                                    break;
                             }
-                        },
-                        changeColor:function (color) { // 改变颜色
-                            self.app.colorType = color;
-                        },
-                        sureAdd:function () { // 确定
-                            api.confirm({
-                                title: '添加账户提示',
-                                msg: '你真的要添加这个账户吗?',
-                                buttons: ['确定', '取消']
-                            }, function(ret, err) {
-                                var index = ret.buttonIndex;
-                                if(index == 1){
-                                    if(!self.hasClick){
-                                        var id = uuid(8,16);
-                                        var now = date.format("yyyy-MM-dd HH:mm:ss");
-                                        var data = {
-                                            "id":id,
-                                            "type":self.pageType,
-                                            "name":self.app.accountName,
-                                            "remark":self.app.remark,
-                                            "color":self.app.colorType,
-                                            "amount":self.app.amount,
-                                            "balance":self.app.amount,
-                                            "difference":"0.00",
-                                            "rose":"0.00",
-                                            "roseType":0,
-                                            "inflow":"0.00",
-                                            "outflow":"0.00",
-                                            "addDate":now,
-                                            "upDate":now
-                                        };
-                                        addData('accounts',data,'添加账户成功');
-
-                                        api.sendEvent({
-                                            name: 'addAccountSuccess'
-                                        });
-
-                                        $api.setStorage('isFist',1);
-                                        setTimeout(function () {
-                                            api.closeToWin({
-                                                name: 'root'
-                                            });
-                                        },300);
-                                        self.hasClick = true;
-                                    }
-                                }
-                            });
                         }
                     }
                 });
@@ -215,29 +156,65 @@
             /**
              * @description: 事件管理
              */
-            AddRecords.prototype.events = function() {
+            AddRecords.prototype.events = function () {
                 var self = this;
 
+                api.addEventListener({ // 保存数据
+                    name: 'onSureClick'
+                }, function (ret, err) {
+                    var id = uuid(8, 16);
+                    var now = date.format("yyyy-MM-dd HH:mm:ss");
+
+                    // 计算止盈 止损
+                    var rise5 = (self.cost + self.cost * 0.05).toFixed(2);
+                    var rise10 = (self.cost + self.cost * 0.1).toFixed(2);
+                    var rise15 = (self.cost + self.cost * 0.15).toFixed(2);
+                    var rise20 = (self.cost + self.cost * 0.2).toFixed(2);
+                    var fall5 = (self.cost - self.cost * 0.05).toFixed(2);
+                    var fall10 = (self.cost - self.cost * 0.1).toFixed(2);
+                    var fall15 = (self.cost - self.cost * 0.15).toFixed(2);
+                    var fall20 = (self.cost - self.cost * 0.2).toFixed(2);
+                    var data = {
+                        "id": id,
+                        "type": self.type, // 记账方式 0 普通 1投资
+                        "explain": self.explain, // 说明
+                        "cost": self.cost, //成本
+                        "state": 0, // 状态 0建仓 1已完成
+                        "final_profit": 0, // 最终赢利
+                        "final_rose": 0, // 最终涨幅
+                        "add_list": [],// 加仓列表
+                        "target_profit":[rise5,rise10,rise15,rise20], // 止盈
+                        "target_stop":[fall5,fall10,fall15,fall20], // 止损
+                        "addDate": now,
+                        "upDate": now
+                    };
+                    addData('diaries', data, '记账成功');
+
+                    api.sendEvent({
+                        name: 'addDiarySuccess'
+                    });
+                    setTimeout(function () {
+                        api.closeWin({
+                            name: 'addRecord'
+                        });
+                    }, 300);
+                });
             };
 
             /**
              * @description: ajax管理
              */
-            AddRecords.prototype.https = function() {
+            AddRecords.prototype.https = function () {
                 var self = this;
-                return {
-
-                };
+                return {};
             };
 
             /**
              * @description: 方法管理
              */
-            AddRecords.prototype.methods = function() {
+            AddRecords.prototype.methods = function () {
                 var self = this;
-                return {
-
-                };
+                return {};
             };
 
             new AddRecords();

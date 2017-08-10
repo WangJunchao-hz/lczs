@@ -112,19 +112,19 @@ body{
 .bg-ececec{
     background-color: #ececec;
 }
-.bg-f0ad4e{
+.bg-f0ad4e{ // 警告
     background-color: #f0ad4e !important;
 }
-.bg-337ab7{
+.bg-337ab7{ // 首选项
     background-color: #337ab7 !important;
 }
-.bg-5bc0de{
+.bg-5bc0de{ // 一般
     background-color: #5bc0de !important;
 }
-.bg-5cb85c{
+.bg-5cb85c{ // 成功
     background-color: #5cb85c !important;
 }
-.bg-d9534f{
+.bg-d9534f{ // 危险
     background-color: #d9534f !important;
 }
 .bg-disabled{
@@ -244,17 +244,23 @@ body{
      color: #fff;
      font-size: 0.6rem;
  }
+.btn-1{
+    width: 100% !important;
+}
 .btn-2{ // 表示2等分
-    width: 50%;
+    width: 50% !important;
 }
 .btn-3{
-    width: 33.3%;
+    width: 33.3% !important;
 }
 .btn-4{
-    width: 25%;
+    width: 25% !important;
 }
 .btn-5{
-    width: 20%;
+    width: 20% !important;
+}
+.btn-75{
+    width: 75% !important;
 }
 .dis-in-block{
     display: block;

@@ -16,38 +16,14 @@
 
 <body>
 <div id="app" v-cloak class="aui-content-padded">
-    <div class="card-li bg-default">
+    <div class="card-li bg-default card-li-total">
         <div class="card-li-inner">
-            <div class="fl fc-2b2525 aui-font-size-18"><i class="iconfont icon-bingtu fc-1"></i><span>总览</span></div>
+            <div class="fl fc-2b2525 aui-font-size-18"><i class="iconfont icon-bingtu fc-1"></i><span>总资产</span></div>
             <div class="fr fc-1b1515 aui-font-size-20">
                 <span>{{total.balance}}</span>
                 <span class="aui-font-size-12 fc-2b2525">余额</span>
             </div>
         </div>
-        <section class="aui-grid">
-            <div class="aui-row">
-                <div class="aui-col-xs-4 fc-928f8f">
-                    <div class="aui-grid-label">{{total.amount}}</div>
-                    <div class="aui-grid-label">本金</div>
-                </div>
-                <div v-if="total.roseType != -1" class="aui-col-xs-4 fc-red">
-                    <div class="aui-grid-label">+{{total.difference}}</div>
-                    <div class="aui-grid-label">差额</div>
-                </div>
-                <div v-else class="aui-col-xs-4 fc-green">
-                    <div class="aui-grid-label">-{{total.difference}}</div>
-                    <div class="aui-grid-label">差额</div>
-                </div>
-                <div v-if="total.roseType != -1" class="aui-col-xs-4 fc-red">
-                    <div class="aui-grid-label">+{{total.rose}}%</div>
-                    <div class="aui-grid-label">涨幅</div>
-                </div>
-                <div v-else class="aui-col-xs-4 fc-green">
-                    <div class="aui-grid-label">-{{total.rose}}%</div>
-                    <div class="aui-grid-label">涨幅</div>
-                </div>
-            </div>
-        </section>
     </div>
     <div id="jCardList">
         <div class="card-li" v-if="accountLists.length != 0" v-for="item in accountLists" v-bind:class="'bg-'+ item.color" v-on:click="goDetails(item)" tapmode>
@@ -137,11 +113,7 @@
                         accountLists: data.contents,
                         icons:iconsArry,
                         total:{
-                            amount:'0.00',
-                            balance:'0.00',
-                            difference:'0.00',
-                            rose:'0.00',
-                            roseType:0
+                            balance:'0.00' // 总资产余额
                         }
                     },
                     created:function () {
@@ -182,26 +154,17 @@
                         getTotal:function () {
                             var dataArry = this.accountLists;
                             if(dataArry.length != 0){
-                                var totalAmount = 0.00,totalBalance = 0.00,totalDifference,totalRose,totalRoseType = 0;
+                                var totalBalance = 0.00;
                                 for(var i = 0; i < dataArry.length; i++){
-                                    var amount = strToFloat(dataArry[i].amount);
                                     var balance = strToFloat(dataArry[i].balance);
-                                    totalAmount = totalAmount + amount;
                                     totalBalance = totalBalance + balance;
                                 }
-                                totalDifference = (totalBalance - totalAmount).toFixed(2);
-                                if(totalDifference > 0){
-                                    totalRoseType = 1;
-                                }else if(totalDifference < 0){
-                                    totalRoseType = -1;
-                                }
-                                totalRose = getPercent(totalAmount,totalDifference);
                                 this.total = {
-                                    amount:totalAmount,
-                                    balance:totalBalance,
-                                    difference:totalDifference,
-                                    rose:totalRose,
-                                    roseType:totalRoseType
+                                    balance:totalBalance
+                                }
+                            }else {
+                                this.total = {
+                                    balance:0.00
                                 }
                             }
                         },

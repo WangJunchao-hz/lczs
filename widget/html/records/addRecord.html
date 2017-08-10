@@ -31,16 +31,26 @@
 <script type="text/javascript">
     apiready = function () {
         api.parseTapmode();
-        require(['api'],function ($api) {
-            setHeader($api,'jHeader');
-            openFrame($api,'addRecord_frm','./addRecord_frm.html',0,{
-                id:api.pageParam.id
-            },true);
+        require(['api'], function ($api) {
+            setHeader($api, 'jHeader');
+            openFrame($api, 'addRecord_frm', './addRecord_frm.html', 0, {
+                id: api.pageParam.id
+            }, true);
         });
     };
+
     function onSure() {
-        api.sendEvent({
-            name: 'onSureClick'
+        api.confirm({
+            title: '添加账户提示',
+            msg: '你真的要记录这笔流水吗?',
+            buttons: ['确定', '取消']
+        }, function (ret, err) {
+            var index = ret.buttonIndex;
+            if (index == 1) {
+                api.sendEvent({
+                    name: 'onSureClick'
+                });
+            }
         });
     }
 </script>
