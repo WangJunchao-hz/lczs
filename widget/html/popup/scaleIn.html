@@ -4,58 +4,159 @@
 <head>
     <meta charset="utf-8">
     <script src="../../script/lib/utils/rem/1.0.0/rem.js"></script>
-    <meta name="viewport"
-          content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,initial-scale=1.0,width=device-width"/>
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,initial-scale=1.0,width=device-width" />
     <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
     <title>加仓</title>
-    <link rel="stylesheet" type="text/css" href="../../css/aui/2.1.0/aui.css"/>
+    <link rel="stylesheet" type="text/css" href="../../css/aui/2.1.0/aui.css" />
     <!-- <link rel="stylesheet" type="text/css" href="../fonts/iconfont.css" />-->
-    <link rel="stylesheet" type="text/css" href="http://at.alicdn.com/t/font_hdy4esq7wjqbyb9.css"/>
-    <link rel="stylesheet" type="text/css" href="../../css/conf/popup/scaleIn.css"/>
+    <link rel="stylesheet" type="text/css" href="http://at.alicdn.com/t/font_hdy4esq7wjqbyb9.css" />
+    <link rel="stylesheet" type="text/css" href="../../css/conf/popup/scaleIn.css" />
 </head>
 
 <body>
-    <div class="container">
-        <div class="title bg-5bc0de fc-default">加仓</div>
-        <div class="input">
-            <div class="clear border-b input-item">
-                <label class="fl btn-4 aui-text-center">金额</label>
-                <input class="fl btn-75" name="money" type="number" placeholder="必填">
+    <div id="app">
+        <div class="container">
+            <div class="title bg-5bc0de fc-default" v-text="title">加仓</div>
+            <div class="input">
+                <div class="clear border-b input-item">
+                    <label class="fl btn-4 aui-text-center">金额</label>
+                    <input class="fl btn-75" name="money" type="number" placeholder="必填">
+                </div>
+                <div class="clear border-b input-item" v-if="isAdd">
+                    <label class="fl btn-4 aui-text-center">说明</label>
+                    <textarea class="fl btn-75" name="remark" type="text" placeholder="选填"></textarea>
+                </div>
             </div>
-            <div class="clear border-b input-item">
-                <label class="fl btn-4 aui-text-center">说明</label>
-                <textarea class="fl btn-75" name="remark" type="text" placeholder="选填"></textarea>
+            <div class="clear btns">
+                <div class="btn-left btn-2 fl aui-text-center">
+                    <div class="btn-2 bg-f0ad4e fc-default btns-btn cancel" v-on:click="cancel()" tapmode>取消</div>
+                </div>
+                <div class="btn-right btn-2 fl aui-text-center">
+                    <div class="btn-2 bg-337ab7 fc-default btns-btn sure" v-on:click="sure()" tapmode>确定</div>
+                </div>
             </div>
+            <div class="clear"></div>
         </div>
-        <div class="clear btns">
-            <div class="btn-left btn-2 fl aui-text-center">
-                <div class="btn-2 bg-f0ad4e fc-default btns-btn cancel">取消</div>
-            </div>
-            <div class="btn-right btn-2 fl aui-text-center">
-                <div class="btn-2 bg-337ab7 fc-default btns-btn sure">确定</div>
-            </div>
-        </div>
-        <div class="clear"></div>
     </div>
 </body>
 <script type="text/javascript" data-main="../../script/app" src="../../script/lib/require/2.1.11/require.js"></script>
 <script src="../../script/app.js"></script>
 <script src="../../script/conf/common.js"></script>
 <script type="text/javascript">
-    apiready = function () {
-        api.parseTapmode();
-        require(['api','zepto'], function ($api,$) {
-            $('.cancel').on('click',function () {
-                api.closeFrame({
-                    name:'scaleIn'
-                });
-            });
+    apiready = function() {
+        require(['vue', 'zepto', 'date'], function(Vue, $, date) {
+            function ScaleIn() {
+                this.init();
+                this.initUI();
+            }
 
-            $('.sure').on('click',function () {
-                var money = $('input[name="money"]').val();
-                var remark = $('textarea[name="remark"]').val();
-                alert(money);
-            });
+            ScaleIn.prototype.init = function() {
+                var self = this;
+                self.id = api.pageParam.id;
+                self.type = api.pageParam.type;
+                self.cost = api.pageParam.cost;
+
+                if (typeof self.type != 'undefined') {
+                    switch (self.type) {
+                        case 0: // 加仓
+                            self.title = '加仓';
+                            self.isAdd = true;
+                            break;
+                        case 1: // 清仓
+                            self.title = '清仓';
+                            self.isAdd = false;
+                            break;
+                    }
+                }
+            };
+
+            ScaleIn.prototype.initUI = function() {
+                var self = this;
+
+                self.app = new Vue({
+                    el: '#app',
+                    data: {
+                        title: self.title || '标题',
+                        isAdd: self.isAdd
+                    },
+                    computed: {
+
+                    },
+                    beforeCreate: function() {
+
+                    },
+                    mounted: function() {
+                        api.parseTapmode();
+                    },
+                    methods: {
+                        cancel: function() {
+                            api.closeFrame({
+                                name: 'scaleIn'
+                            });
+                        },
+                        sure: function() {
+                            var money = $('input[name="money"]').val();
+                            if (money) {
+                                var now = date.format("yyyy-MM-dd HH:mm:ss");
+                                var oldData = queryData(diaries, self.id);
+                                if (typeof self.type != 'undefined') {
+                                    switch (self.type) {
+                                        case 0: // 加仓
+                                            var remark = $('textarea[name="remark"]').val() || '坚定持有';
+                                            var cost = parseFloat((parseFloat(self.cost) + parseFloat(money)).toFixed(2));
+                                            oldData.cost = cost;
+                                            oldData.target_profit = calRose(cost);
+                                            oldData.target_stop = calFail(cost);
+                                            var data = {
+                                                "money": parseFloat(money).toFixed(2), // 加仓金额
+                                                "remark": remark, // 加仓备注
+                                                "date": now // 加仓时间
+                                            };
+                                            oldData.add_list.push(data);
+                                            oldData.upDate = now;
+                                            upDateData(diaries, self.id, oldData, '加仓成功');
+                                            setTimeout(function() {
+                                                api.sendEvent({
+                                                    name: 'upDateRecord'
+                                                });
+
+                                                api.closeFrame({
+                                                    name: 'scaleIn'
+                                                });
+                                            }, 300);
+                                            break;
+                                        case 1: // 清仓
+                                            var dif = parseFloat(money) - parseFloat(self.cost);
+                                            oldData.final_profit = dif.toFixed(2);
+                                            if(dif < 0){
+                                                oldData.isWin = false;
+                                            }else {
+                                                oldData.isWin = true;
+                                            }
+                                            oldData.final_rose = getPercent(self.cost,Math.abs(dif))*100 + '%';
+                                            oldData.state = 1;
+                                            oldData.final_money = parseFloat(parseFloat(money).toFixed(2));
+                                            upDateData(diaries, self.id, oldData, '清仓成功');
+                                            setTimeout(function() {
+                                                api.sendEvent({
+                                                    name: 'upDateRecord'
+                                                });
+                                                api.closeFrame({
+                                                    name: 'scaleIn'
+                                                });
+                                            }, 300);
+                                            break;
+                                    }
+                                }
+                            } else {
+                                showMsg('请输入金额');
+                            }
+                        }
+                    }
+                });
+            };
+
+            new ScaleIn();
         });
     };
 </script>

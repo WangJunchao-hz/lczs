@@ -139,7 +139,7 @@
                             var val = event.target.value;
                             switch (name) {
                                 case '成本':
-                                    self.cost = parseFloat(val);
+                                    self.cost = parseFloat(parseFloat(val).toFixed(2));
                                     break;
                                 case '金额':
                                     self.amount = val;
@@ -164,16 +164,10 @@
                 }, function (ret, err) {
                     var id = uuid(8, 16);
                     var now = date.format("yyyy-MM-dd HH:mm:ss");
-
-                    // 计算止盈 止损
-                    var rise5 = (self.cost + self.cost * 0.05).toFixed(2);
-                    var rise10 = (self.cost + self.cost * 0.1).toFixed(2);
-                    var rise15 = (self.cost + self.cost * 0.15).toFixed(2);
-                    var rise20 = (self.cost + self.cost * 0.2).toFixed(2);
-                    var fall5 = (self.cost - self.cost * 0.05).toFixed(2);
-                    var fall10 = (self.cost - self.cost * 0.1).toFixed(2);
-                    var fall15 = (self.cost - self.cost * 0.15).toFixed(2);
-                    var fall20 = (self.cost - self.cost * 0.2).toFixed(2);
+                    if(!self.explain){
+                        self.explain = '上车了上车了';
+                    }
+                    alert(self.explain);
                     var data = {
                         "id": id,
                         "type": self.type, // 记账方式 0 普通 1投资
@@ -182,9 +176,11 @@
                         "state": 0, // 状态 0建仓 1已完成
                         "final_profit": 0, // 最终赢利
                         "final_rose": 0, // 最终涨幅
+                        "final_money":0, // 最终卖出价格
+                        "isWin":'', // 是否赢利
                         "add_list": [],// 加仓列表
-                        "target_profit":[rise5,rise10,rise15,rise20], // 止盈
-                        "target_stop":[fall5,fall10,fall15,fall20], // 止损
+                        "target_profit":calRose(self.cost), // 止盈
+                        "target_stop":calFail(self.cost), // 止损
                         "addDate": now,
                         "upDate": now
                     };

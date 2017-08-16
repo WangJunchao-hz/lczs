@@ -241,10 +241,26 @@ function getPercent(num1,num2) { // 计算百分比
     try{
         var res = '0.00';
         if(typeof num1 == 'number' && typeof num1 == 'number' && num1 != 0){
-            res = (num2/num1).toFixed(2);
+            res = (num2/num1).toFixed(4);
         }
         return res;
     }catch (e){
         showMsg('参数格式不正确');
     }
+}
+
+function calRose(cost) { // 计算止盈5项
+    var rise5 = (cost + cost * 0.05).toFixed(2);
+    var rise10 = (cost + cost * 0.1).toFixed(2);
+    var rise15 = (cost + cost * 0.15).toFixed(2);
+    var rise20 = (cost + cost * 0.2).toFixed(2);
+    return [rise5,rise10,rise15,rise20];
+}
+
+function calFail(cost) { // 计算止盈5项
+    var fail5 = (cost - cost * 0.05).toFixed(2);
+    var fail10 = (cost - cost * 0.1).toFixed(2);
+    var fail15 = (cost - cost * 0.15).toFixed(2);
+    var fail20 = (cost - cost * 0.2).toFixed(2);
+    return [fail5,fail10,fail15,fail20];
 }

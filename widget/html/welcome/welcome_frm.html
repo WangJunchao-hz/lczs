@@ -39,14 +39,15 @@
                                 等到10%就卖
                             </div>
                             <div class="aui-timeline border-t" v-for="addList in item.add_list">
-                                <div class="aui-timeline-item-header">2017-2-5 12:23:33</div>
+                                <div class="aui-timeline-item-header" v-text="addList.date">2017-02-5 12:23:33</div>
                                 <div class="aui-timeline-item">
                                     <div class="aui-timeline-item-label text-light bg-5bc0de fc-default">加仓</div>
                                     <div class="aui-timeline-item-inner">
                                         <div class="aui-card-list">
+                                            <div class="btn btn-1 bg-18 aui-text-left aui-padded-l-15" v-text="addList.remark">坚定持有</div>
                                             <div class="clear">
                                                 <span class="btn btn-2 fl bg-theme">金额</span>
-                                                <span class="btn btn-2 fr bg-5cb85c">3000</span>
+                                                <span class="btn btn-2 fr bg-5cb85c" v-text="addList.money">3000</span>
                                             </div>
                                         </div>
                                     </div>
@@ -99,18 +100,22 @@
                                 <span class="btn btn-2 fl bg-5cb85c" v-text="item.cost">3000</span>
                             </div>
                             <div class="clear">
-                                <span class="btn btn-2 fl bg-5bc0de" v-on:click="add(item.id)">加仓</span>
-                                <span class="btn btn-2 fl bg-f0ad4e">清仓</span>
+                                <span class="btn btn-2 fl bg-5bc0de" v-if="item.state == 0" v-on:click="add(item.id,item.cost)">加仓</span>
+                                <span class="btn btn-2 fl bg-5cb85c" v-else-if="item.state == 1">卖出</span>
+                                <span class="btn btn-2 fl bg-f0ad4e" v-if="item.state == 0" v-on:click="complete(item.id,item.cost)">清仓</span>
+                                <span class="btn btn-2 fl bg-5bc0de" v-else-if="item.state == 1" v-text="item.final_money"></span>
                             </div>
                             <div class="clear border-t">
-                                <span class="btn btn-2 fl bg-5cb85c" v-if="item.state == 0">进行中</span>
-                                <span class="btn btn-2 fl bg-red" v-else-if="item.state == 1">赚234.23</span>
                                 <span class="btn btn-2 fl bg-d9534f" v-on:click="deleteData(item.id)">删除记录</span>
+                                <span class="btn btn-2 fl bg-5cb85c" v-if="item.state == 0">进行中</span>
+                                <span class="btn btn-2 fl bg-red" v-else-if="(item.state == 1)&&item.isWin" v-text="'赚'+item.final_profit"></span>
+                                <span class="btn btn-2 fl bg-green" v-else-if="(item.state == 1)&&!item.isWin" v-text="'亏'+item.final_profit"></span>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="res bg-red" v-if="item.state == 1">+2000%</div>
+                <div class="res fc-red" v-if="(item.state == 1)&&item.isWin" v-text="'+'+item.final_rose"></div>
+                <div class="res fc-green" v-else-if="(item.state == 1)&&!item.isWin" v-text="'-'+item.final_rose"></div>
             </div>
         </div>
         <div id="jNoData" class="no-data" v-if="isNoData">
@@ -182,7 +187,7 @@
                         }
                     },
                     methods:{
-                        add:function (id) { // 加仓
+                        add:function (id,cost) { // 加仓
                             api.openFrame({
                                 name: 'scaleIn',
                                 url: '../popup/scaleIn.html',
@@ -194,19 +199,48 @@
                                 },
                                 delay:self.delay,
                                 pageParam: {
-                                    id: id
+                                    id: id,
+                                    type:0,
+                                    cost:cost
                                 },
                                 bgColor: 'rgba(0,0,0,0.5)'
                             });
-
                         },
                         deleteData:function (id) {
-                            deleteData(diaries,id,'删除记录成功');
-                            this.refresh();
+                            api.confirm({
+                                title: '删除记录提示',
+                                msg: '你真的要删除这个记录吗?',
+                                buttons: ['确定', '取消']
+                            }, function(ret, err) {
+                                var index = ret.buttonIndex;
+                                if(index == 1){
+                                    deleteData(diaries,id,'删除记录成功');
+                                    self.app.refresh();
+                                }
+                            });
                         },
                         refresh:function () {
                             var newData = readFile(diaries);
                             self.app.listArrays = newData.contents;
+                        },
+                        complete:function (id,cost) {
+                            api.openFrame({
+                                name: 'scaleIn',
+                                url: '../popup/scaleIn.html',
+                                rect: {
+                                    x: 0,
+                                    y: 0,
+                                    w: 'auto',
+                                    h: 'auto'
+                                },
+                                delay:self.delay,
+                                pageParam: {
+                                    id: id,
+                                    type:1,
+                                    cost:cost
+                                },
+                                bgColor: 'rgba(0,0,0,0.5)'
+                            });
                         }
                     }
                 });
@@ -222,6 +256,13 @@
                 }, function(ret, err) {
                     self.app.refresh();
                 });
+
+                api.addEventListener({ // 更新数据
+                    name: 'upDateRecord'
+                }, function(ret, err){
+                    self.app.refresh();
+                });
+
             };
 
             /**
